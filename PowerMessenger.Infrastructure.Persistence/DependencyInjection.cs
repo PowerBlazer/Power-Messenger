@@ -1,0 +1,26 @@
+﻿using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using PowerMessenger.Application.Context;
+using PowerMessenger.Infrastructure.Persistence.Context;
+
+namespace PowerMessenger.Infrastructure.Persistence;
+
+public static class DependencyInjection
+{
+    public static IServiceCollection AddPersistence(this IServiceCollection services
+        ,[UsedImplicitly] IConfiguration configuration)
+    {
+        var connectionString = configuration["DB_CONNECTION_STRING"] is null
+            ? configuration.GetConnectionString("LocalDb")
+            : configuration["DB_CONNECTION_STRING"]!;
+        
+        services.AddDbContext<IEfContext,EfContext>(options =>
+        {
+            options.UseNpgsql(connectionString);
+        });
+        
+        return services;
+    }
+}
