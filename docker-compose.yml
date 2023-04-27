@@ -1,0 +1,73 @@
+version: '3.4'
+
+services:
+#  webapi:
+#    image: ${DOCKER_REGISTRY-}powermessengerwebapi
+#    build:
+#      context: .
+#      dockerfile: PowerMessenger.WebApi/Dockerfile
+#    environment:
+#      - ASPNETCORE_ENVIRONMENT=Development
+#      - ASPNETCORE_URLS=http://+:3001
+#      - DB_CONNECTION_STRING=Host=postgres;Port=5432;Database=PowerMessengerDb;Username=root;Password=root
+#    ports:
+#      - "6001:3001"
+#    networks:
+#      - messenger_network
+
+#  identity:
+#    image: ${DOCKER_REGISTRY-}powermessengeridentity
+#    container_name: 'identity'
+#    build:
+#      context: .
+#      dockerfile: PowerMessenger.IdentityServer/Dockerfile
+#    environment:
+#      - ASPNETCORE_URLS=http://+:3002
+#      - DB_CONNECTION_STRING=Host=postgres;Port=5432;Database=IdentityServer;Username=root;Password=root
+#    ports:
+#      - "6003:3002"
+#    networks:
+#      - messenger_network
+
+  postgres:
+    container_name: postgres_db_container
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-root}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    expose:
+      - "5433"
+    ports:
+      - "6002:5433"
+    networks:
+      - messenger_network
+    restart: unless-stopped
+    command: -p 5433
+
+#  rabbitmq:
+#    image: rabbitmq:3-management-alpine
+#    container_name: 'rabbitmq'
+#    hostname: rabbitmq
+#    restart: always
+#    environment:
+#      - RABBITMQ_DEFAULT_USER=root
+#      - RABBITMQ_DEFAULT_PASS=root
+#      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
+#    ports:
+#      - "15672:15672"
+#      - "5672:5672"
+#    expose:
+#      - 15672
+#      - 5672
+#    networks:
+#      - messenger_network
+
+networks:
+  messenger_network:
+    driver: bridge
+
+volumes:
+  postgres:
