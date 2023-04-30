@@ -5,13 +5,13 @@ namespace PowerMessenger.Application.Context;
 
 public interface IEfContext
 {
-    public DbSet<User>? Users { get; set; }
-    public DbSet<Chat>? Chats { get; set; }
-    public DbSet<ChatParticipant>? ChatParticipants { get; set; }
-    public DbSet<ChatType>? ChatTypes { get; set; }
-    public DbSet<Message>? Messages { get; set; }
-    public DbSet<MessageStatus>? MessageStatuses { get; set; }
-    public DbSet<MessageType>? MessageTypes { get; set; }
+    DbSet<User> Users { get; }
+    DbSet<Chat> Chats { get; }
+    DbSet<ChatParticipant> ChatParticipants { get; }
+    DbSet<ChatType> ChatTypes { get; }
+    DbSet<Message> Messages { get; }
+    DbSet<MessageStatus> MessageStatuses { get; }
+    DbSet<MessageType> MessageTypes { get; }
     
     Task<int> SaveChangesAsync();
 }

@@ -9,12 +9,12 @@ namespace PowerMessenger.Infrastructure.Persistence;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddPersistence(this IServiceCollection services
+    public static IServiceCollection AddInfrastructurePersistence(this IServiceCollection services
         ,[UsedImplicitly] IConfiguration configuration)
     {
-        var connectionString = configuration["DB_CONNECTION_STRING"] is null
+        var connectionString = configuration["DB_APPLICATION_CONNECTION_STRING"] is null
             ? configuration.GetConnectionString("LocalDb")
-            : configuration["DB_CONNECTION_STRING"]!;
+            : configuration["DB_APPLICATION_CONNECTION_STRING"]!;
         
         services.AddDbContext<IEfContext,EfContext>(options =>
         {

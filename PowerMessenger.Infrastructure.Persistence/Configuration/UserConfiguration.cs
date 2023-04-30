@@ -19,17 +19,13 @@ public class UserConfiguration:IEntityTypeConfiguration<User>
             {
                 Id = 1,
                 UserId = 1,
-                UserName = "PowerBlaze",
-                Email = "power@mail.ru",
-                DateCreated = DateTime.Now
+                UserName = "PowerBlaze"
             },
             new User
             {
                 Id = 2,
                 UserId = 2,
-                UserName = "TowerBlaze",
-                Email = "tower@mail.ru",
-                DateCreated = DateTime.Now
+                UserName = "TowerBlaze"
             }
         );
 

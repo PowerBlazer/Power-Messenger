@@ -7,13 +7,13 @@ namespace PowerMessenger.Infrastructure.Persistence.Context;
 
 public sealed class EfContext : DbContext,IEfContext
 {
-    public DbSet<User>? Users { get; set; }
-    public DbSet<Chat>? Chats { get; set; }
-    public DbSet<ChatParticipant>? ChatParticipants { get; set; }
-    public DbSet<ChatType>? ChatTypes { get; set; }
-    public DbSet<Message>? Messages { get; set; }
-    public DbSet<MessageStatus>? MessageStatuses { get; set; }
-    public DbSet<MessageType>? MessageTypes { get; set; }
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Chat> Chats => Set<Chat>();
+    public DbSet<ChatParticipant> ChatParticipants => Set<ChatParticipant>();
+    public DbSet<ChatType> ChatTypes => Set<ChatType>();
+    public DbSet<Message> Messages => Set<Message>();
+    public DbSet<MessageStatus> MessageStatuses => Set<MessageStatus>();
+    public DbSet<MessageType> MessageTypes => Set<MessageType>();
     
     public EfContext(DbContextOptions<EfContext> options) : base(options)
     {

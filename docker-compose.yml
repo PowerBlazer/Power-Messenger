@@ -1,33 +1,20 @@
 version: '3.4'
 
 services:
-#  webapi:
-#    image: ${DOCKER_REGISTRY-}powermessengerwebapi
-#    build:
-#      context: .
-#      dockerfile: PowerMessenger.WebApi/Dockerfile
-#    environment:
-#      - ASPNETCORE_ENVIRONMENT=Development
-#      - ASPNETCORE_URLS=http://+:3001
-#      - DB_CONNECTION_STRING=Host=postgres;Port=5432;Database=PowerMessengerDb;Username=root;Password=root
-#    ports:
-#      - "6001:3001"
-#    networks:
-#      - messenger_network
-
-#  identity:
-#    image: ${DOCKER_REGISTRY-}powermessengeridentity
-#    container_name: 'identity'
-#    build:
-#      context: .
-#      dockerfile: PowerMessenger.IdentityServer/Dockerfile
-#    environment:
-#      - ASPNETCORE_URLS=http://+:3002
-#      - DB_CONNECTION_STRING=Host=postgres;Port=5432;Database=IdentityServer;Username=root;Password=root
-#    ports:
-#      - "6003:3002"
-#    networks:
-#      - messenger_network
+  webapi:
+    image: ${DOCKER_REGISTRY-}powermessengerwebapi
+    build:
+      context: .
+      dockerfile: PowerMessenger.WebApi/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:3001
+      - DB_APPLICATION_CONNECTION_STRING=Host=postgres;Port=5433;Database=PowerMessengerDb;Username=root;Password=root
+      - DB_IDENTITY_CONNECTION_STRING=Host=postgres;Port=5433;Database=IdentityDb;Username=root;Password=root
+    ports:
+      - "6001:3001"
+    networks:
+      - messenger_network
 
   postgres:
     container_name: postgres_db_container
