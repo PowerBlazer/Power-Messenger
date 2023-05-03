@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PowerMessenger.Application.Context;
+using PowerMessenger.Application.Persistence.Context;
 using PowerMessenger.Infrastructure.Persistence.Context;
 
 namespace PowerMessenger.Infrastructure.Persistence;

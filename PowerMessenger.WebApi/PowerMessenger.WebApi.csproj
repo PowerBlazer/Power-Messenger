@@ -27,6 +27,7 @@
       <ProjectReference Include="..\PowerMessenger.Application\PowerMessenger.Application.csproj" />
       <ProjectReference Include="..\PowerMessenger.Domain\PowerMessenger.Domain.csproj" />
       <ProjectReference Include="..\PowerMessenger.Infrastructure.Identity\PowerMessenger.Infrastructure.Identity.csproj" />
+      <ProjectReference Include="..\PowerMessenger.Infrastructure.MessageQueues\PowerMessenger.Infrastructure.MessageQueues.csproj" />
       <ProjectReference Include="..\PowerMessenger.Infrastructure.Persistence\PowerMessenger.Infrastructure.Persistence.csproj" />
       <ProjectReference Include="..\PowerMessenger.Infrastructure.Shared\PowerMessenger.Infrastructure.Shared.csproj" />
     </ItemGroup>
