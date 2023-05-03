@@ -9,6 +9,8 @@ COPY ["PowerMessenger.Infrastructure.Shared/PowerMessenger.Infrastructure.Shared
 COPY ["PowerMessenger.Infrastructure.Persistence/PowerMessenger.Infrastructure.Persistence.csproj", "PowerMessenger.Infrastructure.Persistence/"]
 COPY ["PowerMessenger.Application/PowerMessenger.Application.csproj", "PowerMessenger.Application/"]
 COPY ["PowerMessenger.Domain/PowerMessenger.Domain.csproj", "PowerMessenger.Domain/"]
+COPY ["PowerMessenger.Infrastructure.Identity/PowerMessenger.Infrastructure.Identity.csproj", "PowerMessenger.Infrastructure.Identity/"]
+COPY ["PowerMessenger.Infrastructure.MessageQueues/PowerMessenger.Infrastructure.MessageQueues.csproj", "PowerMessenger.Infrastructure.MessageQueues/"]
 RUN dotnet restore "PowerMessenger.WebApi/PowerMessenger.WebApi.csproj"
 COPY . .
 WORKDIR "/src/PowerMessenger.WebApi"
