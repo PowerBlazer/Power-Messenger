@@ -3,6 +3,7 @@ using FluentValidation;
 using PowerMessenger.Infrastructure.Identity;
 using PowerMessenger.Infrastructure.Persistence;
 using PowerMessenger.Application;
+using PowerMessenger.Infrastructure.MessageQueues;
 using PowerMessenger.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +35,8 @@ AssemblyScanner.FindValidatorsInAssembly(typeof(Program).Assembly)
 builder.Services
     .AddInfrastructurePersistence(builder.Configuration)
     .AddInfrastructureIdentity(builder.Configuration)
-    .AddApplication(builder.Configuration);
+    .AddApplication(builder.Configuration)
+    .AddMessageQueue(builder.Configuration);
 #endregion
 
 var app = builder.Build();

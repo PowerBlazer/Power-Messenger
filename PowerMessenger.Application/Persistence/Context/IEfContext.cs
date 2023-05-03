@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PowerMessenger.Domain.Entities;
 
-namespace PowerMessenger.Application.Context;
+namespace PowerMessenger.Application.Persistence.Context;
 
 public interface IEfContext
 {

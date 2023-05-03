@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PowerMessenger.Application.Context;
+using PowerMessenger.Application.Persistence.Context;
 using PowerMessenger.Domain.Entities;
 using PowerMessenger.Infrastructure.Persistence.Configuration;
 

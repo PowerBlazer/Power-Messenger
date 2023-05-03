@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PowerMessenger.Application.Identity.Services;
 using PowerMessenger.Infrastructure.Identity.Contexts;
+using PowerMessenger.Infrastructure.Identity.Services;
 
 namespace PowerMessenger.Infrastructure.Identity;
 
@@ -19,6 +21,8 @@ public static class DependencyInjection
         {
             options.UseNpgsql(connectionString);
         });
+
+        services.AddScoped<IAccountService, AccountService>();
         
         return services;
     }

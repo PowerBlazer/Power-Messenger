@@ -1,10 +1,10 @@
-﻿using PowerMessenger.Application.DTOs.Authorization;
-using PowerMessenger.Application.Services;
-using PowerMessenger.Domain.Common;
+﻿using PowerMessenger.Application.Common;
+using PowerMessenger.Application.DTOs.Authorization;
+using PowerMessenger.Application.Identity.Services;
 
 namespace PowerMessenger.Infrastructure.Identity.Services;
 
-public class AccountService:IAccountService
+public class AccountService: IAccountService
 {
     public Task<AuthorizationResult> Register(RegisterDto registerDto)
     {

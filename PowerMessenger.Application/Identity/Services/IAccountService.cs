@@ -1,7 +1,7 @@
-﻿using PowerMessenger.Application.DTOs.Authorization;
-using PowerMessenger.Domain.Common;
+﻿using PowerMessenger.Application.Common;
+using PowerMessenger.Application.DTOs.Authorization;
 
-namespace PowerMessenger.Application.Services;
+namespace PowerMessenger.Application.Identity.Services;
 
 public interface IAccountService
 {

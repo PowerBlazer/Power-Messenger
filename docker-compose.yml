@@ -34,23 +34,23 @@ services:
     restart: unless-stopped
     command: -p 5433
 
-#  rabbitmq:
-#    image: rabbitmq:3-management-alpine
-#    container_name: 'rabbitmq'
-#    hostname: rabbitmq
-#    restart: always
-#    environment:
-#      - RABBITMQ_DEFAULT_USER=root
-#      - RABBITMQ_DEFAULT_PASS=root
-#      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
-#    ports:
-#      - "15672:15672"
-#      - "5672:5672"
-#    expose:
-#      - 15672
-#      - 5672
-#    networks:
-#      - messenger_network
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=root
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    expose:
+      - 15672
+      - 5672
+    networks:
+      - messenger_network
 
 networks:
   messenger_network:
