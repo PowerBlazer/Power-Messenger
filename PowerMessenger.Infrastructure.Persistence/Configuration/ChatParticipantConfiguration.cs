@@ -8,7 +8,6 @@ public class ChatParticipantConfiguration:IEntityTypeConfiguration<ChatParticipa
 {
     public void Configure(EntityTypeBuilder<ChatParticipant> builder)
     {
-        builder.ToTable("ChatParticipants");
         builder.Property(p => p.Role).HasMaxLength(50);
         
         builder.HasOne(p => p.Chat)
