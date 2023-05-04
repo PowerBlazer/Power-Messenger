@@ -8,12 +8,11 @@ public class ChatConfiguration:IEntityTypeConfiguration<Chat>
 {
     public void Configure(EntityTypeBuilder<Chat> builder)
     {
-        builder.ToTable("Chats");
         builder.Property(p => p.Name).HasMaxLength(100);
         
-        //builder.HasOne(p => p.ChatType)
-        //    .WithMany(p => p.Chats)
-        //    .HasForeignKey(p => p.ChatTypeId);
+        /*builder.HasOne(p => p.ChatType)
+            .WithMany(p => p.Chats)
+            .HasForeignKey(p => p.ChatTypeId);*/
 
         #region HasData
         builder.HasData(

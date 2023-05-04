@@ -8,8 +8,6 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
 {
     public void Configure(EntityTypeBuilder<Message> builder)
     {
-        builder.ToTable("Messages");
-
         builder.HasOne<Message>()
             .WithOne(p=>p.ForwardMessage)
             .HasForeignKey<Message>(p=>p.ForwardedMessageId);

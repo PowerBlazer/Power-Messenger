@@ -8,7 +8,7 @@ public class ChatTypeConfiguration:IEntityTypeConfiguration<ChatType>
 {
     public void Configure(EntityTypeBuilder<ChatType> builder)
     {
-        builder.ToTable("ChatTypes");
+        
         
         builder.Property(p => p.Type).HasMaxLength(100);
 

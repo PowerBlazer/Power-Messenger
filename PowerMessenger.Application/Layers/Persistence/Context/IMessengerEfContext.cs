@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PowerMessenger.Domain.Entities;
 
-namespace PowerMessenger.Application.Persistence.Context;
+namespace PowerMessenger.Application.Layers.Persistence.Context;
 
-public interface IEfContext
+public interface IMessengerEfContext
 {
     DbSet<User> Users { get; }
     DbSet<Chat> Chats { get; }

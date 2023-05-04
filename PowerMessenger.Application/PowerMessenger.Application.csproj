@@ -20,9 +20,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="MessageQueues\UserRegistered" />
-      <Folder Include="Persistence" />
-      <Folder Include="Shared" />
+      <Folder Include="Features\AuthorizationFeature\CreateUser" />
+      <Folder Include="Features\AuthorizationFeature\ResendConfirmationCode" />
+      <Folder Include="Features\AuthorizationFeature\SendEmailVerificationCode" />
+      <Folder Include="Features\AuthorizationFeature\VerifyEmailCode" />
+      <Folder Include="Layers\MessageQueues\EmailSend" />
+      <Folder Include="Layers\Shared" />
+      <Folder Include="Middlewares" />
     </ItemGroup>
 
 </Project>

@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PowerMessenger.Application.Persistence.Context;
+using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Domain.Entities;
 using PowerMessenger.Infrastructure.Persistence.Configuration;
 
 namespace PowerMessenger.Infrastructure.Persistence.Context;
 
-public sealed class EfContext : DbContext,IEfContext
+public sealed class MessengerEfContext : DbContext,IMessengerEfContext
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Chat> Chats => Set<Chat>();
@@ -15,7 +15,7 @@ public sealed class EfContext : DbContext,IEfContext
     public DbSet<MessageStatus> MessageStatuses => Set<MessageStatus>();
     public DbSet<MessageType> MessageTypes => Set<MessageType>();
     
-    public EfContext(DbContextOptions<EfContext> options) : base(options)
+    public MessengerEfContext(DbContextOptions<MessengerEfContext> options) : base(options)
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }

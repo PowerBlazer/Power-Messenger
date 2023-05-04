@@ -11,7 +11,7 @@ using PowerMessenger.Infrastructure.Persistence.Context;
 
 namespace PowerMessenger.Infrastructure.Persistence.Migrations
 {
-    [DbContext(typeof(EfContext))]
+    [DbContext(typeof(MessengerEfContext))]
     [Migration("20230419175854_FirstMigration")]
     partial class FirstMigration
     {

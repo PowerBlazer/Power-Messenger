@@ -8,7 +8,6 @@ public class MessageStatusConfiguration:IEntityTypeConfiguration<MessageStatus>
 {
     public void Configure(EntityTypeBuilder<MessageStatus> builder)
     {
-        builder.ToTable("MessageStatuses");
         builder.HasOne(p => p.Message)
             .WithMany(p => p.MessageStatuses)
             .HasForeignKey(p => p.MessageId);

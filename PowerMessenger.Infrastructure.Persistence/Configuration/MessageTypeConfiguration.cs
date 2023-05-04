@@ -4,11 +4,10 @@ using PowerMessenger.Domain.Entities;
 
 namespace PowerMessenger.Infrastructure.Persistence.Configuration;
 
-public class MessageTypeConfiguration:IEntityTypeConfiguration<MessageType>
+public class MessageTypeConfiguration: IEntityTypeConfiguration<MessageType>
 {
     public void Configure(EntityTypeBuilder<MessageType> builder)
     {
-        builder.ToTable("MessageTypes");
         builder.Property(p => p.Type).HasMaxLength(100);
 
         #region HasData
