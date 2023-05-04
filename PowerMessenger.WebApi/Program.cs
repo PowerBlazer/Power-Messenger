@@ -3,12 +3,14 @@ using FluentValidation;
 using PowerMessenger.Infrastructure.Identity;
 using PowerMessenger.Infrastructure.Persistence;
 using PowerMessenger.Application;
+using PowerMessenger.Infrastructure.Email;
 using PowerMessenger.Infrastructure.MessageQueues;
+using PowerMessenger.Infrastructure.Redis;
 using PowerMessenger.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+#region BaseConfiguration
 
 builder.Services
     .AddControllers()
@@ -22,6 +24,8 @@ builder.Services
     .AddSwaggerGen()
     .AddHttpContextAccessor();
 
+#endregion
+
 #region MediatrService
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
@@ -32,20 +36,23 @@ AssemblyScanner.FindValidatorsInAssembly(typeof(Program).Assembly)
 #endregion
 
 #region BusinessService
+
 builder.Services
     .AddInfrastructurePersistence(builder.Configuration)
     .AddInfrastructureIdentity(builder.Configuration)
     .AddApplication(builder.Configuration)
-    .AddMessageQueue(builder.Configuration);
+    .AddMessageQueue(builder.Configuration)
+    .AddRedis(builder.Configuration)
+    .AddEmail(builder.Configuration);
 #endregion
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+/*if (app.Environment.IsDevelopment())
+{*/
     app.UseSwagger();
     app.UseSwaggerUI();    
-}
+//}
 
 app.UseAuthorization();
 app.UseAuthentication();

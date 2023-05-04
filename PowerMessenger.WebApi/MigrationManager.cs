@@ -9,11 +9,28 @@ public static class MigrationManager
     public static void MigrateDatabase(this IHost host)
     {
         using var scope = host.Services.CreateScope();
-        
-        using var appContext = scope.ServiceProvider.GetRequiredService<EfContext>();
-        using var identityContext = scope.ServiceProvider.GetRequiredService<IdentityContext>();
-        
-        appContext.Database.Migrate();
-        identityContext.Database.Migrate();
+
+        for (var i = 1; i <= 10; i++)
+        {
+            try
+            {
+                using var appContext = scope.ServiceProvider.GetRequiredService<MessengerEfContext>();
+                using var identityContext = scope.ServiceProvider.GetRequiredService<IdentityContext>();
+
+                appContext.Database.Migrate();
+                identityContext.Database.Migrate();
+
+                break;
+            }
+            catch
+            {
+                if (i == 10)
+                {
+                    throw;
+                }
+
+                Thread.Sleep(1000 * i);
+            }
+        }
     }
 }
