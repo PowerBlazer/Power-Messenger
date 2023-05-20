@@ -1,6 +1,6 @@
 ﻿namespace PowerMessenger.Application.Layers.Email.Services;
 
-public interface IEmailService
+public interface ISmtpEmailService
 {
     Task SendEmailAsync(string toEmail, string subject, string message);
 }
