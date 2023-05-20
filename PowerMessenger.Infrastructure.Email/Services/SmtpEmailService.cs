@@ -1,15 +1,14 @@
 ﻿using MimeKit;
 using MailKit.Net.Smtp;
-using PowerMessenger.Application.Layers.Email;
 using PowerMessenger.Application.Layers.Email.Services;
 
 namespace PowerMessenger.Infrastructure.Email.Services;
 
-public class EmailService: IEmailService
+public class SmtpEmailService: ISmtpEmailService
 {
     private readonly EmailConfiguration _emailConfiguration;
     
-    public EmailService(EmailConfiguration emailConfiguration)
+    public SmtpEmailService(EmailConfiguration emailConfiguration)
     {
         _emailConfiguration = emailConfiguration;
     }
