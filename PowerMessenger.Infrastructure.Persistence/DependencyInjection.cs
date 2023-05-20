@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PowerMessenger.Application.Layers.Persistence.Context;
+using PowerMessenger.Application.Layers.Persistence.Repositories;
 using PowerMessenger.Infrastructure.Persistence.Context;
+using PowerMessenger.Infrastructure.Persistence.Repositories;
 
 namespace PowerMessenger.Infrastructure.Persistence;
 
@@ -25,6 +27,8 @@ public static class DependencyInjection
             options.UseSnakeCaseNamingConvention();
             
         });
+
+        services.AddScoped<IUserRepository, UserRepository>();
         
         return services;
     }

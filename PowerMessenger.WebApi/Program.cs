@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
-using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using PowerMessenger.Infrastructure.Identity;
 using PowerMessenger.Infrastructure.Persistence;
 using PowerMessenger.Application;
@@ -7,6 +8,7 @@ using PowerMessenger.Infrastructure.Email;
 using PowerMessenger.Infrastructure.MessageQueues;
 using PowerMessenger.Infrastructure.Redis;
 using PowerMessenger.WebApi;
+using PowerMessenger.WebApi.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,23 +21,28 @@ builder.Services
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
+builder.Services.AddApiVersioning(setup =>
+{
+    setup.DefaultApiVersion = new ApiVersion(1, 0);
+    setup.AssumeDefaultVersionWhenUnspecified = true;
+    setup.ReportApiVersions = true;
+});
+
+builder.Services.AddVersionedApiExplorer(setup =>
+{
+    setup.GroupNameFormat = "'v'VVV";
+    setup.SubstituteApiVersionInUrl = true;
+});
+
 builder.Services
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen()
     .AddHttpContextAccessor();
 
-#endregion
-
-#region MediatrService
-
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-
-AssemblyScanner.FindValidatorsInAssembly(typeof(Program).Assembly)
-    .ForEach(item => builder.Services.AddScoped(item.InterfaceType, item.ValidatorType));
+builder.Services.AddSwaggerConfiguration();
 
 #endregion
 
-#region BusinessService
+#region BusinessServices
 
 builder.Services
     .AddInfrastructurePersistence(builder.Configuration)
@@ -48,14 +55,12 @@ builder.Services
 
 var app = builder.Build();
 
-/*if (app.Environment.IsDevelopment())
-{*/
-    app.UseSwagger();
-    app.UseSwaggerUI();    
-//}
-
+app.UseSwaggerSetup(app.Services.GetRequiredService<IApiVersionDescriptionProvider>());
+app.UseStaticFiles();
 app.UseAuthorization();
 app.UseAuthentication();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 app.MigrateDatabase();

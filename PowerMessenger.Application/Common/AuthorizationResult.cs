@@ -12,7 +12,7 @@ public class AuthorizationResult
     
     public bool IsSuccess { get; set; }
     public Dictionary<string, List<string>> Errors { get; set; } = new();
-    public string? Token { get; set; }
+    public string? AccessToken { get; set; }
     
     public void Failed(Dictionary<string, List<string>> errors)
     {

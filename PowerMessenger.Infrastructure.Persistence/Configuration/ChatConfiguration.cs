@@ -8,7 +8,9 @@ public class ChatConfiguration:IEntityTypeConfiguration<Chat>
 {
     public void Configure(EntityTypeBuilder<Chat> builder)
     {
-        builder.Property(p => p.Name).HasMaxLength(100);
+        builder.Property(p => p.Name)
+            .HasMaxLength(100)
+            .IsRequired();
         
         /*builder.HasOne(p => p.ChatType)
             .WithMany(p => p.Chats)

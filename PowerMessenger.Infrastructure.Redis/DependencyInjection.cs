@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PowerMessenger.Application.Layers.Redis;
+using PowerMessenger.Application.Layers.Redis.Services;
 using PowerMessenger.Infrastructure.Redis.Services;
-using StackExchange.Redis;
 
 namespace PowerMessenger.Infrastructure.Redis;
 
@@ -13,10 +13,8 @@ public static class DependencyInjection
         , [UsedImplicitly] IConfiguration configuration)
     {
         var redisConfiguration = configuration.GetSection("Redis").Get<RedisConfiguration>();
-
-        var redisConnection = ConnectionMultiplexer.Connect($"{redisConfiguration!.Host}:{redisConfiguration.Port},password={redisConfiguration.Password}");
         
-        services.AddSingleton<IRedisService>(_ => new RedisService(redisConnection.GetDatabase()));
+        services.AddScoped<IRedisService>(_ => new RedisService(redisConfiguration!));
         
         return services;
     }

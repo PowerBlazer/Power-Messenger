@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using PowerMessenger.Domain.Common;
+using PowerMessenger.Application.Common;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.Login;
 

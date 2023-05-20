@@ -8,4 +8,7 @@
   <ItemGroup>
     <None Include="docker-compose.yml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include=".env" />
+  </ItemGroup>
 </Project>

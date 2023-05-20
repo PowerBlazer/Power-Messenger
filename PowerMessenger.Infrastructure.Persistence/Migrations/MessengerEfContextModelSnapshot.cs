@@ -11,7 +11,7 @@ using PowerMessenger.Infrastructure.Persistence.Context;
 namespace PowerMessenger.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MessengerEfContext))]
-    partial class EfContextModelSnapshot : ModelSnapshot
+    partial class MessengerEfContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

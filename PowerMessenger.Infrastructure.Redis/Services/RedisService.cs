@@ -1,16 +1,21 @@
-﻿using Microsoft.Extensions.Configuration;
-using PowerMessenger.Application.Layers.Redis;
+﻿using PowerMessenger.Application.Layers.Redis;
+using PowerMessenger.Application.Layers.Redis.Services;
 using StackExchange.Redis;
 
 namespace PowerMessenger.Infrastructure.Redis.Services;
 
-public class RedisService: IRedisService
+public class RedisService: IRedisService,IDisposable
 {
+    private readonly Lazy<ConnectionMultiplexer> _redisConnection;
     private readonly IDatabase _dataBaseRedis;
-
-    public RedisService(IDatabase dataBaseRedis)
+    public RedisService(RedisConfiguration redisConfiguration)
     {
-        _dataBaseRedis = dataBaseRedis;
+        _redisConnection =new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.
+            Connect($"{redisConfiguration.Host}:" +
+                    $"{redisConfiguration.Port}," +
+                    $"password={redisConfiguration.Password}")); 
+        
+        _dataBaseRedis = _redisConnection.Value.GetDatabase();
     }
 
     public async Task<string?> GetValueAsync(string key)
@@ -20,7 +25,7 @@ public class RedisService: IRedisService
 
     public async Task<bool> SetValueAsync(string key, string value, TimeSpan? expiry = null)
     {
-        return await _dataBaseRedis.StringSetAsync(key, value);
+        return await _dataBaseRedis.StringSetAsync(key, value,expiry);
     }
 
     public async Task<bool> DeleteValueAsync(string key)
@@ -36,5 +41,13 @@ public class RedisService: IRedisService
         }
 
         return false;
+    }
+
+    public void Dispose()
+    {
+        if (_redisConnection.IsValueCreated)
+        {
+            _redisConnection.Value.Dispose();
+        }
     }
 }

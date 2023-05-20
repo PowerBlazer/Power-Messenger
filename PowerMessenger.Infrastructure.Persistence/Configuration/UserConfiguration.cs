@@ -8,7 +8,10 @@ public class UserConfiguration:IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.Property(p => p.UserName).HasMaxLength(100);
+        builder.Property(p => p.UserName)
+            .HasMaxLength(100)
+            .IsRequired();
+        
         builder.Property(p => p.Theme).HasMaxLength(50);
 
         #region HasData

@@ -1,4 +1,4 @@
-﻿namespace PowerMessenger.Application.Layers.Redis;
+﻿namespace PowerMessenger.Application.Layers.Redis.Services;
 
 public interface IRedisService
 {

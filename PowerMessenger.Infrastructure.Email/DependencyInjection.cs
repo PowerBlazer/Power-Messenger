@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using JetBrains.Annotations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PowerMessenger.Application.Layers.Email;
 using PowerMessenger.Application.Layers.Email.Services;
 using PowerMessenger.Infrastructure.Email.Services;
 
 namespace PowerMessenger.Infrastructure.Email;
 
+[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class DependencyInjection
 {
     public static IServiceCollection AddEmail(this IServiceCollection services
@@ -13,8 +14,8 @@ public static class DependencyInjection
     {
         var emailConfiguration = configuration.GetSection("Email").Get<EmailConfiguration>();
 
-        services.AddSingleton<IEmailService>(email => 
-            new EmailService(emailConfiguration!));
+        services.AddSingleton<ISmtpEmailService>(_ => 
+            new SmtpEmailService(emailConfiguration!));
         
         return services;
     }

@@ -22,7 +22,7 @@ public static class MigrationManager
 
                 break;
             }
-            catch
+            catch   
             {
                 if (i == 10)
                 {

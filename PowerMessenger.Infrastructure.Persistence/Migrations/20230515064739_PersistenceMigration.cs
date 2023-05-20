@@ -9,178 +9,176 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PowerMessenger.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigration : Migration
+    public partial class PersistenceMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ChatTypes",
+                name: "chat_types",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Type = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    type = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatTypes", x => x.Id);
+                    table.PrimaryKey("pk_chat_types", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "MessageTypes",
+                name: "message_types",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Type = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    type = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MessageTypes", x => x.Id);
+                    table.PrimaryKey("pk_message_types", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "users",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    UserName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Avatar = table.Column<string>(type: "text", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Theme = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    user_id = table.Column<long>(type: "bigint", nullable: false),
+                    user_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    avatar = table.Column<string>(type: "text", nullable: true),
+                    date_of_birth = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    theme = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("pk_users", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Chats",
+                name: "chats",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    DateCreate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Photo = table.Column<string>(type: "text", nullable: true),
-                    ChatTypeId = table.Column<long>(type: "bigint", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true)
+                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    photo = table.Column<string>(type: "text", nullable: true),
+                    chat_type_id = table.Column<long>(type: "bigint", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Chats", x => x.Id);
+                    table.PrimaryKey("pk_chats", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Chats_ChatTypes_ChatTypeId",
-                        column: x => x.ChatTypeId,
-                        principalTable: "ChatTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ChatParticipants",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ChatId = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    Role = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ChatParticipants", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ChatParticipants_Chats_ChatId",
-                        column: x => x.ChatId,
-                        principalTable: "Chats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ChatParticipants_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        name: "fk_chats_chat_types_chat_type_id",
+                        column: x => x.chat_type_id,
+                        principalTable: "chat_types",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Messages",
+                name: "chat_participants",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Content = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    ChatId = table.Column<long>(type: "bigint", nullable: false),
-                    ForwardedMessageId = table.Column<long>(type: "bigint", nullable: true),
-                    MessageTypeId = table.Column<long>(type: "bigint", nullable: false),
-                    Source = table.Column<string>(type: "text", nullable: true),
-                    DateCreate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    chat_id = table.Column<long>(type: "bigint", nullable: false),
+                    user_id = table.Column<long>(type: "bigint", nullable: false),
+                    role = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.PrimaryKey("pk_chat_participants", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Messages_Chats_ChatId",
-                        column: x => x.ChatId,
-                        principalTable: "Chats",
-                        principalColumn: "Id",
+                        name: "fk_chat_participants_chats_chat_id",
+                        column: x => x.chat_id,
+                        principalTable: "chats",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Messages_MessageTypes_MessageTypeId",
-                        column: x => x.MessageTypeId,
-                        principalTable: "MessageTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Messages_Messages_ForwardedMessageId",
-                        column: x => x.ForwardedMessageId,
-                        principalTable: "Messages",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Messages_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        name: "fk_chat_participants_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "MessageStatuses",
+                name: "messages",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    MessageId = table.Column<long>(type: "bigint", nullable: false),
-                    IsRead = table.Column<bool>(type: "boolean", nullable: false)
+                    content = table.Column<string>(type: "text", nullable: true),
+                    user_id = table.Column<long>(type: "bigint", nullable: false),
+                    chat_id = table.Column<long>(type: "bigint", nullable: false),
+                    forwarded_message_id = table.Column<long>(type: "bigint", nullable: true),
+                    message_type_id = table.Column<long>(type: "bigint", nullable: false),
+                    source = table.Column<string>(type: "text", nullable: true),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MessageStatuses", x => x.Id);
+                    table.PrimaryKey("pk_messages", x => x.id);
                     table.ForeignKey(
-                        name: "FK_MessageStatuses_Messages_MessageId",
-                        column: x => x.MessageId,
-                        principalTable: "Messages",
-                        principalColumn: "Id",
+                        name: "fk_messages_chats_chat_id",
+                        column: x => x.chat_id,
+                        principalTable: "chats",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MessageStatuses_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        name: "fk_messages_message_types_message_type_id",
+                        column: x => x.message_type_id,
+                        principalTable: "message_types",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_messages_messages_forward_message_id",
+                        column: x => x.forwarded_message_id,
+                        principalTable: "messages",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "fk_messages_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "message_statuses",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    user_id = table.Column<long>(type: "bigint", nullable: false),
+                    message_id = table.Column<long>(type: "bigint", nullable: false),
+                    is_read = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_message_statuses", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_message_statuses_messages_message_id",
+                        column: x => x.message_id,
+                        principalTable: "messages",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_message_statuses_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "ChatTypes",
-                columns: new[] { "Id", "Type" },
+                table: "chat_types",
+                columns: new[] { "id", "type" },
                 values: new object[,]
                 {
                     { 1L, "Personal" },
@@ -188,8 +186,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "MessageTypes",
-                columns: new[] { "Id", "Type" },
+                table: "message_types",
+                columns: new[] { "id", "type" },
                 values: new object[,]
                 {
                     { 1L, "Text" },
@@ -197,17 +195,17 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Avatar", "DateCreated", "DateOfBirth", "Email", "Theme", "UserId", "UserName" },
+                table: "users",
+                columns: new[] { "id", "avatar", "date_of_birth", "theme", "user_id", "user_name" },
                 values: new object[,]
                 {
-                    { 1L, null, new DateTime(2023, 4, 19, 20, 58, 53, 755, DateTimeKind.Local).AddTicks(3332), null, "power@mail.ru", null, 1L, "PowerBlaze" },
-                    { 2L, null, new DateTime(2023, 4, 19, 20, 58, 53, 755, DateTimeKind.Local).AddTicks(3348), null, "tower@mail.ru", null, 2L, "TowerBlaze" }
+                    { 1L, null, null, null, 1L, "PowerBlaze" },
+                    { 2L, null, null, null, 2L, "TowerBlaze" }
                 });
 
             migrationBuilder.InsertData(
-                table: "Chats",
-                columns: new[] { "Id", "ChatTypeId", "DateCreate", "Description", "Name", "Photo" },
+                table: "chats",
+                columns: new[] { "id", "chat_type_id", "date_create", "description", "name", "photo" },
                 values: new object[,]
                 {
                     { 1L, 2L, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Чат для .NET разработчиков и C# программистов.", "Group1", "ChatsImage/efe4e2f6-d7b2-49f4-80bf-a2b5e8fa7178.jpg" },
@@ -215,8 +213,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "ChatParticipants",
-                columns: new[] { "Id", "ChatId", "Role", "UserId" },
+                table: "chat_participants",
+                columns: new[] { "id", "chat_id", "role", "user_id" },
                 values: new object[,]
                 {
                     { 1L, 1L, null, 1L },
@@ -226,8 +224,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Messages",
-                columns: new[] { "Id", "ChatId", "Content", "DateCreate", "ForwardedMessageId", "MessageTypeId", "Source", "UserId" },
+                table: "messages",
+                columns: new[] { "id", "chat_id", "content", "date_create", "forwarded_message_id", "message_type_id", "source", "user_id" },
                 values: new object[,]
                 {
                     { 1L, 1L, "Привет", new DateTime(2022, 1, 20, 23, 30, 0, 0, DateTimeKind.Unspecified), null, 1L, null, 1L },
@@ -250,8 +248,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "MessageStatuses",
-                columns: new[] { "Id", "IsRead", "MessageId", "UserId" },
+                table: "message_statuses",
+                columns: new[] { "id", "is_read", "message_id", "user_id" },
                 values: new object[,]
                 {
                     { 1L, false, 1L, 1L },
@@ -291,75 +289,75 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatParticipants_ChatId",
-                table: "ChatParticipants",
-                column: "ChatId");
+                name: "ix_chat_participants_chat_id",
+                table: "chat_participants",
+                column: "chat_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatParticipants_UserId",
-                table: "ChatParticipants",
-                column: "UserId");
+                name: "ix_chat_participants_user_id",
+                table: "chat_participants",
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chats_ChatTypeId",
-                table: "Chats",
-                column: "ChatTypeId");
+                name: "ix_chats_chat_type_id",
+                table: "chats",
+                column: "chat_type_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_ChatId",
-                table: "Messages",
-                column: "ChatId");
+                name: "ix_message_statuses_message_id",
+                table: "message_statuses",
+                column: "message_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_ForwardedMessageId",
-                table: "Messages",
-                column: "ForwardedMessageId",
+                name: "ix_message_statuses_user_id",
+                table: "message_statuses",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_messages_chat_id",
+                table: "messages",
+                column: "chat_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_messages_forwarded_message_id",
+                table: "messages",
+                column: "forwarded_message_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_MessageTypeId",
-                table: "Messages",
-                column: "MessageTypeId");
+                name: "ix_messages_message_type_id",
+                table: "messages",
+                column: "message_type_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_UserId",
-                table: "Messages",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MessageStatuses_MessageId",
-                table: "MessageStatuses",
-                column: "MessageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MessageStatuses_UserId",
-                table: "MessageStatuses",
-                column: "UserId");
+                name: "ix_messages_user_id",
+                table: "messages",
+                column: "user_id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ChatParticipants");
+                name: "chat_participants");
 
             migrationBuilder.DropTable(
-                name: "MessageStatuses");
+                name: "message_statuses");
 
             migrationBuilder.DropTable(
-                name: "Messages");
+                name: "messages");
 
             migrationBuilder.DropTable(
-                name: "Chats");
+                name: "chats");
 
             migrationBuilder.DropTable(
-                name: "MessageTypes");
+                name: "message_types");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "users");
 
             migrationBuilder.DropTable(
-                name: "ChatTypes");
+                name: "chat_types");
         }
     }
 }

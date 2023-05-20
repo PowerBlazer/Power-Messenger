@@ -6,6 +6,7 @@ namespace PowerMessenger.Application.Layers.Persistence.Context;
 public interface IMessengerEfContext
 {
     DbSet<User> Users { get; }
+    
     DbSet<Chat> Chats { get; }
     DbSet<ChatParticipant> ChatParticipants { get; }
     DbSet<ChatType> ChatTypes { get; }

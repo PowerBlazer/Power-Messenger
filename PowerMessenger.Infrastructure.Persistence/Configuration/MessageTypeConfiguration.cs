@@ -8,7 +8,9 @@ public class MessageTypeConfiguration: IEntityTypeConfiguration<MessageType>
 {
     public void Configure(EntityTypeBuilder<MessageType> builder)
     {
-        builder.Property(p => p.Type).HasMaxLength(100);
+        builder.Property(p => p.Type)
+            .HasMaxLength(100)
+            .IsRequired();
 
         #region HasData
         builder.HasData(

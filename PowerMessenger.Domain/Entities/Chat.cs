@@ -1,12 +1,10 @@
-﻿using JetBrains.Annotations;
-using PowerMessenger.Domain.Entities.Abstractions;
+﻿using PowerMessenger.Domain.Entities.Abstractions;
 
 namespace PowerMessenger.Domain.Entities;
 
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public class Chat : BaseEntity<long>
 {
-    public string Name { get; set; } = string.Empty;
+    public string? Name { get; set; } 
     public DateTime DateCreate { get; set; }
     public string? Photo { get; set; }
     public long ChatTypeId { get; set; }

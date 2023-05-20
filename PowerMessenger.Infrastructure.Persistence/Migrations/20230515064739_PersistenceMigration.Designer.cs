@@ -12,8 +12,8 @@ using PowerMessenger.Infrastructure.Persistence.Context;
 namespace PowerMessenger.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MessengerEfContext))]
-    [Migration("20230419175854_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20230515064739_PersistenceMigration")]
+    partial class PersistenceMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,32 +29,40 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("ChatTypeId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("chat_type_id");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_create");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
 
                     b.Property<string>("Photo")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("photo");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_chats");
 
-                    b.HasIndex("ChatTypeId");
+                    b.HasIndex("ChatTypeId")
+                        .HasDatabaseName("ix_chats_chat_type_id");
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("chats", (string)null);
 
                     b.HasData(
                         new
@@ -81,27 +89,34 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("ChatId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("chat_id");
 
                     b.Property<string>("Role")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("role");
 
                     b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_chat_participants");
 
-                    b.HasIndex("ChatId");
+                    b.HasIndex("ChatId")
+                        .HasDatabaseName("ix_chat_participants_chat_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_chat_participants_user_id");
 
-                    b.ToTable("ChatParticipants", (string)null);
+                    b.ToTable("chat_participants", (string)null);
 
                     b.HasData(
                         new
@@ -134,18 +149,21 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("type");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_chat_types");
 
-                    b.ToTable("ChatTypes", (string)null);
+                    b.ToTable("chat_types", (string)null);
 
                     b.HasData(
                         new
@@ -164,43 +182,56 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("ChatId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("chat_id");
 
                     b.Property<string>("Content")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("content");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_create");
 
                     b.Property<long?>("ForwardedMessageId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("forwarded_message_id");
 
                     b.Property<long>("MessageTypeId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("message_type_id");
 
                     b.Property<string>("Source")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("source");
 
                     b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_messages");
 
-                    b.HasIndex("ChatId");
+                    b.HasIndex("ChatId")
+                        .HasDatabaseName("ix_messages_chat_id");
 
                     b.HasIndex("ForwardedMessageId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_messages_forwarded_message_id");
 
-                    b.HasIndex("MessageTypeId");
+                    b.HasIndex("MessageTypeId")
+                        .HasDatabaseName("ix_messages_message_type_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_messages_user_id");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("messages", (string)null);
 
                     b.HasData(
                         new
@@ -361,26 +392,33 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("IsRead")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_read");
 
                     b.Property<long>("MessageId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("message_id");
 
                     b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_message_statuses");
 
-                    b.HasIndex("MessageId");
+                    b.HasIndex("MessageId")
+                        .HasDatabaseName("ix_message_statuses_message_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_message_statuses_user_id");
 
-                    b.ToTable("MessageStatuses", (string)null);
+                    b.ToTable("message_statuses", (string)null);
 
                     b.HasData(
                         new
@@ -627,18 +665,21 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("type");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_message_types");
 
-                    b.ToTable("MessageTypes", (string)null);
+                    b.ToTable("message_types", (string)null);
 
                     b.HasData(
                         new
@@ -657,53 +698,49 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Avatar")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("text")
+                        .HasColumnName("avatar");
 
                     b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_of_birth");
 
                     b.Property<string>("Theme")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("theme");
 
                     b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_id");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("user_name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_users");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("users", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
-                            DateCreated = new DateTime(2023, 4, 19, 20, 58, 53, 755, DateTimeKind.Local).AddTicks(3332),
-                            Email = "power@mail.ru",
                             UserId = 1L,
                             UserName = "PowerBlaze"
                         },
                         new
                         {
                             Id = 2L,
-                            DateCreated = new DateTime(2023, 4, 19, 20, 58, 53, 755, DateTimeKind.Local).AddTicks(3348),
-                            Email = "tower@mail.ru",
                             UserId = 2L,
                             UserName = "TowerBlaze"
                         });
@@ -715,7 +752,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         .WithMany("Chats")
                         .HasForeignKey("ChatTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_chats_chat_types_chat_type_id");
 
                     b.Navigation("ChatType");
                 });
@@ -726,13 +764,15 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         .WithMany("ChatParticipants")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_chat_participants_chats_chat_id");
 
                     b.HasOne("PowerMessenger.Domain.Entities.User", "User")
                         .WithMany("ChatParticipants")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_chat_participants_users_user_id");
 
                     b.Navigation("Chat");
 
@@ -745,23 +785,27 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_messages_chats_chat_id");
 
                     b.HasOne("PowerMessenger.Domain.Entities.Message", null)
                         .WithOne("ForwardMessage")
-                        .HasForeignKey("PowerMessenger.Domain.Entities.Message", "ForwardedMessageId");
+                        .HasForeignKey("PowerMessenger.Domain.Entities.Message", "ForwardedMessageId")
+                        .HasConstraintName("fk_messages_messages_forward_message_id");
 
                     b.HasOne("PowerMessenger.Domain.Entities.MessageType", "MessageType")
                         .WithMany("Messages")
                         .HasForeignKey("MessageTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_messages_message_types_message_type_id");
 
                     b.HasOne("PowerMessenger.Domain.Entities.User", "User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_messages_users_user_id");
 
                     b.Navigation("Chat");
 
@@ -776,13 +820,15 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         .WithMany("MessageStatuses")
                         .HasForeignKey("MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_message_statuses_messages_message_id");
 
                     b.HasOne("PowerMessenger.Domain.Entities.User", "User")
                         .WithMany("MessageStatuses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_message_statuses_users_user_id");
 
                     b.Navigation("Message");
 

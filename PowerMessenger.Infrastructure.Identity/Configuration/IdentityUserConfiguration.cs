@@ -8,26 +8,17 @@ public class IdentityUserConfiguration : IEntityTypeConfiguration<IdentityUser>
 {
     public void Configure(EntityTypeBuilder<IdentityUser> builder)
     {
-        builder.ToTable("IdentityUser");
+        builder.HasIndex(p => p.Email).IsUnique();
+        builder.Property(p => p.Email).IsRequired();
+
+        builder.Property(p => p.PasswordHash).IsRequired();
         
-        builder.HasIndex(p => p.Email).IsUnique();
-
-        builder.HasIndex(p => p.Email).IsUnique();
         builder.Property(p => p.PhoneNumber).HasMaxLength(15);
-
+        
 
         #region HasData
 
         builder.HasData(
-            new IdentityUser
-            {
-                Id = 1,
-                Email = "yak.ainur@yandex.ru",
-                TwoFactorEnabled = false,
-                EmailConfirmed = true,
-                DateCreated = DateTime.Now,
-                PasswordHash = ""
-            },
             new IdentityUser
             {
                 Id = 2,

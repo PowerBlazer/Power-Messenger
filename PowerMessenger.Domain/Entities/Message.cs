@@ -1,9 +1,7 @@
-﻿using JetBrains.Annotations;
-using PowerMessenger.Domain.Entities.Abstractions;
+﻿using PowerMessenger.Domain.Entities.Abstractions;
 
 namespace PowerMessenger.Domain.Entities;
 
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public class Message : BaseEntity<long>
 {
     public string? Content { get; set; }
