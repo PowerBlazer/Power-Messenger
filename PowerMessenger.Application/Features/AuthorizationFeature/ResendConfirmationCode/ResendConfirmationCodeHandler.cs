@@ -14,6 +14,6 @@ public class ResendConfirmationCodeHandler: IRequestHandler<ResendConfirmationCo
 
     public async Task<string> Handle(ResendConfirmationCodeCommand request, CancellationToken cancellationToken)
     {
-        return await _authorizationService.ResendVerificationCodeAsync(request.SessionId!, request.Email!);
+        return await _authorizationService.ResendVerificationCodeAsync(request.SessionId, request.Email);
     }
 }

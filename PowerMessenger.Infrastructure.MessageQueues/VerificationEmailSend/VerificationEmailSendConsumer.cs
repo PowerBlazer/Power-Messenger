@@ -33,7 +33,7 @@ public class VerificationEmailSendConsumer: IConsumer<VerificationEmailSendEvent
 
         var htmlContent = await razor.CompileRenderStringAsync("template", template,context.Message);
 
-        await _smtpEmailService.SendEmailAsync(context.Message.Email!, "Подтверждение почты в PowerMessenger",
+        await _smtpEmailService.SendEmailAsync(context.Message.Email, "Подтверждение почты в PowerMessenger",
             htmlContent);
     }
 }

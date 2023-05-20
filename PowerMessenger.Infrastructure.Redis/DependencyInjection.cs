@@ -1,7 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PowerMessenger.Application.Layers.Redis;
 using PowerMessenger.Application.Layers.Redis.Services;
 using PowerMessenger.Infrastructure.Redis.Services;
 

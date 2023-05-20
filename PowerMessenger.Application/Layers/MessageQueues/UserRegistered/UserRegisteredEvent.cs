@@ -2,6 +2,12 @@
 
 public class UserRegisteredEvent
 {
-    public long UserId { get; set; }
-    public string? UserName { get; set; }
+    public UserRegisteredEvent(long userId,string userName)
+    {
+        UserId = userId;
+        UserName = userName;
+    }
+    
+    public long UserId { get; }
+    public string UserName { get; }
 }

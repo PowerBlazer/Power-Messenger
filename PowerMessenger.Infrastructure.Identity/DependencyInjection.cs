@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PowerMessenger.Application.Layers.Identity.Services;
@@ -15,7 +13,7 @@ namespace PowerMessenger.Infrastructure.Identity;
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureIdentity(this IServiceCollection services
-        , [UsedImplicitly] IConfiguration configuration)
+        ,IConfiguration configuration)
     {
         #region DataBase
         var connectionString = configuration["DB_IDENTITY_CONNECTION_STRING"] is null

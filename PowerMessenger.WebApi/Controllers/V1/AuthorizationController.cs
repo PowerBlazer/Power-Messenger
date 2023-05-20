@@ -52,6 +52,8 @@ public class AccountController: BaseController
     /// <response code="400">Неправильный формат данных</response>
     /// <response code="500">Ошибка на сервере</response>
     [HttpPut("ConfirmEmail")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task ConfirmEmailWithVerificationCode(
         [FromBody] VerifyEmailCodeCommand verifyEmailCodeCommand)
     {
@@ -67,6 +69,8 @@ public class AccountController: BaseController
     /// <response code="400">Неправильный формат почты</response>
     /// <response code="500">Ошибка на сервере</response>
     [HttpPut("ResendEmailVerification")]
+    [ProducesResponseType(typeof(TActionResult<string>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TActionResult<string>),StatusCodes.Status400BadRequest)]
     public async Task<TActionResult<string>> ResendEmailVerification(
         [FromBody] ResendConfirmationCodeCommand resendConfirmationCodeCommand)
     {
@@ -87,6 +91,8 @@ public class AccountController: BaseController
     /// <response code="400">Ошибка валидации данных</response>
     /// <response code="500">Ошибка на сервере</response>
     [HttpPost("Registration")]
+    [ProducesResponseType(typeof(TActionResult<RegistrationResult>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TActionResult<RegistrationResult>),StatusCodes.Status400BadRequest)]
     public async Task<TActionResult<RegistrationResult>> RegisterUser(
         [FromBody] RegisterUserCommand registerUserCommand)
     {

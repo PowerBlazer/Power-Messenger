@@ -6,7 +6,7 @@ using PowerMessenger.Domain.Entities;
 
 namespace PowerMessenger.Infrastructure.MessageQueues.UserRegistered;
 
-[UsedImplicitly]
+
 public class UserRegisteredConsumer: IConsumer<UserRegisteredEvent>
 {
     private readonly IUserRepository _userRepository;
@@ -21,7 +21,7 @@ public class UserRegisteredConsumer: IConsumer<UserRegisteredEvent>
         await _userRepository.AddUserAsync(new User
         {
             UserId = context.Message.UserId,
-            UserName = context.Message.UserName!
+            UserName = context.Message.UserName
         });
     }
 }

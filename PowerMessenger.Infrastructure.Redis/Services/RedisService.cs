@@ -1,5 +1,4 @@
-﻿using PowerMessenger.Application.Layers.Redis;
-using PowerMessenger.Application.Layers.Redis.Services;
+﻿using PowerMessenger.Application.Layers.Redis.Services;
 using StackExchange.Redis;
 
 namespace PowerMessenger.Infrastructure.Redis.Services;

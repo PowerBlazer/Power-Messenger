@@ -6,6 +6,18 @@ namespace PowerMessenger.Application.Features.AuthorizationFeature.ResendConfirm
 [UsedImplicitly]
 public class ResendConfirmationCodeCommand: IRequest<string>
 {
-    public string? SessionId { get; set; }
-    public string? Email { get; set; }
+    public ResendConfirmationCodeCommand(string sessionId, string email)
+    {
+        SessionId = sessionId;
+        Email = email;
+    }
+    
+    /// <summary>
+    /// ID сессии 
+    /// </summary>
+    public string SessionId { get; }
+    /// <summary>
+    /// Почта пользователя
+    /// </summary>
+    public string Email { get; }
 }

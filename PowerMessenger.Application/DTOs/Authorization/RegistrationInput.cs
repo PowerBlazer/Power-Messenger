@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-
+﻿
 namespace PowerMessenger.Application.DTOs.Authorization;
 
 public class RegistrationInput
@@ -11,8 +10,17 @@ public class RegistrationInput
         UserName = userName;
         Password = password;
     }
-
+    
+    /// <summary>
+    /// ID сессии
+    /// </summary>
     public string SessionId { get; }
+    /// <summary>
+    /// Имя пользователя
+    /// </summary>
     public string UserName { get; } 
+    /// <summary>
+    /// Пароль пользователя
+    /// </summary>
     public string Password { get; }
 }

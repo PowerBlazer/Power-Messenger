@@ -1,8 +1,9 @@
 ﻿namespace PowerMessenger.Application.DTOs.Authorization;
 
-public class RegistrationResult
+public class LoginResult
 {
-    public RegistrationResult(string accessToken, string refreshToken)
+    public LoginResult(string accessToken, 
+        string refreshToken)
     {
         AccessToken = accessToken;
         RefreshToken = refreshToken;

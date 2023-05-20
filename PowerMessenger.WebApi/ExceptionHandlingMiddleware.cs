@@ -27,7 +27,7 @@ public class ExceptionHandlingMiddleware
         {
             await HandleExceptionAsync(httpContext, HttpStatusCode.BadRequest, ex.Errors);
         }
-        catch (SessionExceptionNotFound ex)
+        catch (SessionNotFoundException ex)
         {
             var dictionaryErrors = new Dictionary<string, List<string>>
             { 
@@ -76,7 +76,7 @@ public class ExceptionHandlingMiddleware
 
         var errorResult = new TActionResult<string>
         {
-            Errors = errors,
+            Errors = errors
         };
 
         var result = JsonSerializer.Serialize(errorResult);
@@ -94,7 +94,7 @@ public class ExceptionHandlingMiddleware
 
         var errorResult = new
         {
-            Error = error,
+            Error = error
         };
         
         var result = JsonSerializer.Serialize(errorResult);

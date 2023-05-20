@@ -1,11 +1,18 @@
-﻿using JetBrains.Annotations;
+﻿
 
 namespace PowerMessenger.Application.Layers.MessageQueues.VerificationEmailSend;
 
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public class VerificationEmailSendEvent
 {
-    public string? Email { get; set; }
-    public string? ConfirmLink { get; set; }
-    public string? VerificationCode { get; set; }
+    public VerificationEmailSendEvent(string email, string? confirmLink, 
+        string verificationCode)
+    {
+        Email = email;
+        ConfirmLink = confirmLink;
+        VerificationCode = verificationCode;
+    }
+
+    public string Email { get; }
+    public string? ConfirmLink { get; }
+    public string VerificationCode { get; }
 }

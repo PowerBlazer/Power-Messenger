@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using PowerMessenger.Application.Common;
 using PowerMessenger.Application.DTOs.Authorization;
 using PowerMessenger.Application.Layers.Identity.Services;
 using PowerMessenger.Application.Layers.MessageQueues.UserRegistered;
@@ -42,11 +41,6 @@ public class AuthorizationService: IAuthorizationService
         _identityUnitOfWork = identityUnitOfWork;
     }
     
-    public Task<AuthorizationResult> Login(LoginDto loginDto)
-    {
-        throw new NotImplementedException();
-    }
-    
     public async Task<string> SendEmailVerificationCodeAsync(string email)
     {
          var verificationCode = VerificationCode.GenerateVerificationCode();
@@ -67,12 +61,10 @@ public class AuthorizationService: IAuthorizationService
              throw new Exception($"Сессия не создана {sessionId}");
          }
 
-         await _verificationEmailSendProducer.PublishEmailSend(new VerificationEmailSendEvent
-         {
-             VerificationCode = verificationCode,
-             Email = email,
-             ConfirmLink = ""
-         });
+         await _verificationEmailSendProducer.PublishEmailSend(new VerificationEmailSendEvent(
+             email,
+             confirmLink:"",
+             verificationCode));
 
          return sessionId;
     }
@@ -83,7 +75,7 @@ public class AuthorizationService: IAuthorizationService
 
         if (sessionJson is null)
         {
-            throw new SessionExceptionNotFound("Сессия не найдена");
+            throw new SessionNotFoundException("Сессия не найдена");
         }
         
         var verificationCode = VerificationCode.GenerateVerificationCode();
@@ -105,12 +97,9 @@ public class AuthorizationService: IAuthorizationService
             throw new Exception($"Сессия не обновлена {sessionId}");
         }
         
-        await _verificationEmailSendProducer.PublishEmailSend(new VerificationEmailSendEvent
-        {
-            VerificationCode = verificationCode,
-            Email = email,
-            ConfirmLink = ""
-        });
+        await _verificationEmailSendProducer.PublishEmailSend(new VerificationEmailSendEvent(email,
+            confirmLink:"",
+            verificationCode));
 
         return sessionId;
     }
@@ -121,7 +110,7 @@ public class AuthorizationService: IAuthorizationService
 
         if (sessionValue is null)
         {
-            throw new SessionExceptionNotFound("Сессия закончилась");
+            throw new SessionNotFoundException("Сессия закончилась");
         }
 
         var sessionVerifyEmail = JsonSerializer.Deserialize<SessionVerifyEmail>(sessionValue);
@@ -150,7 +139,7 @@ public class AuthorizationService: IAuthorizationService
 
         if (sessionJson is null)
         {
-            throw new SessionExceptionNotFound("Сессия подтверждения закончилась, повторите попытку");
+            throw new SessionNotFoundException("Сессия подтверждения закончилась, повторите попытку");
         }
 
         var session = JsonSerializer.Deserialize<SessionVerifyEmail>(sessionJson);
@@ -174,11 +163,10 @@ public class AuthorizationService: IAuthorizationService
         {
             var identityUser = await _identityUserRepository.AddUserAsync(newIdentityUser);
         
-            await _userRegisteredProducer.PublishUserRegistered(new UserRegisteredEvent
-            {
-                UserId = identityUser.Id,
-                UserName = registrationInput.UserName
-            });
+            await _userRegisteredProducer.PublishUserRegistered(new UserRegisteredEvent(
+                identityUser.Id,
+                registrationInput.UserName
+            ));
         
              accessToken = _tokenService.GenerateAccessToken(identityUser, _jwtOptions);
              refreshToken = await _tokenService.GenerateRefreshTokenAsync(identityUser.Id, _jwtOptions);

@@ -39,6 +39,7 @@ public static class DependencyInjection
                 {
                     e.ConfigureConsumer<VerificationEmailSendConsumer>(context);
                 });
+
             });
         });
 
@@ -48,3 +49,4 @@ public static class DependencyInjection
         return services;
     }
 }
+

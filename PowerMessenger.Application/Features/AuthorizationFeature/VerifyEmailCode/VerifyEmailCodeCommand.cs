@@ -1,11 +1,15 @@
-﻿using JetBrains.Annotations;
-using MediatR;
+﻿using MediatR;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.VerifyEmailCode;
 
-[UsedImplicitly]
 public class VerifyEmailCodeCommand: IRequest
 {
-    public string? SessionId { get; set; }
-    public string? VerificationCode { get; set; }
+    public VerifyEmailCodeCommand(string sessionId, string verificationCode)
+    {
+        SessionId = sessionId;
+        VerificationCode = verificationCode;
+    }
+
+    public string SessionId { get; }
+    public string VerificationCode { get; }
 }
