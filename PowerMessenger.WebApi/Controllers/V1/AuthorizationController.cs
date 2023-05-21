@@ -113,7 +113,7 @@ public class AccountController: BaseController
     /// <response code="200">Возвращает AccessToken и RefreshToken</response>
     /// <response code="400">Ошибка валидации данных</response>
     /// <response code="500">Ошибка на сервере</response>
-    [HttpPost]
+    [HttpPost("Login")]
     [ProducesResponseType(typeof(ApiActionResult<LoginResult>),StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiActionResult<LoginResult>),StatusCodes.Status400BadRequest)]
     public async Task<ApiActionResult<LoginResult>> LoginUser([FromBody] 
