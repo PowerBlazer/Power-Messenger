@@ -13,10 +13,10 @@ namespace PowerMessenger.WebApi.Controllers.V1;
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
-public class AccountController: BaseController
+public class AuthorizationController: BaseController
 {
     private readonly IMediator _mediator;
-    public AccountController(IMediator mediator)
+    public AuthorizationController(IMediator mediator)
     {
         _mediator = mediator;
     }
