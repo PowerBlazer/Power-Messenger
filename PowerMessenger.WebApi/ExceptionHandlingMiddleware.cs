@@ -27,9 +27,12 @@ public class ExceptionHandlingMiddleware
         {
             await HandleExceptionAsync(httpContext, HttpStatusCode.BadRequest, ex.Errors);
         }
+        catch (LoginNotValidException ex)
+        {
+            await HandleExceptionAsync(httpContext,HttpStatusCode.NotFound,ex.Errors);
+        }
         catch (SessionNotFoundException ex)
         {
-            
             await HandleExceptionAsync(httpContext,HttpStatusCode.NotFound,ex.Error);
         }
         catch (SessionCodeNotValidException ex)
