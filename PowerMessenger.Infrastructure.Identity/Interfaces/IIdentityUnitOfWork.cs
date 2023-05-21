@@ -1,6 +1,6 @@
 ﻿namespace PowerMessenger.Infrastructure.Identity.Interfaces;
 
-public interface IIdentityUnitOfWork: IDisposable
+public interface IIdentityUnitOfWork
 {
     Task ExecuteWithExecutionStrategyAsync(Func<Task> action);
 }

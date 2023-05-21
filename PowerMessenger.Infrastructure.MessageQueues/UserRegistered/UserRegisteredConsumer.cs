@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using MassTransit;
+﻿using MassTransit;
 using PowerMessenger.Application.Layers.MessageQueues.UserRegistered;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
 using PowerMessenger.Domain.Entities;

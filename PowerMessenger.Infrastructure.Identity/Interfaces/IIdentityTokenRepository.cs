@@ -7,4 +7,5 @@ public interface IIdentityTokenRepository
     Task<IdentityToken> AddTokenAsync(IdentityToken token);
     Task<IdentityToken?> GetTokenByRefreshAsync(string refreshToken);
     Task<IdentityToken> UpdateTokenAsync(IdentityToken newToken);
+    Task<IdentityToken> GetTokenByUserId(long userId);
 }

@@ -29,33 +29,14 @@ public class ExceptionHandlingMiddleware
         }
         catch (SessionNotFoundException ex)
         {
-            var dictionaryErrors = new Dictionary<string, List<string>>
-            { 
-                { 
-                    "Session", 
-                    new List<string>
-                    {
-                        ex.Error!
-                    } 
-                } 
-            };
-
-            await HandleExceptionAsync(httpContext,HttpStatusCode.NotFound,dictionaryErrors);
+            
+            await HandleExceptionAsync(httpContext,HttpStatusCode.NotFound,ex.Error);
         }
         catch (SessionCodeNotValidException ex)
         {
-            var dictionaryErrors = new Dictionary<string, List<string>>
-            { 
-                { 
-                    "Session", 
-                    new List<string>
-                    {
-                        ex.Error!
-                    } 
-                } 
-            };
+            
 
-            await HandleExceptionAsync(httpContext,HttpStatusCode.BadRequest,dictionaryErrors);
+            await HandleExceptionAsync(httpContext,HttpStatusCode.BadRequest,ex.Error);
         }
         catch (Exception ex)
         {
@@ -74,7 +55,7 @@ public class ExceptionHandlingMiddleware
         response.ContentType = "application/json";
         response.StatusCode = (int)httpStatusCode;
 
-        var errorResult = new TActionResult<string>
+        var errorResult = new ApiActionResult<string>
         {
             Errors = errors
         };

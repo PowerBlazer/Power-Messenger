@@ -31,4 +31,5 @@ public interface IAuthorizationService
     /// <param name="registrationInput"></param>
     /// <returns>Возвращает результат регистрации</returns>
     Task<RegistrationResult> RegisterUserAsync(RegistrationInput registrationInput);
+    Task<LoginResult> LoginUserAsync(LoginInput loginInput);
 }

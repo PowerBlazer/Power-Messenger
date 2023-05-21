@@ -53,4 +53,22 @@ public class TokenService: ITokenService
 
         return newRefreshToken;
     }
+
+    public async Task<string> UpdateRefreshTokenAsync(long userId, JwtOptions options)
+    {
+        var randomNumber = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        
+        var newRefreshToken = Convert.ToBase64String(randomNumber);
+
+        var refreshIdentityToken = await _tokenRepository.GetTokenByUserId(userId);
+
+        refreshIdentityToken.Token = newRefreshToken;
+        refreshIdentityToken.Expiration = DateTime.Now.AddDays(options.RefreshExpirationDays);
+
+        var updatedToken = await _tokenRepository.UpdateTokenAsync(refreshIdentityToken);
+
+        return updatedToken.Token!;
+    }
 }

@@ -24,7 +24,7 @@ public class IdentityUserRepository: IIdentityUserRepository
         return userEntity.Entity;
     }
 
-    public async Task<IdentityUser?> GetUserByEmail(string email)
+    public async Task<IdentityUser?> GetUserByEmailAsync(string email)
     {
         return await _identityContext.IdentityUsers.FirstOrDefaultAsync(p => p.Email == email);
     }

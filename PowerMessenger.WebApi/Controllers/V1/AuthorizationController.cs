@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PowerMessenger.Application.DTOs.Authorization;
+using PowerMessenger.Application.Features.AuthorizationFeature.LoginUser;
 using PowerMessenger.Application.Features.AuthorizationFeature.RegisterUser;
 using PowerMessenger.Application.Features.AuthorizationFeature.ResendConfirmationCode;
 using PowerMessenger.Application.Features.AuthorizationFeature.SendEmailVerificationCode;
@@ -30,14 +31,14 @@ public class AccountController: BaseController
     /// <response code="400">Неправильный формат почты или почта уже зарегестрирована</response>
     /// <response code="500">Ошибка на сервере</response>
     [HttpPost("SendEmailVerification")]
-    [ProducesResponseType(typeof(TActionResult<string>),StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(TActionResult<string>),StatusCodes.Status400BadRequest)]
-    public async Task<TActionResult<string>> SendEmailVerification(
+    [ProducesResponseType(typeof(ApiActionResult<string>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiActionResult<string>),StatusCodes.Status400BadRequest)]
+    public async Task<ApiActionResult<string>> SendEmailVerification(
         [FromBody]SendEmailVerificationCommand verificationCommand)
     {
         var result = await _mediator.Send(verificationCommand);
         
-        return new TActionResult<string>
+        return new ApiActionResult<string>
         {
             Result = result
         };
@@ -69,14 +70,14 @@ public class AccountController: BaseController
     /// <response code="400">Неправильный формат почты</response>
     /// <response code="500">Ошибка на сервере</response>
     [HttpPut("ResendEmailVerification")]
-    [ProducesResponseType(typeof(TActionResult<string>),StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(TActionResult<string>),StatusCodes.Status400BadRequest)]
-    public async Task<TActionResult<string>> ResendEmailVerification(
+    [ProducesResponseType(typeof(ApiActionResult<string>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiActionResult<string>),StatusCodes.Status400BadRequest)]
+    public async Task<ApiActionResult<string>> ResendEmailVerification(
         [FromBody] ResendConfirmationCodeCommand resendConfirmationCodeCommand)
     {
         var result = await _mediator.Send(resendConfirmationCodeCommand);
         
-        return new TActionResult<string>
+        return new ApiActionResult<string>
         {
             Result = result
         };
@@ -91,14 +92,36 @@ public class AccountController: BaseController
     /// <response code="400">Ошибка валидации данных</response>
     /// <response code="500">Ошибка на сервере</response>
     [HttpPost("Registration")]
-    [ProducesResponseType(typeof(TActionResult<RegistrationResult>),StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(TActionResult<RegistrationResult>),StatusCodes.Status400BadRequest)]
-    public async Task<TActionResult<RegistrationResult>> RegisterUser(
+    [ProducesResponseType(typeof(ApiActionResult<RegistrationResult>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiActionResult<RegistrationResult>),StatusCodes.Status400BadRequest)]
+    public async Task<ApiActionResult<RegistrationResult>> RegisterUser(
         [FromBody] RegisterUserCommand registerUserCommand)
     {
         var result = await _mediator.Send(registerUserCommand);
 
-        return new TActionResult<RegistrationResult>
+        return new ApiActionResult<RegistrationResult>
+        {
+            Result = result
+        };
+    }
+
+    /// <summary>
+    /// Авторизация пользователя
+    /// </summary>
+    /// <param name="loginUserCommand">Имя пользователя и пароль</param>
+    /// <returns>Возвращает AccessToken и RefreshToken</returns>
+    /// <response code="200">Возвращает AccessToken и RefreshToken</response>
+    /// <response code="400">Ошибка валидации данных</response>
+    /// <response code="500">Ошибка на сервере</response>
+    [HttpPost]
+    [ProducesResponseType(typeof(ApiActionResult<LoginResult>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiActionResult<LoginResult>),StatusCodes.Status400BadRequest)]
+    public async Task<ApiActionResult<LoginResult>> LoginUser([FromBody] 
+        LoginUserCommand loginUserCommand)
+    {
+        var result = await _mediator.Send(loginUserCommand);
+
+        return new ApiActionResult<LoginResult>
         {
             Result = result
         };

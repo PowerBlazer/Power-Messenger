@@ -38,4 +38,9 @@ public class IdentityTokenRepository: IIdentityTokenRepository
 
         return updatedToken;
     }
+
+    public async Task<IdentityToken> GetTokenByUserId(long userId)
+    {
+        return await _identityContext.IdentityTokens.FirstAsync(p => p.UserId == userId);
+    }
 }

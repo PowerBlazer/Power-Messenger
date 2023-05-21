@@ -10,8 +10,8 @@ public class LoginUserValidation: AbstractValidator<LoginUserCommand>
         RuleFor(p => p.Email)
             .NotEmpty()
             .WithMessage("Поле не может быть пустым")
-            .MustAsync(async (email, _) => !await emailService.ContainEmailAsync(email))
-            .WithMessage("Пользователь с такой почтой уже зарегестрирован");
+            .MustAsync(async (email, _) => await emailService.ContainEmailAsync(email))
+            .WithMessage("Пользователь с такой почтой не зарегестрирован");
 
         RuleFor(p => p.Password)
             .NotEmpty()

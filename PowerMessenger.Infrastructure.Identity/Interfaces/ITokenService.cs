@@ -7,4 +7,5 @@ public interface ITokenService
 {
     string GenerateAccessToken(IdentityUser identityUser, JwtOptions options);
     Task<string> GenerateRefreshTokenAsync(long userId, JwtOptions options);
+    Task<string> UpdateRefreshTokenAsync(long userId, JwtOptions options);
 }

@@ -176,4 +176,29 @@ public class AuthorizationService: IAuthorizationService
 
         return new RegistrationResult(accessToken, refreshToken);
     }
+
+    public async Task<LoginResult> LoginUserAsync(LoginInput loginInput)
+    {
+        var identityUser = await _identityUserRepository.GetUserByEmailAsync(loginInput.Email);
+
+        if (identityUser is null)
+        {
+            throw new LoginNotValidException("Email","Пользователь с такой почтой не зарегестрирован");
+        }
+
+        if (identityUser.PasswordHash != ComputeHash256.ComputeSha256Hash(loginInput.Password))
+        {
+            throw new LoginNotValidException("Password","Неправильный пароль");
+        }
+        
+        string accessToken = null!, refreshToken = null!;
+
+        await _identityUnitOfWork.ExecuteWithExecutionStrategyAsync(async () =>
+        {
+            accessToken = _tokenService.GenerateAccessToken(identityUser, _jwtOptions);
+            refreshToken = await _tokenService.UpdateRefreshTokenAsync(identityUser.Id, _jwtOptions);
+        });
+        
+        return new LoginResult(accessToken, refreshToken);
+    }
 }
