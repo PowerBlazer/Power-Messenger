@@ -1,11 +1,14 @@
-﻿using PowerMessenger.Infrastructure.Identity.Common;
+﻿using System.Security.Claims;
+using PowerMessenger.Application.Layers.Identity;
 using PowerMessenger.Infrastructure.Identity.Entities;
 
 namespace PowerMessenger.Infrastructure.Identity.Interfaces;
 
 public interface ITokenService
 {
-    string GenerateAccessToken(IdentityUser identityUser, JwtOptions options);
-    Task<string> GenerateRefreshTokenAsync(long userId, JwtOptions options);
-    Task<string> UpdateRefreshTokenAsync(long userId, JwtOptions options);
+    string GenerateAccessToken(IdentityUser identityUser);
+    ClaimsPrincipal GetPrincipalFromExpiredToken(string accessToken);
+    Task<string> GenerateRefreshTokenAsync(long userId);
+    Task<string> UpdateRefreshTokenAsync(long userId);
+    
 }

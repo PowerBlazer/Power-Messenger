@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Security.Claims;
+using System.Text.Json;
 using PowerMessenger.Application.DTOs.Authorization;
 using PowerMessenger.Application.Layers.Identity.Services;
 using PowerMessenger.Application.Layers.MessageQueues.UserRegistered;
@@ -20,25 +21,24 @@ public class AuthorizationService: IAuthorizationService
     private readonly IUserRegisteredProducer _userRegisteredProducer;
     private readonly ITokenService _tokenService;
     private readonly IIdentityUserRepository _identityUserRepository;
-    private readonly JwtOptions _jwtOptions;
+    private readonly IIdentityTokenRepository _tokenRepository;
     private readonly IIdentityUnitOfWork _identityUnitOfWork;
     
-   
     public AuthorizationService(IRedisService redisService, 
         IVerificationEmailSendProducer verificationEmailSendProducer, 
         ITokenService tokenService, 
         IIdentityUserRepository identityUserRepository,
-        JwtOptions jwtOptions, 
         IUserRegisteredProducer userRegisteredProducer, 
-        IIdentityUnitOfWork identityUnitOfWork)
+        IIdentityUnitOfWork identityUnitOfWork, 
+        IIdentityTokenRepository tokenRepository)
     {
         _redisService = redisService;
         _verificationEmailSendProducer = verificationEmailSendProducer;
         _tokenService = tokenService;
         _identityUserRepository = identityUserRepository;
-        _jwtOptions = jwtOptions;
         _userRegisteredProducer = userRegisteredProducer;
         _identityUnitOfWork = identityUnitOfWork;
+        _tokenRepository = tokenRepository;
     }
     
     public async Task<string> SendEmailVerificationCodeAsync(string email)
@@ -168,8 +168,8 @@ public class AuthorizationService: IAuthorizationService
                 registrationInput.UserName
             ));
         
-             accessToken = _tokenService.GenerateAccessToken(identityUser, _jwtOptions);
-             refreshToken = await _tokenService.GenerateRefreshTokenAsync(identityUser.Id, _jwtOptions);
+             accessToken = _tokenService.GenerateAccessToken(identityUser);
+             refreshToken = await _tokenService.GenerateRefreshTokenAsync(identityUser.Id);
 
             await _redisService.DeleteValueAsync(registrationInput.SessionId);
         });
@@ -183,22 +183,48 @@ public class AuthorizationService: IAuthorizationService
 
         if (identityUser is null)
         {
-            throw new LoginNotValidException("Email","Пользователь с такой почтой не зарегестрирован");
+            throw new AuthenticationValidException("Email","Пользователь с такой почтой не зарегестрирован");
         }
 
         if (identityUser.PasswordHash != ComputeHash256.ComputeSha256Hash(loginInput.Password))
         {
-            throw new LoginNotValidException("Password","Неправильный пароль");
+            throw new AuthenticationValidException("Password","Неправильный пароль");
         }
         
         string accessToken = null!, refreshToken = null!;
 
         await _identityUnitOfWork.ExecuteWithExecutionStrategyAsync(async () =>
         {
-            accessToken = _tokenService.GenerateAccessToken(identityUser, _jwtOptions);
-            refreshToken = await _tokenService.UpdateRefreshTokenAsync(identityUser.Id, _jwtOptions);
+            accessToken = _tokenService.GenerateAccessToken(identityUser);
+            refreshToken = await _tokenService.UpdateRefreshTokenAsync(identityUser.Id);
         });
         
         return new LoginResult(accessToken, refreshToken);
+    }
+
+    public async Task<RefreshTokenResult> RefreshToken(RefreshTokenInput refreshTokenInput)
+    {
+        var principal = _tokenService.GetPrincipalFromExpiredToken(refreshTokenInput.AccessToken);
+
+        var userId = long.Parse(principal.Claims.First(p => p.Type == ClaimTypes.NameIdentifier).Value);
+        var identityToken = await _tokenRepository.GetTokenByUserId(userId);
+
+        if (identityToken.Token != refreshTokenInput.RefreshToken
+            || identityToken.Expiration <= DateTime.Now)
+        {
+            throw new AuthenticationValidException("Token", "Недействительный токен обновления");
+        }
+        
+        string accessToken = null!, refreshToken = null!;
+
+        await _identityUnitOfWork.ExecuteWithExecutionStrategyAsync(async () =>
+        {
+            var identityUser = await _identityUserRepository.GetUserByIdAsync(userId);
+            
+            accessToken = _tokenService.GenerateAccessToken(identityUser!);
+            refreshToken = await _tokenService.UpdateRefreshTokenAsync(identityUser!.Id);
+        });
+
+        return new RefreshTokenResult(accessToken, refreshToken);
     }
 }

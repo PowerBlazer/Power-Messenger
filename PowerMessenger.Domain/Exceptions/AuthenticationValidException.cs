@@ -1,10 +1,10 @@
 ﻿namespace PowerMessenger.Domain.Exceptions;
 
-public class LoginNotValidException: Exception
+public class AuthenticationValidException: Exception
 {
     public Dictionary<string,List<string>> Errors { get; }
 
-    public LoginNotValidException(string parameterName,params string[] errors)
+    public AuthenticationValidException(string parameterName,params string[] errors)
     {
         Errors = new Dictionary<string, List<string>>
         {

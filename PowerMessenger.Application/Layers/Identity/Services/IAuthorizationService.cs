@@ -31,5 +31,16 @@ public interface IAuthorizationService
     /// <param name="registrationInput"></param>
     /// <returns>Возвращает результат регистрации</returns>
     Task<RegistrationResult> RegisterUserAsync(RegistrationInput registrationInput);
+    /// <summary>
+    /// Авторизация пользователя
+    /// </summary>
+    /// <param name="loginInput"></param>
+    /// <returns>Возвращает результат авторизации</returns>
     Task<LoginResult> LoginUserAsync(LoginInput loginInput);
+    /// <summary>
+    /// Обновление токенов
+    /// </summary>
+    /// <param name="refreshTokenInput">Объект токен доступа и обновления</param>
+    /// <returns>Возвращает обновленные токены</returns>
+    Task<RefreshTokenResult> RefreshToken(RefreshTokenInput refreshTokenInput);
 }

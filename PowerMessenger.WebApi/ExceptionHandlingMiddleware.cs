@@ -27,9 +27,9 @@ public class ExceptionHandlingMiddleware
         {
             await HandleExceptionAsync(httpContext, HttpStatusCode.BadRequest, ex.Errors);
         }
-        catch (LoginNotValidException ex)
+        catch (AuthenticationValidException ex)
         {
-            await HandleExceptionAsync(httpContext,HttpStatusCode.NotFound,ex.Errors);
+            await HandleExceptionAsync(httpContext,HttpStatusCode.Unauthorized,ex.Errors);
         }
         catch (SessionNotFoundException ex)
         {
@@ -47,7 +47,6 @@ public class ExceptionHandlingMiddleware
             
             await HandleExceptionAsync(httpContext,HttpStatusCode.InternalServerError, "Ошибка на сервере");
         }
-
     }
         
     private static async Task HandleExceptionAsync(HttpContext httpContext,

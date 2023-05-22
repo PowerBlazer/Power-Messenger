@@ -28,4 +28,9 @@ public class IdentityUserRepository: IIdentityUserRepository
     {
         return await _identityContext.IdentityUsers.FirstOrDefaultAsync(p => p.Email == email);
     }
+
+    public async Task<IdentityUser?> GetUserByIdAsync(long userId)
+    {
+        return await _identityContext.IdentityUsers.FirstOrDefaultAsync(p => p.Id == userId);
+    }
 }

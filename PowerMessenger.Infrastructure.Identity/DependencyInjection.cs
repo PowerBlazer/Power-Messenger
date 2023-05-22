@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PowerMessenger.Application.Layers.Identity;
 using PowerMessenger.Application.Layers.Identity.Services;
 using PowerMessenger.Infrastructure.Identity.Common;
 using PowerMessenger.Infrastructure.Identity.Contexts;
@@ -34,8 +35,8 @@ public static class DependencyInjection
         
         #endregion
         
-        services.AddSingleton<JwtOptions>(_=> configuration.GetSection("JWT").Get<JwtOptions>()!);
-
+        services.AddSingleton<JwtOptions>(_ => configuration.GetSection("JWT").Get<JwtOptions>()!);
+        
         #region Repositories
         services.AddScoped<IIdentityTokenRepository, IdentityTokenRepository>();
         services.AddScoped<IIdentityUserRepository, IdentityUserRepository>();

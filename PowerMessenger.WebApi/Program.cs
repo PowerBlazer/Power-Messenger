@@ -1,10 +1,13 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using PowerMessenger.Infrastructure.Identity;
 using PowerMessenger.Infrastructure.Persistence;
 using PowerMessenger.Application;
+using PowerMessenger.Application.Layers.Identity;
 using PowerMessenger.Infrastructure.Email;
+using PowerMessenger.Infrastructure.Identity.Common;
 using PowerMessenger.Infrastructure.MessageQueues;
 using PowerMessenger.Infrastructure.Redis;
 using PowerMessenger.WebApi;
@@ -53,12 +56,48 @@ builder.Services
     .AddEmail(builder.Configuration);
 #endregion
 
+#region AuthenticationConfiguration
+
+var jwtOptions = builder.Configuration.GetSection("JWT")
+    .Get<JwtOptions>()!;
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        //options.RequireHttpsMetadata = true;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtOptions.Issuer,
+
+            ValidateAudience = true,
+            ValidAudience = jwtOptions.Audience,
+
+            ValidateLifetime = true,
+
+            IssuerSigningKey = jwtOptions.GetSymmetricSecurityKey(),
+            ValidateIssuerSigningKey = true,
+        };
+    });
+
+
+#endregion
+
 var app = builder.Build();
 
-app.UseSwaggerSetup(app.Services.GetRequiredService<IApiVersionDescriptionProvider>());
+app.UseSwaggerSetup(app.Services
+    .GetRequiredService<IApiVersionDescriptionProvider>());
+
 app.UseStaticFiles();
-app.UseAuthorization();
+
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 

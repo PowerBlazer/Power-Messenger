@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using Microsoft.IdentityModel.Tokens;
 
-namespace PowerMessenger.Infrastructure.Identity.Common;
+namespace PowerMessenger.Application.Layers.Identity;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public class JwtOptions

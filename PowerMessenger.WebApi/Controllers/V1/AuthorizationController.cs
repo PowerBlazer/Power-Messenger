@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PowerMessenger.Application.DTOs.Authorization;
 using PowerMessenger.Application.Features.AuthorizationFeature.LoginUser;
+using PowerMessenger.Application.Features.AuthorizationFeature.RefreshToken;
 using PowerMessenger.Application.Features.AuthorizationFeature.RegisterUser;
 using PowerMessenger.Application.Features.AuthorizationFeature.ResendConfirmationCode;
 using PowerMessenger.Application.Features.AuthorizationFeature.SendEmailVerificationCode;
@@ -126,6 +127,28 @@ public class AuthorizationController: BaseController
             Result = result
         };
     }
+
+    /// <summary>
+    /// Получить токен доступа и обновить токен обновления
+    /// </summary>
+    /// <param name="refreshTokenCommand">Токен доступа и токен обновления</param>
+    /// <returns>Возвращает AccessToken и RefreshToken</returns>
+    /// <response code="200">Возвращает AccessToken и RefreshToken</response>
+    /// <response code="400">Ошибка валидации данных</response>
+    /// <response code="401">Не валидный токен</response>
+    /// <response code="500">Ошибка на сервере</response>
+    [HttpPost("Refresh")]
+    public async Task<ApiActionResult<RefreshTokenResult>> RefreshToken([FromBody]
+        RefreshTokenCommand refreshTokenCommand)
+    {
+        var result = await _mediator.Send(refreshTokenCommand);
+
+        return new ApiActionResult<RefreshTokenResult>
+        {
+            Result = result
+        };
+    }
+
 
 
 
