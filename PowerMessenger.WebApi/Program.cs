@@ -7,7 +7,6 @@ using PowerMessenger.Infrastructure.Persistence;
 using PowerMessenger.Application;
 using PowerMessenger.Application.Layers.Identity;
 using PowerMessenger.Infrastructure.Email;
-using PowerMessenger.Infrastructure.Identity.Common;
 using PowerMessenger.Infrastructure.MessageQueues;
 using PowerMessenger.Infrastructure.Redis;
 using PowerMessenger.WebApi;
@@ -42,6 +41,14 @@ builder.Services
     .AddHttpContextAccessor();
 
 builder.Services.AddSwaggerConfiguration();
+
+builder.Services.AddCors(coreOptions =>
+    coreOptions.AddPolicy("All", options =>
+    {
+        options.AllowAnyHeader();
+        options.AllowAnyMethod();
+        options.AllowAnyOrigin();
+    }));
 
 #endregion
 
@@ -95,6 +102,7 @@ app.UseSwaggerSetup(app.Services
     .GetRequiredService<IApiVersionDescriptionProvider>());
 
 app.UseStaticFiles();
+app.UseCors("All");
 
 app.UseAuthentication();
 app.UseAuthorization();
