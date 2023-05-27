@@ -7,25 +7,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8F008297-33B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{36DBA1AC-A879-434B-86F7-24FC51402FEA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerMessenger.Domain", "PowerMessenger.Domain\PowerMessenger.Domain.csproj", "{AA2C9320-15FC-4018-89E7-A3B6C3F00EBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "src\PowerMessenger.Domain", "src\PowerMessenger.Domain\PowerMessenger.Domain.csproj", "{AA2C9320-15FC-4018-89E7-A3B6C3F00EBB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerMessenger.Application", "PowerMessenger.Application\PowerMessenger.Application.csproj", "{6F427E6C-14D1-461B-BA00-68C60F0CAC46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "src\PowerMessenger.Application", "src\PowerMessenger.Application\PowerMessenger.Application.csproj", "{6F427E6C-14D1-461B-BA00-68C60F0CAC46}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerMessenger.Infrastructure.Persistence", "PowerMessenger.Infrastructure.Persistence\PowerMessenger.Infrastructure.Persistence.csproj", "{A386DD38-27A6-44C7-BC9E-070C7855E12C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "src\PowerMessenger.Infrastructure.Persistence", "src\PowerMessenger.Infrastructure.Persistence\PowerMessenger.Infrastructure.Persistence.csproj", "{A386DD38-27A6-44C7-BC9E-070C7855E12C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerMessenger.Infrastructure.Shared", "PowerMessenger.Infrastructure.Shared\PowerMessenger.Infrastructure.Shared.csproj", "{67011D6E-B90A-47BD-BBE4-6C8E08DB1418}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "src\PowerMessenger.Infrastructure.Shared", "src\PowerMessenger.Infrastructure.Shared\PowerMessenger.Infrastructure.Shared.csproj", "{67011D6E-B90A-47BD-BBE4-6C8E08DB1418}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerMessenger.WebApi", "PowerMessenger.WebApi\PowerMessenger.WebApi.csproj", "{E5715DA1-3B4D-45D1-9097-78D165CE89A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "src\PowerMessenger.WebApi", "src\PowerMessenger.WebApi\PowerMessenger.WebApi.csproj", "{E5715DA1-3B4D-45D1-9097-78D165CE89A6}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A3002D82-0DCE-42F6-BBEE-493985F1595C}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "src\docker-compose", "src\docker-compose.dcproj", "{A3002D82-0DCE-42F6-BBEE-493985F1595C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerMessenger.Infrastructure.Identity", "PowerMessenger.Infrastructure.Identity\PowerMessenger.Infrastructure.Identity.csproj", "{3E2ECDEE-9873-4D59-B7B4-BBC534E4FE76}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src\PowerMessenger.Infrastructure.Identity", "src\PowerMessenger.Infrastructure.Identity\PowerMessenger.Infrastructure.Identity.csproj", "{3E2ECDEE-9873-4D59-B7B4-BBC534E4FE76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerMessenger.Infrastructure.MessageQueues", "PowerMessenger.Infrastructure.MessageQueues\PowerMessenger.Infrastructure.MessageQueues.csproj", "{2381E2F2-D412-46EE-820F-1765D9CC5E3F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src\PowerMessenger.Infrastructure.MessageQueues", "src\PowerMessenger.Infrastructure.MessageQueues\PowerMessenger.Infrastructure.MessageQueues.csproj", "{2381E2F2-D412-46EE-820F-1765D9CC5E3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerMessenger.Infrastructure.Email", "PowerMessenger.Infrastructure.Email\PowerMessenger.Infrastructure.Email.csproj", "{9BA1CE6B-25F3-4F98-98C3-2390BA1483A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src\PowerMessenger.Infrastructure.Email", "src\PowerMessenger.Infrastructure.Email\PowerMessenger.Infrastructure.Email.csproj", "{9BA1CE6B-25F3-4F98-98C3-2390BA1483A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerMessenger.Infrastructure.Redis", "PowerMessenger.Infrastructure.Redis\PowerMessenger.Infrastructure.Redis.csproj", "{7046BD01-4FC8-4A77-ACC1-ADD5F095B538}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src\PowerMessenger.Infrastructure.Redis", "src\PowerMessenger.Infrastructure.Redis\PowerMessenger.Infrastructure.Redis.csproj", "{7046BD01-4FC8-4A77-ACC1-ADD5F095B538}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
