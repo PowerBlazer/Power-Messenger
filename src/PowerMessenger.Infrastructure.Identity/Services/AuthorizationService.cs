@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
 using System.Text.Json;
-using PowerMessenger.Application.DTOs.Authorization;
 using PowerMessenger.Application.Layers.Identity.Services;
 using PowerMessenger.Application.Layers.MessageQueues.UserRegistered;
 using PowerMessenger.Application.Layers.MessageQueues.VerificationEmailSend;
 using PowerMessenger.Application.Layers.Redis.Services;
 using PowerMessenger.Domain.Common;
+using PowerMessenger.Domain.DTOs.Authorization;
 using PowerMessenger.Domain.Exceptions;
 using PowerMessenger.Infrastructure.Identity.Common;
 using PowerMessenger.Infrastructure.Identity.Entities;
@@ -133,9 +133,9 @@ public class AuthorizationService: IAuthorizationService
         }
     }
 
-    public async Task<RegistrationResult> RegisterUserAsync(RegistrationInput registrationInput)
+    public async Task<RegistrationResponse> RegisterUserAsync(RegistrationRequest registrationRequest)
     {
-        var sessionJson = await _redisService.GetValueAsync(registrationInput.SessionId);
+        var sessionJson = await _redisService.GetValueAsync(registrationRequest.SessionId);
 
         if (sessionJson is null)
         {
@@ -154,7 +154,7 @@ public class AuthorizationService: IAuthorizationService
             Email = session.Email,
             EmailConfirmed = true,
             DateCreated = DateTime.Now,
-            PasswordHash = ComputeHash256.ComputeSha256Hash(registrationInput.Password)
+            PasswordHash = ComputeHash256.ComputeSha256Hash(registrationRequest.Password)
         };
 
         string accessToken = null!, refreshToken = null!;
@@ -165,28 +165,28 @@ public class AuthorizationService: IAuthorizationService
         
             await _userRegisteredProducer.PublishUserRegistered(new UserRegisteredEvent(
                 identityUser.Id,
-                registrationInput.UserName
+                registrationRequest.UserName
             ));
         
              accessToken = _tokenService.GenerateAccessToken(identityUser);
              refreshToken = await _tokenService.GenerateRefreshTokenAsync(identityUser.Id);
 
-            await _redisService.DeleteValueAsync(registrationInput.SessionId);
+            await _redisService.DeleteValueAsync(registrationRequest.SessionId);
         });
 
-        return new RegistrationResult(accessToken, refreshToken);
+        return new RegistrationResponse(accessToken, refreshToken);
     }
 
-    public async Task<LoginResult> LoginUserAsync(LoginInput loginInput)
+    public async Task<LoginResponse> LoginUserAsync(LoginRequest loginRequest)
     {
-        var identityUser = await _identityUserRepository.GetUserByEmailAsync(loginInput.Email);
+        var identityUser = await _identityUserRepository.GetUserByEmailAsync(loginRequest.Email);
 
         if (identityUser is null)
         {
             throw new AuthenticationValidException("Email","Пользователь с такой почтой не зарегестрирован");
         }
-
-        if (identityUser.PasswordHash != ComputeHash256.ComputeSha256Hash(loginInput.Password))
+        
+        if (identityUser.PasswordHash != ComputeHash256.ComputeSha256Hash(loginRequest.Password))
         {
             throw new AuthenticationValidException("Password","Неправильный пароль");
         }
@@ -199,17 +199,17 @@ public class AuthorizationService: IAuthorizationService
             refreshToken = await _tokenService.UpdateRefreshTokenAsync(identityUser.Id);
         });
         
-        return new LoginResult(accessToken, refreshToken);
+        return new LoginResponse(accessToken, refreshToken);
     }
 
-    public async Task<RefreshTokenResult> RefreshToken(RefreshTokenInput refreshTokenInput)
+    public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest refreshTokenRequest)
     {
-        var principal = _tokenService.GetPrincipalFromExpiredToken(refreshTokenInput.AccessToken);
+        var principal = _tokenService.GetPrincipalFromExpiredToken(refreshTokenRequest.AccessToken);
 
         var userId = long.Parse(principal.Claims.First(p => p.Type == ClaimTypes.NameIdentifier).Value);
         var identityToken = await _tokenRepository.GetTokenByUserId(userId);
 
-        if (identityToken.Token != refreshTokenInput.RefreshToken
+        if (identityToken.Token != refreshTokenRequest.RefreshToken
             || identityToken.Expiration <= DateTime.Now)
         {
             throw new AuthenticationValidException("Token", "Недействительный токен обновления");
@@ -225,6 +225,6 @@ public class AuthorizationService: IAuthorizationService
             refreshToken = await _tokenService.UpdateRefreshTokenAsync(identityUser!.Id);
         });
 
-        return new RefreshTokenResult(accessToken, refreshToken);
+        return new RefreshTokenResponse(accessToken, refreshToken);
     }
 }

@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using PowerMessenger.Application.DTOs.Authorization;
+using PowerMessenger.Domain.DTOs.Authorization;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.RefreshToken;
 
-public class RefreshTokenCommand: IRequest<RefreshTokenResult>
+public class RefreshTokenCommand: IRequest<RefreshTokenResponse>
 {
     public RefreshTokenCommand(string accessToken, string refreshToken)
     {

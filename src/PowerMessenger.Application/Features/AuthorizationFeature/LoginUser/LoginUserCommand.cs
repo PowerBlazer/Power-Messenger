@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using PowerMessenger.Application.DTOs.Authorization;
+using PowerMessenger.Domain.DTOs.Authorization;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.LoginUser;
 
-public class LoginUserCommand: IRequest<LoginResult>
+public class LoginUserCommand: IRequest<LoginResponse>
 {
     public LoginUserCommand(string email, string password)
     {

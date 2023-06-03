@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-using PowerMessenger.Application.DTOs.Authorization;
 using PowerMessenger.Application.Layers.Identity.Services;
+using PowerMessenger.Domain.DTOs.Authorization;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.RegisterUser;
 
-public class RegisterUserHandler: IRequestHandler<RegisterUserCommand,RegistrationResult>
+public class RegisterUserHandler: IRequestHandler<RegisterUserCommand,RegistrationResponse>
 {
     private readonly IAuthorizationService _authorizationService;
     private readonly IMapper _mapper;
@@ -17,9 +17,9 @@ public class RegisterUserHandler: IRequestHandler<RegisterUserCommand,Registrati
         _mapper = mapper;
     }
 
-    public async Task<RegistrationResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<RegistrationResponse> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var registerInput = _mapper.Map<RegisterUserCommand, RegistrationInput>(request);
+        var registerInput = _mapper.Map<RegisterUserCommand, RegistrationRequest>(request);
 
         return await _authorizationService.RegisterUserAsync(registerInput);
     }

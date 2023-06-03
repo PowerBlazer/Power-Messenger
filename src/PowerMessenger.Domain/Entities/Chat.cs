@@ -9,8 +9,9 @@ public class Chat : BaseEntity<long>
     public string? Photo { get; set; }
     public long ChatTypeId { get; set; }
     public string? Description { get; set; }
-    
+   
     public ChatType? ChatType { get; set; }
     public ICollection<ChatParticipant>? ChatParticipants { get; set; }
     public ICollection<Message>? Messages { get; set; }
+    public ICollection<MessageStatus>? MessageStatuses { get; set; }
 }

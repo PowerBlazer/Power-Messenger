@@ -29,4 +29,9 @@ public class CacheService: ICacheService
 
         return isSet;
     }
+
+    public async Task<bool> DeleteData(string key)
+    {
+        return await _redisService.DeleteValueAsync(key);
+    }
 }

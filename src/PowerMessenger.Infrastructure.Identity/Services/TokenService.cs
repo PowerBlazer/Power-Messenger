@@ -97,7 +97,7 @@ public class TokenService: ITokenService
         var newRefreshToken = Convert.ToBase64String(randomNumber);
 
         var refreshIdentityToken = await _tokenRepository.GetTokenByUserId(userId);
-
+        
         refreshIdentityToken.Token = newRefreshToken;
         refreshIdentityToken.Expiration = DateTime.Now.AddDays(_jwtOptions.RefreshExpirationDays);
 

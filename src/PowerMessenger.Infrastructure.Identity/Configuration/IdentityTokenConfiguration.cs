@@ -15,7 +15,13 @@ public class IdentityTokenConfiguration: IEntityTypeConfiguration<IdentityToken>
             .HasOne(p => p.User)
             .WithOne(p => p.IdentityToken)
             .HasForeignKey<IdentityToken>(p => p.UserId);
-        
-        
+
+        builder.HasData(new IdentityToken
+        {
+            Id = 1,
+            UserId = 1,
+            Token = "121212121212121",
+            Expiration = DateTime.Now.AddDays(7)
+        });
     }
 }

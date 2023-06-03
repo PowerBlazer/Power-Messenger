@@ -56,6 +56,15 @@ namespace PowerMessenger.Infrastructure.Identity.Migrations
                         .HasDatabaseName("ix_identity_tokens_user_id");
 
                     b.ToTable("identity_tokens", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Expiration = new DateTime(2023, 6, 4, 21, 57, 27, 161, DateTimeKind.Local).AddTicks(2466),
+                            Token = "121212121212121",
+                            UserId = 1L
+                        });
                 });
 
             modelBuilder.Entity("PowerMessenger.Infrastructure.Identity.Entities.IdentityUser", b =>
@@ -106,11 +115,11 @@ namespace PowerMessenger.Infrastructure.Identity.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 2L,
-                            DateCreated = new DateTime(2023, 5, 14, 19, 17, 30, 58, DateTimeKind.Local).AddTicks(2670),
-                            Email = "test@yandex.ru",
+                            Id = 1L,
+                            DateCreated = new DateTime(2023, 5, 28, 21, 57, 27, 160, DateTimeKind.Local).AddTicks(6670),
+                            Email = "yak.ainur@yandex.ru",
                             EmailConfirmed = true,
-                            PasswordHash = "",
+                            PasswordHash = "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
                             TwoFactorEnabled = false
                         });
                 });

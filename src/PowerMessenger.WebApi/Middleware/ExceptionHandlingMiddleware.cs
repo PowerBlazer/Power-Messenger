@@ -3,7 +3,7 @@ using System.Text.Json;
 using PowerMessenger.Domain.Common;
 using PowerMessenger.Domain.Exceptions;
 
-namespace PowerMessenger.WebApi;
+namespace PowerMessenger.WebApi.Middleware;
 
 public class ExceptionHandlingMiddleware
 {

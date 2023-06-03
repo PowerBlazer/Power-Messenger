@@ -18,4 +18,10 @@ public interface ICacheService
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     Task<bool> SetData<T>(string key, T value, TimeSpan expiry);
+    /// <summary>
+    /// Delete a value by key
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns>Success Delete(bool)</returns>
+    Task<bool> DeleteData(string key);
 }

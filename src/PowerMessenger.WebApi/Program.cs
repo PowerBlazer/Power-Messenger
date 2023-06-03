@@ -9,8 +9,10 @@ using PowerMessenger.Application.Layers.Identity;
 using PowerMessenger.Infrastructure.Email;
 using PowerMessenger.Infrastructure.MessageQueues;
 using PowerMessenger.Infrastructure.Redis;
+using PowerMessenger.Infrastructure.Shared;
 using PowerMessenger.WebApi;
 using PowerMessenger.WebApi.Common;
+using PowerMessenger.WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +59,7 @@ builder.Services.AddCors(coreOptions =>
 builder.Services
     .AddInfrastructurePersistence(builder.Configuration)
     .AddInfrastructureIdentity(builder.Configuration)
+    .AddInfrastructureShared(builder.Configuration)
     .AddApplication(builder.Configuration)
     .AddMessageQueue(builder.Configuration)
     .AddRedis(builder.Configuration)
@@ -89,7 +92,7 @@ builder.Services.AddAuthentication(options =>
             ValidateLifetime = true,
 
             IssuerSigningKey = jwtOptions.GetSymmetricSecurityKey(),
-            ValidateIssuerSigningKey = true,
+            ValidateIssuerSigningKey = true
         };
     });
 

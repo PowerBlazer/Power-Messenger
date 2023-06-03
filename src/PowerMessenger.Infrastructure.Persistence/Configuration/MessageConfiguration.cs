@@ -23,9 +23,11 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
         builder.HasOne(p => p.User)
             .WithMany(p => p.Messages)
             .HasForeignKey(p => p.UserId);
-
- 
-
+        
+        builder.HasOne(p => p.DeletedByUser)
+            .WithMany(p => p.DeletedMessages)
+            .HasForeignKey(p => p.DeletedByUserId);
+        
         #region HasData
 
         builder.HasData(new Message
@@ -35,7 +37,8 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 ChatId = 1,
                 Content = "Привет",
                 DateCreate = DateTime.Parse("2022-01-20 23:30:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -44,7 +47,8 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 ChatId = 1,
                 Content = "Дарова",
                 DateCreate = DateTime.Parse("2022-01-20 23:31:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -52,7 +56,8 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 UserId = 1,
                 ChatId = 1,
                 DateCreate = DateTime.Parse("2022-01-20 23:32:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -61,7 +66,8 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 ChatId = 1,
                 Content = "Нормально",
                 DateCreate = DateTime.Parse("2022-01-20 23:33:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -70,7 +76,8 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 ChatId = 1,
                 Content = "HelloWorld",
                 DateCreate = DateTime.Parse("2022-01-20 23:34:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -80,7 +87,8 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 Content = @"Если бы не характер, то природная смекалка, хитрость и отвага, доходящая до авантюризма,
 сделали бы его в наше время очень богатым",
                 DateCreate = DateTime.Parse("2022-01-20 23:35:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -91,7 +99,8 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
 Do consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. 
 Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
                 DateCreate = DateTime.Parse("2022-01-20 23:36:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -102,7 +111,8 @@ Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris
 Do consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. 
 Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
                 DateCreate = DateTime.Parse("2022-01-20 23:37:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -113,7 +123,8 @@ Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris
 Do consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. 
 Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
                 DateCreate = DateTime.Parse("2022-01-20 23:38:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -124,7 +135,8 @@ Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris
 Do consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. 
 Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
                 DateCreate = DateTime.Parse("2022-01-20 23:39:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -135,7 +147,8 @@ Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris
 Voluptate id nulla exercitation enim do qui elit proident ullamco qui pariatur cillum. 
 Pariatur ea eu duis laborum occaecat deserunt.",
                 DateCreate = DateTime.Parse("2022-01-20 23:40:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -144,7 +157,8 @@ Pariatur ea eu duis laborum occaecat deserunt.",
                 ChatId = 1,
                 Content = "Eiusmod dolore est id ipsum mollit ex.",
                 DateCreate = DateTime.Parse("2022-01-20 23:41:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -153,7 +167,8 @@ Pariatur ea eu duis laborum occaecat deserunt.",
                 ChatId = 1,
                 Content = "Dolore enim ea est incididunt do",
                 DateCreate = DateTime.Parse("2022-01-20 23:42:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -162,7 +177,8 @@ Pariatur ea eu duis laborum occaecat deserunt.",
                 ChatId = 2,
                 Content = "Eiusmod dolore est id ipsum mollit ex.",
                 DateCreate = DateTime.Parse("2022-01-20 23:39:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -173,7 +189,8 @@ Pariatur ea eu duis laborum occaecat deserunt.",
 Voluptate id nulla exercitation enim do qui elit proident ullamco qui pariatur cillum. 
 Pariatur ea eu duis laborum occaecat deserunt.",
                 DateCreate = DateTime.Parse("2022-01-20 23:40:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -182,7 +199,8 @@ Pariatur ea eu duis laborum occaecat deserunt.",
                 ChatId = 2,
                 Content = "Eiusmod dolore est id ipsum mollit ex.",
                 DateCreate = DateTime.Parse("2022-01-20 23:41:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             },
             new Message
             {
@@ -191,13 +209,11 @@ Pariatur ea eu duis laborum occaecat deserunt.",
                 ChatId = 2,
                 Content = "Dolore enim ea est incididunt do",
                 DateCreate = DateTime.Parse("2022-01-20 23:42:00"),
-                MessageTypeId = 1
+                MessageTypeId = 1,
+                DeletedByAll = false
             }
         );
 
         #endregion
-
-
-
     }
 }

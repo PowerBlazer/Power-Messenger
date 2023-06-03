@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PowerMessenger.Application.Layers.Identity;
 using PowerMessenger.Application.Layers.Identity.Services;
-using PowerMessenger.Infrastructure.Identity.Common;
 using PowerMessenger.Infrastructure.Identity.Contexts;
 using PowerMessenger.Infrastructure.Identity.Interfaces;
 using PowerMessenger.Infrastructure.Identity.Repositories;

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-using PowerMessenger.Application.DTOs.Authorization;
 using PowerMessenger.Application.Layers.Identity.Services;
+using PowerMessenger.Domain.DTOs.Authorization;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.LoginUser;
 
-public class LoginUserHandler: IRequestHandler<LoginUserCommand,LoginResult>
+public class LoginUserHandler: IRequestHandler<LoginUserCommand,LoginResponse>
 {
     private readonly IAuthorizationService _authorizationService;
     private readonly IMapper _mapper;
@@ -17,9 +17,9 @@ public class LoginUserHandler: IRequestHandler<LoginUserCommand,LoginResult>
         _mapper = mapper;
     }
 
-    public async Task<LoginResult> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<LoginResponse> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var loginInput = _mapper.Map<LoginUserCommand,LoginInput>(request);
+        var loginInput = _mapper.Map<LoginUserCommand,LoginRequest>(request);
 
         return await _authorizationService.LoginUserAsync(loginInput);
     }

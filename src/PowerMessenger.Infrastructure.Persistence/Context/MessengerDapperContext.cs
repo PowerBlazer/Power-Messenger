@@ -7,7 +7,6 @@ namespace PowerMessenger.Infrastructure.Persistence.Context;
 public class MessengerDapperContext : IMessengerDapperContext
 {
     private readonly string _connectionString;
-
     public MessengerDapperContext(string connectionString)
     {
         _connectionString = connectionString;

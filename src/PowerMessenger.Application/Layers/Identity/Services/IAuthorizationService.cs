@@ -1,4 +1,4 @@
-﻿using PowerMessenger.Application.DTOs.Authorization;
+﻿using PowerMessenger.Domain.DTOs.Authorization;
 
 namespace PowerMessenger.Application.Layers.Identity.Services;
 
@@ -28,19 +28,19 @@ public interface IAuthorizationService
     /// <summary>
     /// Регистрация пользователя 
     /// </summary>
-    /// <param name="registrationInput"></param>
+    /// <param name="registrationRequest"></param>
     /// <returns>Возвращает результат регистрации</returns>
-    Task<RegistrationResult> RegisterUserAsync(RegistrationInput registrationInput);
+    Task<RegistrationResponse> RegisterUserAsync(RegistrationRequest registrationRequest);
     /// <summary>
     /// Авторизация пользователя
     /// </summary>
-    /// <param name="loginInput"></param>
+    /// <param name="loginRequest"></param>
     /// <returns>Возвращает результат авторизации</returns>
-    Task<LoginResult> LoginUserAsync(LoginInput loginInput);
+    Task<LoginResponse> LoginUserAsync(LoginRequest loginRequest);
     /// <summary>
     /// Обновление токенов
     /// </summary>
-    /// <param name="refreshTokenInput">Объект токен доступа и обновления</param>
+    /// <param name="refreshTokenRequest">Объект токен доступа и обновления</param>
     /// <returns>Возвращает обновленные токены</returns>
-    Task<RefreshTokenResult> RefreshToken(RefreshTokenInput refreshTokenInput);
+    Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest refreshTokenRequest);
 }

@@ -14,4 +14,5 @@ public class User:BaseEntity<long>
     public ICollection<ChatParticipant>? ChatParticipants { get; set; }
     public ICollection<MessageStatus>? MessageStatuses { get; set; }
     public ICollection<Message>? Messages { get; set; }
+    public ICollection<Message>? DeletedMessages { get; set; }
 }

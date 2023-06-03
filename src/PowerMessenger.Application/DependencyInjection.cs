@@ -6,8 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PowerMessenger.Application.Features.AuthorizationFeature;
 using PowerMessenger.Application.Middlewares;
-#pragma warning disable CS0618
-
 
 namespace PowerMessenger.Application;
 

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using PowerMessenger.Application.DTOs.Authorization;
 using PowerMessenger.Application.Features.AuthorizationFeature.LoginUser;
 using PowerMessenger.Application.Features.AuthorizationFeature.RefreshToken;
 using PowerMessenger.Application.Features.AuthorizationFeature.RegisterUser;
@@ -8,6 +7,7 @@ using PowerMessenger.Application.Features.AuthorizationFeature.ResendConfirmatio
 using PowerMessenger.Application.Features.AuthorizationFeature.SendEmailVerificationCode;
 using PowerMessenger.Application.Features.AuthorizationFeature.VerifyEmailCode;
 using PowerMessenger.Domain.Common;
+using PowerMessenger.Domain.DTOs.Authorization;
 
 namespace PowerMessenger.WebApi.Controllers.V1;
 
@@ -93,14 +93,14 @@ public class AuthorizationController: BaseController
     /// <response code="400">Ошибка валидации данных</response>
     /// <response code="500">Ошибка на сервере</response>
     [HttpPost("Registration")]
-    [ProducesResponseType(typeof(ApiActionResult<RegistrationResult>),StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiActionResult<RegistrationResult>),StatusCodes.Status400BadRequest)]
-    public async Task<ApiActionResult<RegistrationResult>> RegisterUser(
+    [ProducesResponseType(typeof(ApiActionResult<RegistrationResponse>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiActionResult<RegistrationResponse>),StatusCodes.Status400BadRequest)]
+    public async Task<ApiActionResult<RegistrationResponse>> RegisterUser(
         [FromBody] RegisterUserCommand registerUserCommand)
     {
         var result = await _mediator.Send(registerUserCommand);
 
-        return new ApiActionResult<RegistrationResult>
+        return new ApiActionResult<RegistrationResponse>
         {
             Result = result
         };
@@ -116,14 +116,14 @@ public class AuthorizationController: BaseController
     /// <response code="401">Неправильный пароль</response>
     /// <response code="500">Ошибка на сервере</response>
     [HttpPost("Login")]
-    [ProducesResponseType(typeof(ApiActionResult<LoginResult>),StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiActionResult<LoginResult>),StatusCodes.Status400BadRequest)]
-    public async Task<ApiActionResult<LoginResult>> LoginUser([FromBody] 
+    [ProducesResponseType(typeof(ApiActionResult<LoginResponse>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiActionResult<LoginResponse>),StatusCodes.Status400BadRequest)]
+    public async Task<ApiActionResult<LoginResponse>> LoginUser([FromBody] 
         LoginUserCommand loginUserCommand)
     {
         var result = await _mediator.Send(loginUserCommand);
 
-        return new ApiActionResult<LoginResult>
+        return new ApiActionResult<LoginResponse>
         {
             Result = result
         };
@@ -139,12 +139,12 @@ public class AuthorizationController: BaseController
     /// <response code="401">Не валидный токен</response>
     /// <response code="500">Ошибка на сервере</response>
     [HttpPost("Refresh")]
-    public async Task<ApiActionResult<RefreshTokenResult>> RefreshToken([FromBody]
+    public async Task<ApiActionResult<RefreshTokenResponse>> RefreshToken([FromBody]
         RefreshTokenCommand refreshTokenCommand)
     {
         var result = await _mediator.Send(refreshTokenCommand);
 
-        return new ApiActionResult<RefreshTokenResult>
+        return new ApiActionResult<RefreshTokenResponse>
         {
             Result = result
         };

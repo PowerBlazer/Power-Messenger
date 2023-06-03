@@ -8,8 +8,6 @@ public class ChatTypeConfiguration:IEntityTypeConfiguration<ChatType>
 {
     public void Configure(EntityTypeBuilder<ChatType> builder)
     {
-        
-        
         builder.Property(p => p.Type)
             .HasMaxLength(100)
             .IsRequired();

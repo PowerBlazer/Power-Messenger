@@ -28,11 +28,13 @@ public static class DependencyInjection
             
         });
 
-        services.AddScoped<IMessengerDapperContext>(_ => 
+        services.AddSingleton<IMessengerDapperContext>(_ => 
             new MessengerDapperContext(connectionString!));
 
-        
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IChatRepository, ChatRepository>();
+        services.AddScoped<IChatParticipantsRepository, ChatParticipantsRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
         
         return services;
     }

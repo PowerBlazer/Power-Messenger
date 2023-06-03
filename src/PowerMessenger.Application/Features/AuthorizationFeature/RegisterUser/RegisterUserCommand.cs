@@ -1,11 +1,11 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using PowerMessenger.Application.DTOs.Authorization;
+using PowerMessenger.Domain.DTOs.Authorization;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.RegisterUser;
 
 [UsedImplicitly]
-public class RegisterUserCommand: IRequest<RegistrationResult>
+public class RegisterUserCommand: IRequest<RegistrationResponse>
 {
     public RegisterUserCommand(string sessionId, string userName, 
         string password, string passwordConfirm)

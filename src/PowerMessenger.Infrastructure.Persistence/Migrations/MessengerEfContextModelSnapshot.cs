@@ -66,7 +66,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         {
                             Id = 1L,
                             ChatTypeId = 2L,
-                            DateCreate = new DateTime(2023, 5, 27, 15, 26, 50, 391, DateTimeKind.Local).AddTicks(2273),
+                            DateCreate = new DateTime(2023, 6, 3, 19, 5, 3, 599, DateTimeKind.Local).AddTicks(5904),
                             Description = "Чат для .NET разработчиков и C# программистов.",
                             Name = "Group1",
                             Photo = "ChatsImage/efe4e2f6-d7b2-49f4-80bf-a2b5e8fa7178.jpg"
@@ -75,7 +75,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         {
                             Id = 2L,
                             ChatTypeId = 2L,
-                            DateCreate = new DateTime(2023, 5, 27, 15, 26, 50, 391, DateTimeKind.Local).AddTicks(2285),
+                            DateCreate = new DateTime(2023, 6, 3, 19, 5, 3, 599, DateTimeKind.Local).AddTicks(5917),
                             Description = "Стараемся не флудить. Пишем по делу. Правила: https://t.me/professorweb/430450 Для флуда @svoboda_obsh",
                             Name = "DOT.NET Talking",
                             Photo = "ChatsImage/5009efc6-6891-44b6-8d20-68ec9a9199de.jpg"
@@ -196,6 +196,14 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create");
 
+                    b.Property<bool>("DeletedByAll")
+                        .HasColumnType("boolean")
+                        .HasColumnName("deleted_by_all");
+
+                    b.Property<long?>("DeletedByUserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("deleted_by_user_id");
+
                     b.Property<long?>("ForwardedMessageId")
                         .HasColumnType("bigint")
                         .HasColumnName("forwarded_message_id");
@@ -218,6 +226,9 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                     b.HasIndex("ChatId")
                         .HasDatabaseName("ix_messages_chat_id");
 
+                    b.HasIndex("DeletedByUserId")
+                        .HasDatabaseName("ix_messages_deleted_by_user_id");
+
                     b.HasIndex("ForwardedMessageId")
                         .IsUnique()
                         .HasDatabaseName("ix_messages_forwarded_message_id");
@@ -237,6 +248,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "Привет",
                             DateCreate = new DateTime(2022, 1, 20, 23, 30, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
                         },
@@ -246,6 +258,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "Дарова",
                             DateCreate = new DateTime(2022, 1, 20, 23, 31, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
                         },
@@ -254,6 +267,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 3L,
                             ChatId = 1L,
                             DateCreate = new DateTime(2022, 1, 20, 23, 32, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
                         },
@@ -263,6 +277,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "Нормально",
                             DateCreate = new DateTime(2022, 1, 20, 23, 33, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
                         },
@@ -272,6 +287,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "HelloWorld",
                             DateCreate = new DateTime(2022, 1, 20, 23, 34, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
                         },
@@ -281,6 +297,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "Если бы не характер, то природная смекалка, хитрость и отвага, доходящая до авантюризма,\r\nсделали бы его в наше время очень богатым",
                             DateCreate = new DateTime(2022, 1, 20, 23, 35, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
                         },
@@ -290,6 +307,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "Eiusmod id pariatur reprehenderit minim ea est laboris. \r\nDo consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. \r\nAliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
                             DateCreate = new DateTime(2022, 1, 20, 23, 36, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
                         },
@@ -299,6 +317,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "Eiusmod id pariatur reprehenderit minim ea est laboris. \r\nDo consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. \r\nAliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
                             DateCreate = new DateTime(2022, 1, 20, 23, 37, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
                         },
@@ -308,6 +327,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "Eiusmod id pariatur reprehenderit minim ea est laboris. \r\nDo consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. \r\nAliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
                             DateCreate = new DateTime(2022, 1, 20, 23, 38, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
                         },
@@ -317,6 +337,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "Eiusmod id pariatur reprehenderit minim ea est laboris. \r\nDo consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. \r\nAliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
                             DateCreate = new DateTime(2022, 1, 20, 23, 39, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
                         },
@@ -326,6 +347,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "Cupidatat exercitation et culpa nisi consectetur laborum eu voluptate enim deserunt nostrud.\r\nVoluptate id nulla exercitation enim do qui elit proident ullamco qui pariatur cillum. \r\nPariatur ea eu duis laborum occaecat deserunt.",
                             DateCreate = new DateTime(2022, 1, 20, 23, 40, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
                         },
@@ -335,6 +357,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "Eiusmod dolore est id ipsum mollit ex.",
                             DateCreate = new DateTime(2022, 1, 20, 23, 41, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
                         },
@@ -344,6 +367,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 1L,
                             Content = "Dolore enim ea est incididunt do",
                             DateCreate = new DateTime(2022, 1, 20, 23, 42, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
                         },
@@ -353,6 +377,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 2L,
                             Content = "Eiusmod dolore est id ipsum mollit ex.",
                             DateCreate = new DateTime(2022, 1, 20, 23, 39, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
                         },
@@ -362,6 +387,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 2L,
                             Content = "Cupidatat exercitation et culpa nisi consectetur laborum eu voluptate enim deserunt nostrud.\r\nVoluptate id nulla exercitation enim do qui elit proident ullamco qui pariatur cillum. \r\nPariatur ea eu duis laborum occaecat deserunt.",
                             DateCreate = new DateTime(2022, 1, 20, 23, 40, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
                         },
@@ -371,6 +397,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 2L,
                             Content = "Eiusmod dolore est id ipsum mollit ex.",
                             DateCreate = new DateTime(2022, 1, 20, 23, 41, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
                         },
@@ -380,6 +407,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             ChatId = 2L,
                             Content = "Dolore enim ea est incididunt do",
                             DateCreate = new DateTime(2022, 1, 20, 23, 42, 0, 0, DateTimeKind.Unspecified),
+                            DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
                         });
@@ -394,13 +422,13 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_read");
-
-                    b.Property<long>("MessageId")
+                    b.Property<long>("ChatId")
                         .HasColumnType("bigint")
-                        .HasColumnName("message_id");
+                        .HasColumnName("chat_id");
+
+                    b.Property<long?>("LastMessageReadId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("last_message_read_id");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint")
@@ -409,8 +437,11 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                     b.HasKey("Id")
                         .HasName("pk_message_statuses");
 
-                    b.HasIndex("MessageId")
-                        .HasDatabaseName("ix_message_statuses_message_id");
+                    b.HasIndex("ChatId")
+                        .HasDatabaseName("ix_message_statuses_chat_id");
+
+                    b.HasIndex("LastMessageReadId")
+                        .HasDatabaseName("ix_message_statuses_last_message_read_id");
 
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_message_statuses_user_id");
@@ -421,239 +452,29 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         new
                         {
                             Id = 1L,
-                            IsRead = false,
-                            MessageId = 1L,
+                            ChatId = 1L,
+                            LastMessageReadId = 12L,
                             UserId = 1L
                         },
                         new
                         {
                             Id = 2L,
-                            IsRead = false,
-                            MessageId = 1L,
+                            ChatId = 1L,
+                            LastMessageReadId = 11L,
                             UserId = 2L
                         },
                         new
                         {
                             Id = 3L,
-                            IsRead = false,
-                            MessageId = 2L,
+                            ChatId = 2L,
+                            LastMessageReadId = 16L,
                             UserId = 1L
                         },
                         new
                         {
                             Id = 4L,
-                            IsRead = false,
-                            MessageId = 2L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 5L,
-                            IsRead = false,
-                            MessageId = 3L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 6L,
-                            IsRead = false,
-                            MessageId = 3L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 7L,
-                            IsRead = false,
-                            MessageId = 4L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 8L,
-                            IsRead = false,
-                            MessageId = 4L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 9L,
-                            IsRead = false,
-                            MessageId = 5L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 10L,
-                            IsRead = false,
-                            MessageId = 5L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 11L,
-                            IsRead = false,
-                            MessageId = 6L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 12L,
-                            IsRead = false,
-                            MessageId = 6L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 13L,
-                            IsRead = false,
-                            MessageId = 7L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 14L,
-                            IsRead = false,
-                            MessageId = 7L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 15L,
-                            IsRead = false,
-                            MessageId = 8L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 16L,
-                            IsRead = false,
-                            MessageId = 8L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 17L,
-                            IsRead = false,
-                            MessageId = 9L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 18L,
-                            IsRead = false,
-                            MessageId = 9L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 19L,
-                            IsRead = false,
-                            MessageId = 10L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 20L,
-                            IsRead = false,
-                            MessageId = 10L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 21L,
-                            IsRead = false,
-                            MessageId = 11L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 22L,
-                            IsRead = false,
-                            MessageId = 11L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 23L,
-                            IsRead = false,
-                            MessageId = 12L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 24L,
-                            IsRead = false,
-                            MessageId = 12L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 25L,
-                            IsRead = false,
-                            MessageId = 13L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 26L,
-                            IsRead = false,
-                            MessageId = 13L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 27L,
-                            IsRead = false,
-                            MessageId = 14L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 28L,
-                            IsRead = false,
-                            MessageId = 14L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 29L,
-                            IsRead = false,
-                            MessageId = 15L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 30L,
-                            IsRead = false,
-                            MessageId = 15L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 31L,
-                            IsRead = false,
-                            MessageId = 16L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 32L,
-                            IsRead = false,
-                            MessageId = 16L,
-                            UserId = 2L
-                        },
-                        new
-                        {
-                            Id = 33L,
-                            IsRead = false,
-                            MessageId = 17L,
-                            UserId = 1L
-                        },
-                        new
-                        {
-                            Id = 34L,
-                            IsRead = false,
-                            MessageId = 17L,
+                            ChatId = 2L,
+                            LastMessageReadId = 14L,
                             UserId = 2L
                         });
                 });
@@ -785,6 +606,11 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_messages_chats_chat_id");
 
+                    b.HasOne("PowerMessenger.Domain.Entities.User", "DeletedByUser")
+                        .WithMany("DeletedMessages")
+                        .HasForeignKey("DeletedByUserId")
+                        .HasConstraintName("fk_messages_users_deleted_by_user_id");
+
                     b.HasOne("PowerMessenger.Domain.Entities.Message", null)
                         .WithOne("ForwardMessage")
                         .HasForeignKey("PowerMessenger.Domain.Entities.Message", "ForwardedMessageId")
@@ -806,6 +632,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Chat");
 
+                    b.Navigation("DeletedByUser");
+
                     b.Navigation("MessageType");
 
                     b.Navigation("User");
@@ -813,11 +641,16 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("PowerMessenger.Domain.Entities.MessageStatus", b =>
                 {
-                    b.HasOne("PowerMessenger.Domain.Entities.Message", "Message")
+                    b.HasOne("PowerMessenger.Domain.Entities.Chat", "Chat")
                         .WithMany("MessageStatuses")
-                        .HasForeignKey("MessageId")
+                        .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
+                        .HasConstraintName("fk_message_statuses_chats_chat_id");
+
+                    b.HasOne("PowerMessenger.Domain.Entities.Message", "Message")
+                        .WithMany("MessageStatuses")
+                        .HasForeignKey("LastMessageReadId")
                         .HasConstraintName("fk_message_statuses_messages_message_id");
 
                     b.HasOne("PowerMessenger.Domain.Entities.User", "User")
@@ -827,6 +660,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_message_statuses_users_user_id");
 
+                    b.Navigation("Chat");
+
                     b.Navigation("Message");
 
                     b.Navigation("User");
@@ -835,6 +670,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("PowerMessenger.Domain.Entities.Chat", b =>
                 {
                     b.Navigation("ChatParticipants");
+
+                    b.Navigation("MessageStatuses");
 
                     b.Navigation("Messages");
                 });
@@ -859,6 +696,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("PowerMessenger.Domain.Entities.User", b =>
                 {
                     b.Navigation("ChatParticipants");
+
+                    b.Navigation("DeletedMessages");
 
                     b.Navigation("MessageStatuses");
 

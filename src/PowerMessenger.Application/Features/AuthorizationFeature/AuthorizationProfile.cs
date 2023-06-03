@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using PowerMessenger.Application.DTOs.Authorization;
 using PowerMessenger.Application.Features.AuthorizationFeature.LoginUser;
 using PowerMessenger.Application.Features.AuthorizationFeature.RefreshToken;
 using PowerMessenger.Application.Features.AuthorizationFeature.RegisterUser;
+using PowerMessenger.Domain.DTOs.Authorization;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature;
 
@@ -10,11 +10,11 @@ public class AuthorizationProfile: Profile
 {
     public AuthorizationProfile()
     {
-        CreateMap<RegistrationInput,RegisterUserCommand>()
+        CreateMap<RegistrationRequest,RegisterUserCommand>()
             .ReverseMap();
-        CreateMap<LoginInput, LoginUserCommand>()
+        CreateMap<LoginRequest, LoginUserCommand>()
             .ReverseMap();
-        CreateMap<RefreshTokenInput, RefreshTokenCommand>()
+        CreateMap<RefreshTokenRequest, RefreshTokenCommand>()
             .ReverseMap();
     }
 }

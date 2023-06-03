@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using PowerMessenger.Application.Layers.Identity;
 using PowerMessenger.Infrastructure.Identity.Entities;
 
 namespace PowerMessenger.Infrastructure.Identity.Interfaces;
