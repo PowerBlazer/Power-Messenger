@@ -12,6 +12,9 @@ public class UserConfiguration:IEntityTypeConfiguration<User>
             .HasMaxLength(100)
             .IsRequired();
         
+        builder.HasIndex(p => p.UserId)
+            .IsUnique();
+        
         builder.Property(p => p.Theme).HasMaxLength(50);
 
         #region HasData

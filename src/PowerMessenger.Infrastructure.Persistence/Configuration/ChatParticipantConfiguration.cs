@@ -16,6 +16,7 @@ public class ChatParticipantConfiguration:IEntityTypeConfiguration<ChatParticipa
 
         builder.HasOne(p => p.User)
             .WithMany(p => p.ChatParticipants)
+            .HasPrincipalKey(p=>p.UserId)
             .HasForeignKey(p => p.UserId);
 
         #region HasData

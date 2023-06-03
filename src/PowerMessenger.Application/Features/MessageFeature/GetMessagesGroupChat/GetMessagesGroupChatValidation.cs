@@ -11,7 +11,9 @@ public class GetMessagesGroupChatValidation: AbstractValidator<GetMessagesGroupC
             .NotEmpty()
             .WithMessage("Поле не может быть пустым")
             .MustAsync(async (chatId, _) => await chatService.CheckChatExistenceById(chatId))
-            .WithMessage("Такого чата не сущесвует");
+            .WithMessage("Такого чата не сущесвует")
+            .MustAsync(async (chatId,_) => await chatService.ValidateChatType(chatId,"Group"))
+            .WithMessage("Не соответсвует тип чата");
 
         RuleFor(p => p.UserId)
             .NotEmpty()

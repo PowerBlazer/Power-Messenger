@@ -1,21 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
+using PowerMessenger.Domain.Entities;
 
 namespace PowerMessenger.Infrastructure.Persistence.Repositories;
 
-public class ChatParticipantsRepository: IChatParticipantsRepository
+public class ChatTypeRepository: IChatTypeRepository
 {
     private readonly IMessengerEfContext _messengerEfContext;
 
-    public ChatParticipantsRepository(IMessengerEfContext messengerEfContext)
+    public ChatTypeRepository(IMessengerEfContext messengerEfContext)
     {
         _messengerEfContext = messengerEfContext;
     }
 
-    public async Task<bool> CheckParticipantInChat(long chatId, long userId)
+    public async Task<ChatType?> GetChatTypeById(long typeId)
     {
-        return await _messengerEfContext.ChatParticipants
-            .FirstOrDefaultAsync(p => p.ChatId == chatId && p.UserId == userId) is not null;
+        return await _messengerEfContext.ChatTypes
+            .FirstOrDefaultAsync(p => p.Id == typeId);
     }
 }

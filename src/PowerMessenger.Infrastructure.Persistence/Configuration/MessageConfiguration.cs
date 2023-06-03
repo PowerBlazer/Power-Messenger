@@ -22,10 +22,12 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
 
         builder.HasOne(p => p.User)
             .WithMany(p => p.Messages)
+            .HasPrincipalKey(p=>p.UserId)
             .HasForeignKey(p => p.UserId);
         
         builder.HasOne(p => p.DeletedByUser)
             .WithMany(p => p.DeletedMessages)
+            .HasPrincipalKey(p=>p.UserId)
             .HasForeignKey(p => p.DeletedByUserId);
         
         #region HasData

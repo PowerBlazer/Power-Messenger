@@ -14,6 +14,7 @@ public class MessageStatusConfiguration:IEntityTypeConfiguration<MessageStatus>
 
         builder.HasOne(p => p.User)
             .WithMany(p => p.MessageStatuses)
+            .HasPrincipalKey(p=>p.UserId)
             .HasForeignKey(p => p.UserId);
 
         builder.HasOne(p => p.Chat)
