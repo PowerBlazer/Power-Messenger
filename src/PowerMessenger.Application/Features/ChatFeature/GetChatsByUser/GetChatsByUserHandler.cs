@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using JetBrains.Annotations;
+using MediatR;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
 using PowerMessenger.Application.Layers.Redis.Services;
 using PowerMessenger.Domain.Common;
@@ -6,6 +7,7 @@ using PowerMessenger.Domain.DTOs.Chat;
 
 namespace PowerMessenger.Application.Features.ChatFeature.GetChatsByUser;
 
+[UsedImplicitly]
 public class GetChatsByUserHandler: IRequestHandler<GetChatsByUserQuery,IList<ChatResponse>>
 {
     private readonly IChatRepository _chatRepository;

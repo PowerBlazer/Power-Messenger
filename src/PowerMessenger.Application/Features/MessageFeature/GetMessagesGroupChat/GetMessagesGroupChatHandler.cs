@@ -1,10 +1,12 @@
-﻿using MediatR;
+﻿using JetBrains.Annotations;
+using MediatR;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
 using PowerMessenger.Domain.DTOs.Message;
 
 namespace PowerMessenger.Application.Features.MessageFeature.GetMessagesGroupChat;
 
-public class GetChatsByUserHandler: IRequestHandler<GetMessagesGroupChatQuery,IList<MessageGroupChatResponse>>
+[UsedImplicitly]
+public class GetChatsByUserHandler: IRequestHandler<GetMessagesGroupChatQuery,MessagesGroupChatResponse>
 {
     private readonly IMessageRepository _messageRepository;
 
@@ -13,10 +15,17 @@ public class GetChatsByUserHandler: IRequestHandler<GetMessagesGroupChatQuery,IL
         _messageRepository = messageRepository;
     }
 
-    public async Task<IList<MessageGroupChatResponse>> Handle(GetMessagesGroupChatQuery request, CancellationToken cancellationToken)
+    public async Task<MessagesGroupChatResponse> Handle(GetMessagesGroupChatQuery request, CancellationToken cancellationToken)
     {
-       var messagesEnumerable = await _messageRepository.GetMessagesGroupChatByUser(request.ChatId, request.UserId);
+       var messagesEnumerable = await _messageRepository.GetMessagesGroupChatByUser(
+           request.ChatId,
+           request.UserId,
+           request.Next,
+           request.Prev
+       );
+       
+       var countUnreadMessages = await _messageRepository.GetCountUnreadMessagesChat(request.ChatId, request.UserId);
 
-       return messagesEnumerable.ToList();
+       return new MessagesGroupChatResponse(messagesEnumerable.ToList(),countUnreadMessages);
     }
 }

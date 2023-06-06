@@ -30,6 +30,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Features\MessageFeature\GetNextMessagesGroupChat" />
+      <Folder Include="Features\MessageFeature\GetPrevMessagesGroupChat" />
       <Folder Include="Hubs" />
     </ItemGroup>
 

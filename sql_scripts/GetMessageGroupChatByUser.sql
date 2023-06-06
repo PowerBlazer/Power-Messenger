@@ -1,12 +1,13 @@
-CREATE OR REPLACE FUNCTION get_messages_group_chat_by_user(IN p_chat_id bigint,IN p_user_id bigint) 
+CREATE OR REPLACE FUNCTION get_messages_group_chat_by_user(IN p_chat_id bigint,IN p_user_id bigint,IN p_next integer, IN p_prev integer) 
 RETURNS TABLE(
 	id bigint,
 	content text,
 	source text,
-	date_create timestamp without time zone,
+	date_create timestamp with time zone,
 	type character varying,
 	is_owner boolean,
 	is_read boolean,
+    message_user_id bigint,
 	message_user_name character varying,
 	message_user_avatar text,
 	forwarded_message_id bigint,
@@ -20,7 +21,7 @@ RETURNS TABLE(
 	COST 100 ROWS 1000 
 AS $BODY$
 DECLARE
-	firstUnReadMessageDate timestamp without time zone;
+	firstUnReadMessageDate timestamp with time zone;
 BEGIN
 	SELECT public.messages.date_create INTO firstUnReadMessageDate FROM public.message_statuses
 		INNER JOIN public.messages ON public.messages.id = message_statuses.last_message_read_id
@@ -40,7 +41,7 @@ BEGIN
 			FROM messages
 			WHERE messages.chat_id = p_chat_id
 				AND messages.date_create > firstUnReadMessageDate
-			LIMIT 10
+			LIMIT p_next
 		), 
 		read_messages AS (
 			SELECT messages.id
@@ -48,7 +49,7 @@ BEGIN
 			WHERE messages.chat_id = p_chat_id
 				AND messages.date_create <= firstUnReadMessageDate
 			ORDER BY messages.date_create DESC
-			LIMIT 10
+			LIMIT p_prev
 		)
 		SELECT messages.id,
 			messages.content,
@@ -57,6 +58,7 @@ BEGIN
 			message_types.type,
 			CASE WHEN messages.user_id = p_user_id THEN true ELSE false END as isOwner,
 			CASE WHEN messages.id IN (SELECT read_messages.id FROM read_messages) THEN true ELSE false END as isRead,
+            users.user_id,
 			users.user_name,
 			users.avatar,
 			forwarded_messages.id,

@@ -12,7 +12,7 @@ using PowerMessenger.Infrastructure.Persistence.Context;
 namespace PowerMessenger.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MessengerEfContext))]
-    [Migration("20230603160503_PersistenceMigration")]
+    [Migration("20230606210346_PersistenceMigration")]
     partial class PersistenceMigration
     {
         /// <inheritdoc />
@@ -38,8 +38,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("chat_type_id");
 
-                    b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp without time zone")
+                    b.Property<DateTimeOffset>("DateCreate")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_create");
 
                     b.Property<string>("Description")
@@ -69,7 +69,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         {
                             Id = 1L,
                             ChatTypeId = 2L,
-                            DateCreate = new DateTime(2023, 6, 3, 19, 5, 3, 599, DateTimeKind.Local).AddTicks(5904),
+                            DateCreate = new DateTimeOffset(new DateTime(2023, 6, 6, 21, 3, 45, 984, DateTimeKind.Unspecified).AddTicks(8556), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Чат для .NET разработчиков и C# программистов.",
                             Name = "Group1",
                             Photo = "ChatsImage/efe4e2f6-d7b2-49f4-80bf-a2b5e8fa7178.jpg"
@@ -78,7 +78,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         {
                             Id = 2L,
                             ChatTypeId = 2L,
-                            DateCreate = new DateTime(2023, 6, 3, 19, 5, 3, 599, DateTimeKind.Local).AddTicks(5917),
+                            DateCreate = new DateTimeOffset(new DateTime(2023, 6, 6, 21, 3, 45, 984, DateTimeKind.Unspecified).AddTicks(8561), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Стараемся не флудить. Пишем по делу. Правила: https://t.me/professorweb/430450 Для флуда @svoboda_obsh",
                             Name = "DOT.NET Talking",
                             Photo = "ChatsImage/5009efc6-6891-44b6-8d20-68ec9a9199de.jpg"
@@ -195,8 +195,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("content");
 
-                    b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp without time zone")
+                    b.Property<DateTimeOffset>("DateCreate")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_create");
 
                     b.Property<bool>("DeletedByAll")
@@ -250,7 +250,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 1L,
                             ChatId = 1L,
                             Content = "Привет",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 30, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 30, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
@@ -260,7 +260,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 2L,
                             ChatId = 1L,
                             Content = "Дарова",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 31, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 31, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
@@ -269,7 +269,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         {
                             Id = 3L,
                             ChatId = 1L,
-                            DateCreate = new DateTime(2022, 1, 20, 23, 32, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 32, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
@@ -279,7 +279,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 4L,
                             ChatId = 1L,
                             Content = "Нормально",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 33, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 33, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
@@ -289,7 +289,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 5L,
                             ChatId = 1L,
                             Content = "HelloWorld",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 34, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 34, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
@@ -299,7 +299,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 6L,
                             ChatId = 1L,
                             Content = "Если бы не характер, то природная смекалка, хитрость и отвага, доходящая до авантюризма,\r\nсделали бы его в наше время очень богатым",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 35, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 35, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
@@ -309,7 +309,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 7L,
                             ChatId = 1L,
                             Content = "Eiusmod id pariatur reprehenderit minim ea est laboris. \r\nDo consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. \r\nAliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 36, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 36, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
@@ -319,7 +319,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 8L,
                             ChatId = 1L,
                             Content = "Eiusmod id pariatur reprehenderit minim ea est laboris. \r\nDo consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. \r\nAliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 37, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 37, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
@@ -329,7 +329,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 9L,
                             ChatId = 1L,
                             Content = "Eiusmod id pariatur reprehenderit minim ea est laboris. \r\nDo consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. \r\nAliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 38, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 38, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
@@ -339,7 +339,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 10L,
                             ChatId = 1L,
                             Content = "Eiusmod id pariatur reprehenderit minim ea est laboris. \r\nDo consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. \r\nAliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 39, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 39, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
@@ -349,7 +349,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 11L,
                             ChatId = 1L,
                             Content = "Cupidatat exercitation et culpa nisi consectetur laborum eu voluptate enim deserunt nostrud.\r\nVoluptate id nulla exercitation enim do qui elit proident ullamco qui pariatur cillum. \r\nPariatur ea eu duis laborum occaecat deserunt.",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 40, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 40, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
@@ -359,7 +359,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 12L,
                             ChatId = 1L,
                             Content = "Eiusmod dolore est id ipsum mollit ex.",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 41, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 41, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
@@ -369,7 +369,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 13L,
                             ChatId = 1L,
                             Content = "Dolore enim ea est incididunt do",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 42, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 42, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
@@ -379,7 +379,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 14L,
                             ChatId = 2L,
                             Content = "Eiusmod dolore est id ipsum mollit ex.",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 39, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 43, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 1L
@@ -389,7 +389,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 15L,
                             ChatId = 2L,
                             Content = "Cupidatat exercitation et culpa nisi consectetur laborum eu voluptate enim deserunt nostrud.\r\nVoluptate id nulla exercitation enim do qui elit proident ullamco qui pariatur cillum. \r\nPariatur ea eu duis laborum occaecat deserunt.",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 40, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 44, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
@@ -399,7 +399,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 16L,
                             ChatId = 2L,
                             Content = "Eiusmod dolore est id ipsum mollit ex.",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 41, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 45, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
@@ -409,10 +409,174 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                             Id = 17L,
                             ChatId = 2L,
                             Content = "Dolore enim ea est incididunt do",
-                            DateCreate = new DateTime(2022, 1, 20, 23, 42, 0, 0, DateTimeKind.Unspecified),
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
                             DeletedByAll = false,
                             MessageTypeId = 1L,
                             UserId = 2L
+                        },
+                        new
+                        {
+                            Id = 18L,
+                            ChatId = 2L,
+                            Content = "Привет!",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 1, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            MessageTypeId = 1L,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 19L,
+                            ChatId = 2L,
+                            Content = "Как дела?",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 2, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 18L,
+                            MessageTypeId = 1L,
+                            UserId = 2L
+                        },
+                        new
+                        {
+                            Id = 20L,
+                            ChatId = 2L,
+                            Content = "Отлично!",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 3, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 19L,
+                            MessageTypeId = 1L,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 21L,
+                            ChatId = 2L,
+                            Content = "Что делаешь?",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 4, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 20L,
+                            MessageTypeId = 1L,
+                            UserId = 2L
+                        },
+                        new
+                        {
+                            Id = 22L,
+                            ChatId = 2L,
+                            Content = "Планирую поход в кино.",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 5, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 21L,
+                            MessageTypeId = 1L,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 23L,
+                            ChatId = 2L,
+                            Content = "Какой фильм собираешься смотреть?",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 6, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 22L,
+                            MessageTypeId = 1L,
+                            UserId = 2L
+                        },
+                        new
+                        {
+                            Id = 24L,
+                            ChatId = 2L,
+                            Content = "Думаю посмотреть новый боевик.",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 7, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 23L,
+                            MessageTypeId = 1L,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 25L,
+                            ChatId = 2L,
+                            Content = "Звучит интересно. Какие еще планы на выходные?",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 8, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 24L,
+                            MessageTypeId = 1L,
+                            UserId = 2L
+                        },
+                        new
+                        {
+                            Id = 26L,
+                            ChatId = 2L,
+                            Content = "Надеюсь провести время с семьей и отдохнуть.",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 9, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 25L,
+                            MessageTypeId = 1L,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 27L,
+                            ChatId = 2L,
+                            Content = "Отличные планы! Удачи вам!",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 10, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 26L,
+                            MessageTypeId = 1L,
+                            UserId = 2L
+                        },
+                        new
+                        {
+                            Id = 28L,
+                            ChatId = 2L,
+                            Content = "Спасибо! Буду стараться!",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 11, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 27L,
+                            MessageTypeId = 1L,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 29L,
+                            ChatId = 2L,
+                            Content = "Как прошел поход в кино?",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 12, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 28L,
+                            MessageTypeId = 1L,
+                            UserId = 2L
+                        },
+                        new
+                        {
+                            Id = 30L,
+                            ChatId = 2L,
+                            Content = "Было здорово! Фильм понравился.",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 13, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 29L,
+                            MessageTypeId = 1L,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 31L,
+                            ChatId = 2L,
+                            Content = "Рад, что вам понравилось!",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 14, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 30L,
+                            MessageTypeId = 1L,
+                            UserId = 2L
+                        },
+                        new
+                        {
+                            Id = 32L,
+                            ChatId = 2L,
+                            Content = "Спасибо за рекомендацию фильма.",
+                            DateCreate = new DateTimeOffset(new DateTime(2022, 12, 20, 23, 46, 15, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DeletedByAll = false,
+                            ForwardedMessageId = 31L,
+                            MessageTypeId = 1L,
+                            UserId = 1L
                         });
                 });
 
@@ -528,8 +692,8 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("avatar");
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("timestamp without time zone")
+                    b.Property<DateTimeOffset?>("DateOfBirth")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_of_birth");
 
                     b.Property<string>("Theme")
@@ -549,6 +713,13 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_users");
+
+                    b.HasAlternateKey("UserId")
+                        .HasName("ak_users_user_id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_user_id");
 
                     b.ToTable("users", (string)null);
 
@@ -591,6 +762,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                     b.HasOne("PowerMessenger.Domain.Entities.User", "User")
                         .WithMany("ChatParticipants")
                         .HasForeignKey("UserId")
+                        .HasPrincipalKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_chat_participants_users_user_id");
@@ -612,6 +784,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                     b.HasOne("PowerMessenger.Domain.Entities.User", "DeletedByUser")
                         .WithMany("DeletedMessages")
                         .HasForeignKey("DeletedByUserId")
+                        .HasPrincipalKey("UserId")
                         .HasConstraintName("fk_messages_users_deleted_by_user_id");
 
                     b.HasOne("PowerMessenger.Domain.Entities.Message", null)
@@ -629,6 +802,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                     b.HasOne("PowerMessenger.Domain.Entities.User", "User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
+                        .HasPrincipalKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_messages_users_user_id");
@@ -659,6 +833,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
                     b.HasOne("PowerMessenger.Domain.Entities.User", "User")
                         .WithMany("MessageStatuses")
                         .HasForeignKey("UserId")
+                        .HasPrincipalKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_message_statuses_users_user_id");

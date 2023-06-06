@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
 using PowerMessenger.Domain.DTOs.Chat;
+using PowerMessenger.Domain.DTOs.Common;
 using PowerMessenger.Domain.Entities;
-using PowerMessenger.Domain.RepositoryTransferObjects.MessageRepository;
 
 
 namespace PowerMessenger.Infrastructure.Persistence.Repositories;

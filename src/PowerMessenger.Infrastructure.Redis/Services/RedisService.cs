@@ -1,6 +1,7 @@
 ﻿using PowerMessenger.Application.Layers.Redis.Services;
 using StackExchange.Redis;
 
+#pragma warning disable CA1816
 namespace PowerMessenger.Infrastructure.Redis.Services;
 
 public class RedisService: IRedisService,IDisposable
@@ -41,7 +42,7 @@ public class RedisService: IRedisService,IDisposable
 
         return false;
     }
-
+    
     public void Dispose()
     {
         if (_redisConnection.IsValueCreated)

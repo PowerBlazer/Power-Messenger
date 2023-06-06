@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_chats_by_user(IN p_user_id bigint)
 RETURNS TABLE(
 	id bigint, 
 	Name character varying, 
-	datecreate timestamp without time zone, 
+	datecreate timestamp with time zone, 
 	photo text, 
 	description text,
 	type character varying, 
@@ -11,7 +11,7 @@ RETURNS TABLE(
 	countmessages integer, 
 	lastmessagecontent text, 
 	lastmessagetype character varying, 
-	lastmessagedatecreate timestamp without time zone)
+	lastmessagedatecreate timestamp with time zone)
 LANGUAGE 'plpgsql'
 VOLATILE
 PARALLEL UNSAFE
@@ -27,11 +27,11 @@ AS $BODY$
         chats.description,
         chat_types.type,
         (SELECT count(*)::integer FROM public.chat_participants WHERE chat_participants.chat_id = chats.id),
-        (SELECT COUNT(*)::integer FROM public.messages WHERE public.messages.date_create >= (SELECT public.messages.date_create FROM public.message_statuses 
-			INNER JOIN public.messages ON public.messages.id = public.message_statuses.last_message_read_id 
-			WHERE public.message_statuses.chat_id = chats.id 
-			AND public.message_statuses.user_id = p_user_id LIMIT 1)
-		AND public.messages.chat_id = chats.id),
+        (SELECT COUNT(*)::integer FROM messages WHERE messages.date_create > 
+			(SELECT status_messages.date_create FROM message_statuses
+				INNER JOIN messages as status_messages ON message_statuses.last_message_read_id = status_messages.id
+			WHERE message_statuses.user_id = p_user_id AND message_statuses.chat_id = chats.id) 
+		 AND messages.chat_id = chats.id),
 		 
         (SELECT count(*)::integer FROM public.messages WHERE messages.chat_id = chats.id),
         (SELECT content FROM public.messages WHERE messages.chat_id = chats.id 

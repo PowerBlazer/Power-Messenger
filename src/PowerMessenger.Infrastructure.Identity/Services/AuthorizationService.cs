@@ -75,7 +75,7 @@ public class AuthorizationService: IAuthorizationService
 
         if (sessionJson is null)
         {
-            throw new SessionNotFoundException("Сессия не найдена");
+            throw new SessionCodeNotFoundException("Сессия не найдена");
         }
         
         var verificationCode = VerificationCode.GenerateVerificationCode();
@@ -110,7 +110,7 @@ public class AuthorizationService: IAuthorizationService
 
         if (sessionValue is null)
         {
-            throw new SessionNotFoundException("Сессия закончилась");
+            throw new SessionCodeNotFoundException("Сессия закончилась");
         }
 
         var sessionVerifyEmail = JsonSerializer.Deserialize<SessionVerifyEmail>(sessionValue);
@@ -139,7 +139,7 @@ public class AuthorizationService: IAuthorizationService
 
         if (sessionJson is null)
         {
-            throw new SessionNotFoundException("Сессия подтверждения закончилась, повторите попытку");
+            throw new SessionCodeNotFoundException("Сессия подтверждения закончилась, повторите попытку");
         }
 
         var session = JsonSerializer.Deserialize<SessionVerifyEmail>(sessionJson);

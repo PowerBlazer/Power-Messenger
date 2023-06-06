@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
+using JetBrains.Annotations;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.RegisterUser;
 
+[UsedImplicitly]
 public class RegisterUserValidation: AbstractValidator<RegisterUserCommand>
 {
     public RegisterUserValidation()

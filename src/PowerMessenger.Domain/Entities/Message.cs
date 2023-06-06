@@ -7,7 +7,7 @@ public class Message : BaseEntity<long>
     public string? Content { get; set; }
     public long UserId { get; set; }
     public long ChatId { get; set; }
-    public DateTime DateCreate { get; set; }
+    public DateTimeOffset DateCreate { get; set; }
     public long MessageTypeId { get; set; }
     public long? ForwardedMessageId { get; set; }
     public string? Source { get; set; }

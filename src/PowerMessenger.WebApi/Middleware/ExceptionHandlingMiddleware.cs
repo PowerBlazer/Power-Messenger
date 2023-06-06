@@ -31,14 +31,12 @@ public class ExceptionHandlingMiddleware
         {
             await HandleExceptionAsync(httpContext,HttpStatusCode.Unauthorized,ex.Errors);
         }
-        catch (SessionNotFoundException ex)
+        catch (SessionCodeNotFoundException ex)
         {
             await HandleExceptionAsync(httpContext,HttpStatusCode.NotFound,ex.Error);
         }
         catch (SessionCodeNotValidException ex)
         {
-            
-
             await HandleExceptionAsync(httpContext,HttpStatusCode.BadRequest,ex.Error);
         }
         catch (Exception ex)

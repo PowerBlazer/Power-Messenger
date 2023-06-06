@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
+using JetBrains.Annotations;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.VerifyEmailCode;
 
+[UsedImplicitly]
 public class VerifyEmailCodeValidation: AbstractValidator<VerifyEmailCodeCommand>
 {
     public VerifyEmailCodeValidation()

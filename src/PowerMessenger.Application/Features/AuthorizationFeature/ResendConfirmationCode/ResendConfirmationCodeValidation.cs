@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
+using JetBrains.Annotations;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.ResendConfirmationCode;
 
+[UsedImplicitly]
 public class ResendConfirmationCodeValidation: AbstractValidator<ResendConfirmationCodeCommand>
 {
     public ResendConfirmationCodeValidation()

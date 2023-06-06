@@ -9,13 +9,17 @@ namespace PowerMessenger.Infrastructure.Persistence.Repositories;
 public class MessageRepository: IMessageRepository
 {
     private readonly IMessengerDapperContext _messengerDapperContext;
+    private readonly IMessengerEfContext _messengerEfContext;
 
-    public MessageRepository(IMessengerDapperContext messengerDapperContext)
+    public MessageRepository(IMessengerDapperContext messengerDapperContext, 
+        IMessengerEfContext messengerEfContext)
     {
         _messengerDapperContext = messengerDapperContext;
+        _messengerEfContext = messengerEfContext;
     }
 
-    public async Task<IEnumerable<MessageGroupChatResponse>> GetMessagesGroupChatByUser(long chatId, long userId)
+    public async Task<IEnumerable<MessageGroupChatResponse>> GetMessagesGroupChatByUser(long chatId, long userId,
+        int next,int prev)
     {
         using var connection = _messengerDapperContext.CreateNpgConnection();
         
@@ -27,13 +31,14 @@ public class MessageRepository: IMessageRepository
             type,
             is_owner as IsOwner,
             is_read as IsRead,
+            message_user_id as Id,
             message_user_name as UserName,
             message_user_avatar as Avatar,
             forwarded_message_id as Id,
             forwarded_message_user_name as UserName,
             forwarded_message_content as Content,
             forwarded_message_type as Type
-        FROM get_messages_group_chat_by_user(@chatId,@userId)";
+        FROM get_messages_group_chat_by_user(@chatId,@userId,@next,@prev)";
 
         var messagesGroup = await connection.QueryAsync<MessageGroupChatResponse,MessageOwner,ForwardedMessage,MessageGroupChatResponse>(
             query,
@@ -43,9 +48,29 @@ public class MessageRepository: IMessageRepository
                 message.ForwardedMessage = forwarded;
                 return message;
             },
-            new { chatId = chatId,userId = userId },
-            splitOn: "UserName,Id");
+            new
+            {
+                chatId = chatId,
+                userId = userId,
+                next = next,
+                prev = prev
+            },
+            splitOn: "Id,Id");
 
         return messagesGroup;
+    }
+
+    public async Task<int> GetCountUnreadMessagesChat(long chatId, long userId)
+    {
+        using var connection = _messengerDapperContext.CreateNpgConnection();
+        const string query = "SELECT * FROM get_unread_message_count(@userId, @chatId)";
+
+        var countUnreadMessages = await connection.QueryFirstOrDefaultAsync<int>(query, new
+        {
+            userId = userId,
+            chatId = chatId
+        });
+
+        return countUnreadMessages;
     }
 }

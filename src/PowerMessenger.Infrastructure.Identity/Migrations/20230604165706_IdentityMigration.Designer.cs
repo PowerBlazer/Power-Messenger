@@ -12,7 +12,7 @@ using PowerMessenger.Infrastructure.Identity.Contexts;
 namespace PowerMessenger.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20230528185727_IdentityMigration")]
+    [Migration("20230604165706_IdentityMigration")]
     partial class IdentityMigration
     {
         /// <inheritdoc />
@@ -64,9 +64,16 @@ namespace PowerMessenger.Infrastructure.Identity.Migrations
                         new
                         {
                             Id = 1L,
-                            Expiration = new DateTime(2023, 6, 4, 21, 57, 27, 161, DateTimeKind.Local).AddTicks(2466),
+                            Expiration = new DateTime(2023, 6, 11, 19, 57, 6, 311, DateTimeKind.Local).AddTicks(8521),
                             Token = "121212121212121",
                             UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Expiration = new DateTime(2023, 6, 11, 19, 57, 6, 311, DateTimeKind.Local).AddTicks(8541),
+                            Token = "1212121212121212",
+                            UserId = 2L
                         });
                 });
 
@@ -79,8 +86,8 @@ namespace PowerMessenger.Infrastructure.Identity.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp without time zone")
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_created");
 
                     b.Property<string>("Email")
@@ -119,8 +126,17 @@ namespace PowerMessenger.Infrastructure.Identity.Migrations
                         new
                         {
                             Id = 1L,
-                            DateCreated = new DateTime(2023, 5, 28, 21, 57, 27, 160, DateTimeKind.Local).AddTicks(6670),
+                            DateCreated = new DateTimeOffset(new DateTime(2023, 6, 4, 16, 57, 6, 311, DateTimeKind.Unspecified).AddTicks(5616), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "yak.ainur@yandex.ru",
+                            EmailConfirmed = true,
+                            PasswordHash = "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+                            TwoFactorEnabled = false
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            DateCreated = new DateTimeOffset(new DateTime(2023, 6, 4, 16, 57, 6, 311, DateTimeKind.Unspecified).AddTicks(5620), new TimeSpan(0, 0, 0, 0, 0)),
+                            Email = "power.blaze@mail.ru",
                             EmailConfirmed = true,
                             PasswordHash = "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
                             TwoFactorEnabled = false

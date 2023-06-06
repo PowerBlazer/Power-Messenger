@@ -4,6 +4,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace PowerMessenger.Infrastructure.Identity.Migrations
 {
     /// <inheritdoc />
@@ -21,7 +23,7 @@ namespace PowerMessenger.Infrastructure.Identity.Migrations
                     email = table.Column<string>(type: "text", nullable: false),
                     password_hash = table.Column<string>(type: "text", nullable: false),
                     phone_number = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: true),
-                    date_created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    date_created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     email_confirmed = table.Column<bool>(type: "boolean", nullable: false),
                     two_factor_enabled = table.Column<bool>(type: "boolean", nullable: false)
                 },
@@ -54,12 +56,20 @@ namespace PowerMessenger.Infrastructure.Identity.Migrations
             migrationBuilder.InsertData(
                 table: "identity_users",
                 columns: new[] { "id", "date_created", "email", "email_confirmed", "password_hash", "phone_number", "two_factor_enabled" },
-                values: new object[] { 1L, new DateTime(2023, 5, 28, 21, 57, 27, 160, DateTimeKind.Local).AddTicks(6670), "yak.ainur@yandex.ru", true, "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", null, false });
+                values: new object[,]
+                {
+                    { 1L, new DateTimeOffset(new DateTime(2023, 6, 4, 16, 57, 6, 311, DateTimeKind.Unspecified).AddTicks(5616), new TimeSpan(0, 0, 0, 0, 0)), "yak.ainur@yandex.ru", true, "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", null, false },
+                    { 2L, new DateTimeOffset(new DateTime(2023, 6, 4, 16, 57, 6, 311, DateTimeKind.Unspecified).AddTicks(5620), new TimeSpan(0, 0, 0, 0, 0)), "power.blaze@mail.ru", true, "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", null, false }
+                });
 
             migrationBuilder.InsertData(
                 table: "identity_tokens",
                 columns: new[] { "id", "expiration", "token", "user_id" },
-                values: new object[] { 1L, new DateTime(2023, 6, 4, 21, 57, 27, 161, DateTimeKind.Local).AddTicks(2466), "121212121212121", 1L });
+                values: new object[,]
+                {
+                    { 1L, new DateTime(2023, 6, 11, 19, 57, 6, 311, DateTimeKind.Local).AddTicks(8521), "121212121212121", 1L },
+                    { 2L, new DateTime(2023, 6, 11, 19, 57, 6, 311, DateTimeKind.Local).AddTicks(8541), "1212121212121212", 2L }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "ix_identity_tokens_token",

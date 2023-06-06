@@ -6,7 +6,7 @@ public class MessageGroupChatResponse
 {
     public long Id { get; set; }
     public string? Content { get; set; }
-    public DateTime DateCreate { get; set; }
+    public DateTimeOffset DateCreate { get; set; }
     public required string Type { get; set; }
     public string? Source { get; set; }
     public bool IsOwner { get; set; }

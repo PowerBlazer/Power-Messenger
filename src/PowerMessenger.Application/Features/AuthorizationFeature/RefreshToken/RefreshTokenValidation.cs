@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
+using JetBrains.Annotations;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.RefreshToken;
 
+[UsedImplicitly]
 public class RefreshTokenValidation: AbstractValidator<RefreshTokenCommand>
 {
     public RefreshTokenValidation()

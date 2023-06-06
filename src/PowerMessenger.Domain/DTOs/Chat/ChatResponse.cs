@@ -1,4 +1,4 @@
-﻿using PowerMessenger.Domain.RepositoryTransferObjects.MessageRepository;
+﻿using PowerMessenger.Domain.DTOs.Common;
 
 namespace PowerMessenger.Domain.DTOs.Chat;
 
@@ -6,7 +6,7 @@ public class ChatResponse
 {
     public long Id { get; set; }
     public required string Name { get; set; }
-    public DateTime DateCreate { get; set; }
+    public DateTimeOffset DateCreate { get; set; }
     public string? Photo { get; set; }
     public string? Description { get; set; }
     public required string Type { get; set; }

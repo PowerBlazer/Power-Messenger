@@ -1,8 +1,10 @@
 ﻿using FluentValidation;
+using JetBrains.Annotations;
 using PowerMessenger.Application.Layers.Identity.Services;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.SendEmailVerificationCode;
 
+[UsedImplicitly]
 public class SendEmailVerificationValidation: AbstractValidator<SendEmailVerificationCommand>
 {
     public SendEmailVerificationValidation(IEmailService emailService)

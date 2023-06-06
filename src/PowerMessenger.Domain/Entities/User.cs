@@ -8,7 +8,7 @@ public class User:BaseEntity<long>
     public long UserId { get; set; }
     public string? UserName { get; set; } 
     public string? Avatar { get; set; }
-    public DateTime? DateOfBirth { get; set; }
+    public DateTimeOffset? DateOfBirth { get; set; }
     public string? Theme { get; set; }
     
     public ICollection<ChatParticipant>? ChatParticipants { get; set; }

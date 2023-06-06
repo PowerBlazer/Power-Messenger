@@ -4,5 +4,6 @@ namespace PowerMessenger.Application.Layers.Persistence.Repositories;
 
 public interface IMessageRepository
 {
-    Task<IEnumerable<MessageGroupChatResponse>> GetMessagesGroupChatByUser(long chatId, long userId);
+    Task<IEnumerable<MessageGroupChatResponse>> GetMessagesGroupChatByUser(long chatId, long userId,int next,int prev);
+    Task<int> GetCountUnreadMessagesChat(long chatId, long userId);
 }

@@ -1,8 +1,10 @@
 ﻿using FluentValidation;
+using JetBrains.Annotations;
 using PowerMessenger.Application.Layers.Identity.Services;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.LoginUser;
 
+[UsedImplicitly]
 public class LoginUserValidation: AbstractValidator<LoginUserCommand>
 {
     public LoginUserValidation(IEmailService emailService)

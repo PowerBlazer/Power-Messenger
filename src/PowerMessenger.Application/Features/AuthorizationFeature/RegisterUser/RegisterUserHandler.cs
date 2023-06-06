@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using JetBrains.Annotations;
 using MediatR;
 using PowerMessenger.Application.Layers.Identity.Services;
 using PowerMessenger.Domain.DTOs.Authorization;
 
 namespace PowerMessenger.Application.Features.AuthorizationFeature.RegisterUser;
 
+[UsedImplicitly]
 public class RegisterUserHandler: IRequestHandler<RegisterUserCommand,RegistrationResponse>
 {
     private readonly IAuthorizationService _authorizationService;

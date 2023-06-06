@@ -38,7 +38,7 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 UserId = 1,
                 ChatId = 1,
                 Content = "Привет",
-                DateCreate = DateTime.Parse("2022-01-20 23:30:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:30:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -48,7 +48,7 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 UserId = 2,
                 ChatId = 1,
                 Content = "Дарова",
-                DateCreate = DateTime.Parse("2022-01-20 23:31:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:31:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -57,7 +57,7 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 Id = 3,
                 UserId = 1,
                 ChatId = 1,
-                DateCreate = DateTime.Parse("2022-01-20 23:32:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:32:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -67,7 +67,7 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 UserId = 2,
                 ChatId = 1,
                 Content = "Нормально",
-                DateCreate = DateTime.Parse("2022-01-20 23:33:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:33:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -77,9 +77,10 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 UserId = 1,
                 ChatId = 1,
                 Content = "HelloWorld",
-                DateCreate = DateTime.Parse("2022-01-20 23:34:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:34:00+03:00"),
                 MessageTypeId = 1,
-                DeletedByAll = false
+                DeletedByAll = false,
+                
             },
             new Message
             {
@@ -88,7 +89,7 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 ChatId = 1,
                 Content = @"Если бы не характер, то природная смекалка, хитрость и отвага, доходящая до авантюризма,
 сделали бы его в наше время очень богатым",
-                DateCreate = DateTime.Parse("2022-01-20 23:35:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:35:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -100,7 +101,7 @@ public class MessageConfiguration:IEntityTypeConfiguration<Message>
                 Content = @"Eiusmod id pariatur reprehenderit minim ea est laboris. 
 Do consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. 
 Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
-                DateCreate = DateTime.Parse("2022-01-20 23:36:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:36:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -112,7 +113,7 @@ Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris
                 Content = @"Eiusmod id pariatur reprehenderit minim ea est laboris. 
 Do consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. 
 Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
-                DateCreate = DateTime.Parse("2022-01-20 23:37:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:37:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -124,7 +125,7 @@ Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris
                 Content = @"Eiusmod id pariatur reprehenderit minim ea est laboris. 
 Do consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. 
 Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
-                DateCreate = DateTime.Parse("2022-01-20 23:38:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:38:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -136,7 +137,7 @@ Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris
                 Content = @"Eiusmod id pariatur reprehenderit minim ea est laboris. 
 Do consectetur officia consectetur consequat deserunt. In labore excepteur non ipsum esse commodo officia. 
 Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris in reprehenderit exercitation.",
-                DateCreate = DateTime.Parse("2022-01-20 23:39:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:39:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -148,7 +149,7 @@ Aliquip sit aliquip laborum dolor nisi mollit consequat exercitation sit laboris
                 Content = @"Cupidatat exercitation et culpa nisi consectetur laborum eu voluptate enim deserunt nostrud.
 Voluptate id nulla exercitation enim do qui elit proident ullamco qui pariatur cillum. 
 Pariatur ea eu duis laborum occaecat deserunt.",
-                DateCreate = DateTime.Parse("2022-01-20 23:40:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:40:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -158,7 +159,7 @@ Pariatur ea eu duis laborum occaecat deserunt.",
                 UserId = 2,
                 ChatId = 1,
                 Content = "Eiusmod dolore est id ipsum mollit ex.",
-                DateCreate = DateTime.Parse("2022-01-20 23:41:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:41:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -168,7 +169,7 @@ Pariatur ea eu duis laborum occaecat deserunt.",
                 UserId = 1,
                 ChatId = 1,
                 Content = "Dolore enim ea est incididunt do",
-                DateCreate = DateTime.Parse("2022-01-20 23:42:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:42:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -178,7 +179,7 @@ Pariatur ea eu duis laborum occaecat deserunt.",
                 UserId = 1,
                 ChatId = 2,
                 Content = "Eiusmod dolore est id ipsum mollit ex.",
-                DateCreate = DateTime.Parse("2022-01-20 23:39:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:43:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -190,7 +191,7 @@ Pariatur ea eu duis laborum occaecat deserunt.",
                 Content = @"Cupidatat exercitation et culpa nisi consectetur laborum eu voluptate enim deserunt nostrud.
 Voluptate id nulla exercitation enim do qui elit proident ullamco qui pariatur cillum. 
 Pariatur ea eu duis laborum occaecat deserunt.",
-                DateCreate = DateTime.Parse("2022-01-20 23:40:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:44:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -200,7 +201,7 @@ Pariatur ea eu duis laborum occaecat deserunt.",
                 UserId = 2,
                 ChatId = 2,
                 Content = "Eiusmod dolore est id ipsum mollit ex.",
-                DateCreate = DateTime.Parse("2022-01-20 23:41:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:45:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
             },
@@ -210,9 +211,174 @@ Pariatur ea eu duis laborum occaecat deserunt.",
                 UserId = 2,
                 ChatId = 2,
                 Content = "Dolore enim ea est incididunt do",
-                DateCreate = DateTime.Parse("2022-01-20 23:42:00"),
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:00+03:00"),
                 MessageTypeId = 1,
                 DeletedByAll = false
+            },
+            new Message
+            {
+                Id = 18,
+                UserId = 1,
+                ChatId = 2,
+                Content = "Привет!",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:01+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = null
+            },
+            new Message
+            {
+                Id = 19,
+                UserId = 2,
+                ChatId = 2,
+                Content = "Как дела?",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:02+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 18
+            },
+            new Message
+            {
+                Id = 20,
+                UserId = 1,
+                ChatId = 2,
+                Content = "Отлично!",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:03+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 19
+            },
+            new Message
+            {
+                Id = 21,
+                UserId = 2,
+                ChatId = 2,
+                Content = "Что делаешь?",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:04+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 20
+            },
+            new Message
+            {
+                Id = 22,
+                UserId = 1,
+                ChatId = 2,
+                Content = "Планирую поход в кино.",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:05+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 21
+            },
+            new Message
+            {
+                Id = 23,
+                UserId = 2,
+                ChatId = 2,
+                Content = "Какой фильм собираешься смотреть?",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:06+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 22
+            },
+            new Message
+            {
+                Id = 24,
+                UserId = 1,
+                ChatId = 2,
+                Content = "Думаю посмотреть новый боевик.",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:07+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 23
+            },
+            new Message
+            {
+                Id = 25,
+                UserId = 2,
+                ChatId = 2,
+                Content = "Звучит интересно. Какие еще планы на выходные?",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:08+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 24
+            },
+            new Message
+            {
+                Id = 26,
+                UserId = 1,
+                ChatId = 2,
+                Content = "Надеюсь провести время с семьей и отдохнуть.",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:09+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 25
+            },
+            new Message
+            {
+                Id = 27,
+                UserId = 2,
+                ChatId = 2,
+                Content = "Отличные планы! Удачи вам!",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:10+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 26
+            },
+            new Message
+            {
+                Id = 28,
+                UserId = 1,
+                ChatId = 2,
+                Content = "Спасибо! Буду стараться!",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:11+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 27
+            },
+            new Message
+            {
+                Id = 29,
+                UserId = 2,
+                ChatId = 2,
+                Content = "Как прошел поход в кино?",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:12+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 28
+            },
+            new Message
+            {
+                Id = 30,
+                UserId = 1,
+                ChatId = 2,
+                Content = "Было здорово! Фильм понравился.",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:13+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 29
+            },
+            new Message
+            {
+                Id = 31,
+                UserId = 2,
+                ChatId = 2,
+                Content = "Рад, что вам понравилось!",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:14+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 30
+            },
+            new Message
+            {
+                Id = 32,
+                UserId = 1,
+                ChatId = 2,
+                Content = "Спасибо за рекомендацию фильма.",
+                DateCreate = DateTimeOffset.Parse("2022-12-20T23:46:15+03:00"),
+                MessageTypeId = 1,
+                DeletedByAll = false,
+                ForwardedMessageId = 31
             }
         );
 

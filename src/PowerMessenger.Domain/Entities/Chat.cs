@@ -5,7 +5,7 @@ namespace PowerMessenger.Domain.Entities;
 public class Chat : BaseEntity<long>
 {
     public string? Name { get; set; } 
-    public DateTime DateCreate { get; set; }
+    public DateTimeOffset DateCreate { get; set; }
     public string? Photo { get; set; }
     public long ChatTypeId { get; set; }
     public string? Description { get; set; }
