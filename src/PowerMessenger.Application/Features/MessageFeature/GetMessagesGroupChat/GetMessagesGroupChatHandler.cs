@@ -2,6 +2,7 @@
 using MediatR;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
 using PowerMessenger.Domain.DTOs.Message;
+using PowerMessenger.Domain.DTOs.Message.MessagesGroupChat;
 
 namespace PowerMessenger.Application.Features.MessageFeature.GetMessagesGroupChat;
 

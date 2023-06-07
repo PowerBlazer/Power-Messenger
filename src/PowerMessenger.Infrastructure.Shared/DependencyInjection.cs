@@ -11,6 +11,7 @@ public static class DependencyInjection
         , IConfiguration configuration)
     {
         services.AddScoped<IChatService,ChatService>();
+        services.AddScoped<IMessageService, MessageService>();
         
         
         return services;

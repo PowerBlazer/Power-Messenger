@@ -1,6 +1,6 @@
 ﻿using PowerMessenger.Domain.DTOs.Common;
 
-namespace PowerMessenger.Domain.DTOs.Message;
+namespace PowerMessenger.Domain.DTOs.Message.MessagesGroupChat;
 
 public class MessageGroupChatResponse
 {
