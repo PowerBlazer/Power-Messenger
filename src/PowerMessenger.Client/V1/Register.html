@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/reg.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="email-window">
+        <div class="email-window_inner">
+            <h2>Введите почту</h2>
+            <input type="text" class="email" id="email-input">
+        </div>
+        <button id="email-next" onclick="NextEmail()">Далее</button>
+    </div>
+
+    <div class="code_verification-window">
+        <div class="code_verification-window_inner">
+            <h2>Введите код подтверждения</h2>
+            <input type="number" class="code" id="codeVerification-input">
+        </div>
+        <button onclick="ResendVerificationCode()">Повторно отправить код</button>
+        <button id="code-next" onclick="NextCode()">Далее</button>
+    </div>
+
+    <div class="register-window">
+        <div class="register-window_inner">
+            <div class="username-block">
+                <h2>Введите имя пользователя</h2>
+                <input type="text" class="username" id="username-input">
+            </div>
+            <div class="password-block">
+                <h2>Введите пароль</h2>
+                <input type="password" class="password" id="password-input">
+            </div>
+            <div class="password_confirm-block">
+                <h2>Введите пароль повторно</h2>
+                <input type="password" class="passwordConfirm" id="passwordConfirm-input">
+            </div>
+        </div>
+        <button id="register" onclick="Register()">Регистрация</button>
+    </div>
+</body>
+<script src="./js/reg.js"></script>
+</html>

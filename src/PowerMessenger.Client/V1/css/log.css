@@ -1,0 +1,23 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-window{
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.login-window > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
