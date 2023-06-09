@@ -64,6 +64,20 @@ services:
       - redis-conf:/usr/local/etc/redis/redis.conf
     networks:
       - messenger_network
+  
+  nginx:
+    image: nginx
+    tty: true
+    ports:
+      - 80:80
+    volumes:
+      - ./PowerMessenger.Client/V1/:/usr/share/nginx/V1/:ro 
+      - ./nginx.conf:/etc/nginx/nginx.conf 
+    environment:
+      - NGINX_UID=1000
+      - NGINX_GID=1000
+    networks:
+      - messenger_network
 
 networks:
   messenger_network:

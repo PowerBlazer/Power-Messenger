@@ -35,7 +35,7 @@ async function NextEmail(){
     }
 
     if(response.status === 400){
-        let errorContent = await response.json();x
+        let errorContent = await response.json();
         ErrorNotification(errorContent.Errors);
     }
 }
