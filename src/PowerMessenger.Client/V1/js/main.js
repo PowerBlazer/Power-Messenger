@@ -1,5 +1,5 @@
 const apiUrl = "api/v1/";
-const apiAssets = "api/"
+const apiAssets = "http://localhost:6001/"
 
 class TokenService{
     constructor(apiUrl){
