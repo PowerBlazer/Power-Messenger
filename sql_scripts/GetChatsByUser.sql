@@ -31,7 +31,7 @@ AS $BODY$
 			(SELECT status_messages.date_create FROM message_statuses
 				INNER JOIN messages as status_messages ON message_statuses.last_message_read_id = status_messages.id
 			WHERE message_statuses.user_id = p_user_id AND message_statuses.chat_id = chats.id) 
-		 AND messages.chat_id = chats.id),
+		 AND messages.chat_id = chats.id AND messages.user_id != p_user_id),
 		 
         (SELECT count(*)::integer FROM public.messages WHERE messages.chat_id = chats.id),
         (SELECT content FROM public.messages WHERE messages.chat_id = chats.id 

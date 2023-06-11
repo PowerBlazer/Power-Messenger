@@ -13,7 +13,8 @@ RETURNS TABLE(
 	forwarded_message_id bigint,
 	forwarded_message_content text,
 	forwarded_message_user_name character varying,
-	forwarded_message_type character varying
+	forwarded_message_type character varying,
+	forwarded_message_chat_id bigint
 ) 
 	LANGUAGE 'plpgsql'
 	VOLATILE
@@ -57,14 +58,15 @@ BEGIN
 			messages.date_create,
 			message_types.type,
 			CASE WHEN messages.user_id = p_user_id THEN true ELSE false END as isOwner,
-			CASE WHEN messages.id IN (SELECT read_messages.id FROM read_messages) THEN true ELSE false END as isRead,
+			CASE WHEN (messages.user_id = p_user_id OR messages.id IN (SELECT read_messages.id FROM read_messages)) THEN true ELSE false END as isRead,,
             users.user_id,
 			users.user_name,
 			users.avatar,
 			forwarded_messages.id,
 			forwarded_messages.content,
 			forwarded_users.user_name,
-			forwarded_types.type
+			forwarded_types.type,
+			forwarded_messages.chat_id
 		FROM public.messages 
 		INNER JOIN users ON messages.user_id = users.user_id
 		INNER JOIN message_types ON messages.message_type_id = message_types.id
