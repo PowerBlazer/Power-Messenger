@@ -498,7 +498,7 @@ BEGIN
 			messages.date_create,
 			message_types.type,
 			CASE WHEN messages.user_id = p_user_id THEN true ELSE false END as isOwner,
-			CASE WHEN (messages.user_id = p_user_id OR messages.id IN (SELECT read_messages.id FROM read_messages)) THEN true ELSE false END as isRead,,
+			CASE WHEN (messages.user_id = p_user_id OR messages.id IN (SELECT read_messages.id FROM read_messages)) THEN true ELSE false END as isRead,
             users.user_id,
 			users.user_name,
 			users.avatar,
