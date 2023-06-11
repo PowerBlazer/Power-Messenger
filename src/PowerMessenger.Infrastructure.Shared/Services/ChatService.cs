@@ -18,21 +18,21 @@ public class ChatService: IChatService
         _chatTypeRepository = chatTypeRepository;
     }
 
-    public async Task<bool> ContainUserInChat(long chatId, long userId)
+    public async Task<bool> ContainUserInChatAsync(long chatId, long userId)
     {
-        return await _chatParticipantsRepository.CheckParticipantInChat(chatId, userId);
+        return await _chatParticipantsRepository.CheckParticipantInChatAsync(chatId, userId);
     }
 
-    public async Task<bool> CheckChatExistenceById(long chatId)
+    public async Task<bool> CheckChatExistenceByIdAsync(long chatId)
     {
-        return await _chatRepository.GetChatById(chatId) is not null;
+        return await _chatRepository.GetChatByIdAsync(chatId) is not null;
     }
 
-    public async Task<bool> ValidateChatType(long chatId, string type)
+    public async Task<bool> ValidateChatTypeAsync(long chatId, string type)
     {
-        var chat = await _chatRepository.GetChatById(chatId);
+        var chat = await _chatRepository.GetChatByIdAsync(chatId);
 
-        var chatType = await _chatTypeRepository.GetChatTypeById(chat!.ChatTypeId);
+        var chatType = await _chatTypeRepository.GetChatTypeByIdAsync(chat!.ChatTypeId);
 
         return chatType?.Type == type;
     }

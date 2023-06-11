@@ -5,9 +5,9 @@ using PowerMessenger.Application.Layers.Identity.Services;
 namespace PowerMessenger.Application.Features.AuthorizationFeature.SendEmailVerificationCode;
 
 [UsedImplicitly]
-public class SendEmailVerificationValidation: AbstractValidator<SendEmailVerificationCommand>
+public class SendEmailVerificationValidator: AbstractValidator<SendEmailVerificationCommand>
 {
-    public SendEmailVerificationValidation(IEmailService emailService)
+    public SendEmailVerificationValidator(IEmailService emailService)
     {
         RuleFor(p => p.Email)
             .NotEmpty()

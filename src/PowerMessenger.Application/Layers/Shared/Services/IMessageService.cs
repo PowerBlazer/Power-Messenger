@@ -2,5 +2,6 @@
 
 public interface IMessageService
 {
-    Task<bool> ContainMessageInChat(long messageId, long chatId);
+    Task<bool> ContainMessageInChatAsync(long messageId, long chatId);
+    Task SetMessageAsReadAsync(long chatId, long messageId, long userId);
 }

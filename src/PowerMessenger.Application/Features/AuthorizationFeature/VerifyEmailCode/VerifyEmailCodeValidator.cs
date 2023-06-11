@@ -4,9 +4,9 @@ using JetBrains.Annotations;
 namespace PowerMessenger.Application.Features.AuthorizationFeature.VerifyEmailCode;
 
 [UsedImplicitly]
-public class VerifyEmailCodeValidation: AbstractValidator<VerifyEmailCodeCommand>
+public class VerifyEmailCodeValidator: AbstractValidator<VerifyEmailCodeCommand>
 {
-    public VerifyEmailCodeValidation()
+    public VerifyEmailCodeValidator()
     {
         RuleFor(p => p.SessionId)
             .NotEmpty().WithMessage("Поле не может быть пустым");

@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="./css/main.css">
     <title>Document</title>
 </head>
+
 <body>
     <header>
         <div class="container">
             <div class="header">
-                <h3 class="logo-name">Power-Messenger</h3>
+                <h3 class="logo-name">
+                    <img src="./assets/messenger-icon.svg" alt="logo-img" width="30" height="30">
+                    Power-Messenger
+                </h3>
                 <div class="header-inner">
                     <div class="menu-items">
                         <a href="Register.html">Register</a>
                         <a href="Login.html">Login</a>
                         <button id="logout-button">Logout</button>
                         <a href="#">Menu</a>
-                        <button id="test">Test</button>
                     </div>
                 </div>
             </div>
-        </div>  
+        </div>
     </header>
     <div class="container">
         <div class="main">
@@ -36,8 +40,8 @@
                 </div>
                 <div class="messages-window">
                     <div class="message-window-scroll">
-                        <div class="message-window_inner">
-                        
+                        <div class="message-window_inner" id="message-observer">
+                            
                         </div>
                     </div>
                     <div class="message-input_inner"></div>
@@ -47,6 +51,5 @@
     </div>
 </body>
 <script src="./js/main.js"></script>
+
 </html>
-
-

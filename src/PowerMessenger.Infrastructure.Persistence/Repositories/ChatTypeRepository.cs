@@ -14,7 +14,7 @@ public class ChatTypeRepository: IChatTypeRepository
         _messengerEfContext = messengerEfContext;
     }
 
-    public async Task<ChatType?> GetChatTypeById(long typeId)
+    public async Task<ChatType?> GetChatTypeByIdAsync(long typeId)
     {
         return await _messengerEfContext.ChatTypes
             .FirstOrDefaultAsync(p => p.Id == typeId);

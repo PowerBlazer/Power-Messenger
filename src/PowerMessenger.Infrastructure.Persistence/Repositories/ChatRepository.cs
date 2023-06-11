@@ -21,7 +21,7 @@ public class ChatRepository: IChatRepository
         _messengerEfContext = messengerEfContext;
     }
 
-    public async Task<IEnumerable<ChatResponse>> GetChatsByUser(long userId)
+    public async Task<IEnumerable<ChatResponse>> GetChatsByUserAsync(long userId)
     {
         using var connection = _messengerDapperContext.CreateNpgConnection();
 
@@ -55,7 +55,7 @@ public class ChatRepository: IChatRepository
         return chats;
     }
 
-    public async Task<Chat?> GetChatById(long chatId)
+    public async Task<Chat?> GetChatByIdAsync(long chatId)
     {
         return await _messengerEfContext.Chats.FirstOrDefaultAsync(p => p.Id == chatId);
     }

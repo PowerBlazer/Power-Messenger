@@ -4,9 +4,9 @@ using JetBrains.Annotations;
 namespace PowerMessenger.Application.Features.AuthorizationFeature.RegisterUser;
 
 [UsedImplicitly]
-public class RegisterUserValidation: AbstractValidator<RegisterUserCommand>
+public class RegisterUserValidator: AbstractValidator<RegisterUserCommand>
 {
-    public RegisterUserValidation()
+    public RegisterUserValidator()
     {
         RuleFor(p => p.SessionId)
             .NotEmpty().WithMessage("Поле не может быть пустым")

@@ -13,7 +13,7 @@ public class ChatParticipantsRepository: IChatParticipantsRepository
         _messengerEfContext = messengerEfContext;
     }
 
-    public async Task<bool> CheckParticipantInChat(long chatId, long userId)
+    public async Task<bool> CheckParticipantInChatAsync(long chatId, long userId)
     {
         return await _messengerEfContext.ChatParticipants
             .FirstOrDefaultAsync(p => p.ChatId == chatId && p.UserId == userId) is not null;

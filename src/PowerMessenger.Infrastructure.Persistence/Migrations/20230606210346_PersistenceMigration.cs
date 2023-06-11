@@ -360,21 +360,22 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
             {
                 #region GetUnreadMessagesCount
                 migrationBuilder.Sql(@"CREATE OR REPLACE FUNCTION get_unread_message_count(p_user_id bigint, p_chat_id bigint)
-                RETURNS integer AS $$
-                BEGIN
-                    RETURN (
-                        SELECT COUNT(*)::integer
-                        FROM messages
-                        WHERE messages.date_create > (
-                            SELECT status_messages.date_create
-                            FROM message_statuses
-                            INNER JOIN messages AS status_messages ON message_statuses.last_message_read_id = status_messages.id
-                            WHERE message_statuses.user_id = p_user_id AND message_statuses.chat_id = p_chat_id
-                        )
-                        AND messages.chat_id = p_chat_id
-                    );
-                END;
-                $$ LANGUAGE plpgsql;
+RETURNS integer AS $$
+BEGIN
+    RETURN (
+        SELECT COUNT(*)::integer
+        FROM messages
+        WHERE messages.date_create > (
+            SELECT status_messages.date_create
+            FROM message_statuses
+            INNER JOIN messages AS status_messages ON message_statuses.last_message_read_id = status_messages.id
+            WHERE message_statuses.user_id = p_user_id AND message_statuses.chat_id = p_chat_id
+        )
+        AND messages.chat_id = p_chat_id AND messages.user_id != p_user_id
+    );
+END;
+$$ LANGUAGE plpgsql;
+
 ");
 
 
@@ -413,7 +414,7 @@ AS $BODY$
 			(SELECT status_messages.date_create FROM message_statuses
 				INNER JOIN messages as status_messages ON message_statuses.last_message_read_id = status_messages.id
 			WHERE message_statuses.user_id = p_user_id AND message_statuses.chat_id = chats.id) 
-		 AND messages.chat_id = chats.id),
+		 AND messages.chat_id = chats.id AND messages.user_id != p_user_id),
 		 
         (SELECT count(*)::integer FROM public.messages WHERE messages.chat_id = chats.id),
         (SELECT content FROM public.messages WHERE messages.chat_id = chats.id 
@@ -436,7 +437,7 @@ $BODY$;");
 
 
                 #endregion
-                #region GetMessageGroupChatByUser
+                #region GetMessagesGroupChatByUser
                 migrationBuilder.Sql(@"CREATE OR REPLACE FUNCTION get_messages_group_chat_by_user(IN p_chat_id bigint,IN p_user_id bigint,IN p_next integer, IN p_prev integer) 
 RETURNS TABLE(
 	id bigint,
@@ -452,7 +453,8 @@ RETURNS TABLE(
 	forwarded_message_id bigint,
 	forwarded_message_content text,
 	forwarded_message_user_name character varying,
-	forwarded_message_type character varying
+	forwarded_message_type character varying,
+	forwarded_message_chat_id bigint
 ) 
 	LANGUAGE 'plpgsql'
 	VOLATILE
@@ -496,14 +498,15 @@ BEGIN
 			messages.date_create,
 			message_types.type,
 			CASE WHEN messages.user_id = p_user_id THEN true ELSE false END as isOwner,
-			CASE WHEN messages.id IN (SELECT read_messages.id FROM read_messages) THEN true ELSE false END as isRead,
+			CASE WHEN (messages.user_id = p_user_id OR messages.id IN (SELECT read_messages.id FROM read_messages)) THEN true ELSE false END as isRead,,
             users.user_id,
 			users.user_name,
 			users.avatar,
 			forwarded_messages.id,
 			forwarded_messages.content,
 			forwarded_users.user_name,
-			forwarded_types.type
+			forwarded_types.type,
+			forwarded_messages.chat_id
 		FROM public.messages 
 		INNER JOIN users ON messages.user_id = users.user_id
 		INNER JOIN message_types ON messages.message_type_id = message_types.id
@@ -527,7 +530,23 @@ $BODY$;");
 	p_user_id bigint,
 	p_message_id bigint,
 	p_count integer)
-    RETURNS TABLE(id bigint, content text, source text, date_create timestamp with time zone, type character varying, is_owner boolean, is_read boolean, message_user_id bigint, message_user_name character varying, message_user_avatar text, forwarded_message_id bigint, forwarded_message_content text, forwarded_message_user_name character varying, forwarded_message_type character varying) 
+    RETURNS TABLE(
+id bigint, 
+content text, 
+source text, 
+date_create timestamp with time zone, 
+type character varying, 
+is_owner boolean, 
+is_read boolean, 
+message_user_id bigint, 
+message_user_name character varying,
+message_user_avatar text, 
+forwarded_message_id bigint, 
+forwarded_message_content text, 
+forwarded_message_user_name character varying, 
+forwarded_message_type character varying,
+forwarded_message_chat_id bigint
+) 
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -537,9 +556,14 @@ AS $BODY$
 
 DECLARE
 	messageDate timestamp with time zone;
+	last_message_read_date timestamp with time zone;
 BEGIN
 	SELECT public.messages.date_create INTO messageDate FROM public.messages 
 	WHERE messages.id = p_message_id LIMIT 1;
+
+	SELECT public.messages.date_create INTO last_message_read_date FROM public.message_statuses
+	INNER JOIN public.messages ON message_statuses.last_message_read_id = messages.id 
+	WHERE message_statuses.user_id = p_user_id AND message_statuses.chat_id = p_chat_id LIMIT 1;
 		
 	RETURN QUERY 
 		SELECT messages.id,
@@ -548,14 +572,15 @@ BEGIN
 			messages.date_create,
 			message_types.type,
 			CASE WHEN messages.user_id = p_user_id THEN true ELSE false END as isOwner,
-			(SELECT true) as isRead,
+			CASE WHEN (messages.user_id = p_user_id OR messages.date_create <= last_message_read_date) THEN true ELSE false END as isRead,
             users.user_id,
 			users.user_name,
 			users.avatar,
 			forwarded_messages.id,
 			forwarded_messages.content,
 			forwarded_users.user_name,
-			forwarded_types.type
+			forwarded_types.type,
+			forwarded_messages.chat_id
 		FROM public.messages 
 		INNER JOIN users ON messages.user_id = users.user_id
 		INNER JOIN message_types ON messages.message_type_id = message_types.id
@@ -578,7 +603,7 @@ $BODY$;");
 	p_user_id bigint,
 	p_message_id bigint,
 	p_count integer)
-    RETURNS TABLE(id bigint, content text, source text, date_create timestamp with time zone, type character varying, is_owner boolean, is_read boolean, message_user_id bigint, message_user_name character varying, message_user_avatar text, forwarded_message_id bigint, forwarded_message_content text, forwarded_message_user_name character varying, forwarded_message_type character varying) 
+    RETURNS TABLE(id bigint, content text, source text, date_create timestamp with time zone, type character varying, is_owner boolean, is_read boolean, message_user_id bigint, message_user_name character varying, message_user_avatar text, forwarded_message_id bigint, forwarded_message_content text, forwarded_message_user_name character varying, forwarded_message_type character varying,forwarded_message_chat_id bigint) 
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -588,9 +613,14 @@ AS $BODY$
 
 DECLARE
 	messageDate timestamp with time zone;
+	last_message_read_date timestamp with time zone;
 BEGIN
 	SELECT public.messages.date_create INTO messageDate FROM public.messages 
 	WHERE messages.id = p_message_id LIMIT 1;
+
+	SELECT public.messages.date_create INTO last_message_read_date FROM public.message_statuses
+	INNER JOIN public.messages ON message_statuses.last_message_read_id = messages.id 
+	WHERE message_statuses.user_id = p_user_id AND message_statuses.chat_id = p_chat_id LIMIT 1;
 		
 	RETURN QUERY 
 		WITH unSortedMessages AS (SELECT messages.id,
@@ -599,14 +629,15 @@ BEGIN
 			messages.date_create,
 			message_types.type,
 			CASE WHEN messages.user_id = p_user_id THEN true ELSE false END as isOwner,
-			(SELECT true) as isRead,
+			CASE WHEN (messages.user_id = p_user_id OR messages.date_create <= last_message_read_date) THEN true ELSE false END as isRead,
             users.user_id,
 			users.user_name,
 			users.avatar,
 			forwarded_messages.id,
 			forwarded_messages.content,
 			forwarded_users.user_name,
-			forwarded_types.type
+			forwarded_types.type,
+			forwarded_messages.chat_id
 		FROM public.messages 
 		INNER JOIN users ON messages.user_id = users.user_id
 		INNER JOIN message_types ON messages.message_type_id = message_types.id

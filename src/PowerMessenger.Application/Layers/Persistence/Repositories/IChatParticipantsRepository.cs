@@ -2,5 +2,5 @@
 
 public interface IChatParticipantsRepository
 {
-    Task<bool> CheckParticipantInChat(long chatId, long userId);
+    Task<bool> CheckParticipantInChatAsync(long chatId, long userId);
 }

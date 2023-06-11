@@ -6,4 +6,5 @@ public class ForwardedMessage
     public required string UserName { get; set; }
     public string? Content { get; set; }
     public required string Type { get; set; }
+    public long ChatId { get; set; }
 }

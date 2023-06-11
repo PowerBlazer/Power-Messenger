@@ -4,9 +4,9 @@ using JetBrains.Annotations;
 namespace PowerMessenger.Application.Features.AuthorizationFeature.ResendConfirmationCode;
 
 [UsedImplicitly]
-public class ResendConfirmationCodeValidation: AbstractValidator<ResendConfirmationCodeCommand>
+public class ResendConfirmationCodeValidator: AbstractValidator<ResendConfirmationCodeCommand>
 {
-    public ResendConfirmationCodeValidation()
+    public ResendConfirmationCodeValidator()
     {
         RuleFor(p => p.SessionId)
             .NotNull().WithMessage("Поле не может быть пустым");

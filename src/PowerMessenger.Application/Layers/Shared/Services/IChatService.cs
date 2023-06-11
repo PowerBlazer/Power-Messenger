@@ -2,7 +2,7 @@
 
 public interface IChatService
 {
-    Task<bool> ContainUserInChat(long chatId, long userId);
-    Task<bool> CheckChatExistenceById(long chatId);
-    Task<bool> ValidateChatType(long chatId, string type);
+    Task<bool> ContainUserInChatAsync(long chatId, long userId);
+    Task<bool> CheckChatExistenceByIdAsync(long chatId);
+    Task<bool> ValidateChatTypeAsync(long chatId, string type);
 }

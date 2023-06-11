@@ -17,17 +17,21 @@ public class GetPrevMessagesGroupChatHandler: IRequestHandler<GetPrevMessagesGro
 
     public async Task<PrevMessagesGroupChatResponse> Handle(GetPrevMessagesGroupChatQuery request, CancellationToken cancellationToken)
     {
-        var messagesGroup = await _messageRepository.GetPrevMessagesGroupChatByUser(
+        var messagesGroup = (await _messageRepository.GetPrevMessagesGroupChatByUserAsync(
             request.ChatId,
             request.UserId,
             request.MessageId,
-            request.Count);
+            request.Count)).ToList();
+        
+        var countPrevMessages = 0;
+        if (messagesGroup.Count > 0)
+        {
+            countPrevMessages = await _messageRepository.GetCountPrevMessagesChatAsync(
+                request.ChatId,
+                request.UserId,
+                messagesGroup.First().Id);
+        }
 
-        var countNextMessages = await _messageRepository.GetCountPrevMessagesChat(
-            request.ChatId,
-            request.UserId,
-            request.MessageId);
-
-        return new PrevMessagesGroupChatResponse(messagesGroup.ToList(), countNextMessages);
+        return new PrevMessagesGroupChatResponse(messagesGroup, countPrevMessages);
     }
 }

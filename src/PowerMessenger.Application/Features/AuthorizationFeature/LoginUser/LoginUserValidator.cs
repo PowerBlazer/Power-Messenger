@@ -5,9 +5,9 @@ using PowerMessenger.Application.Layers.Identity.Services;
 namespace PowerMessenger.Application.Features.AuthorizationFeature.LoginUser;
 
 [UsedImplicitly]
-public class LoginUserValidation: AbstractValidator<LoginUserCommand>
+public class LoginUserValidator: AbstractValidator<LoginUserCommand>
 {
-    public LoginUserValidation(IEmailService emailService)
+    public LoginUserValidator(IEmailService emailService)
     {
         RuleFor(p => p.Email)
             .NotEmpty()

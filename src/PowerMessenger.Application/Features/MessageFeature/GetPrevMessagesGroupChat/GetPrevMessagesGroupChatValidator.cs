@@ -1,25 +1,28 @@
 ﻿using FluentValidation;
+using JetBrains.Annotations;
 using PowerMessenger.Application.Layers.Shared.Services;
 
 namespace PowerMessenger.Application.Features.MessageFeature.GetPrevMessagesGroupChat;
 
-public class GetPrevMessagesGroupChatValidation: AbstractValidator<GetPrevMessagesGroupChatQuery>
+[UsedImplicitly]
+public class GetPrevMessagesGroupChatValidator: AbstractValidator<GetPrevMessagesGroupChatQuery>
 {
-    public GetPrevMessagesGroupChatValidation(IChatService chatService,
+    public GetPrevMessagesGroupChatValidator(IChatService chatService,
         IMessageService messageService)
     {
         RuleFor(p => p.ChatId)
             .NotEmpty()
             .WithMessage("Поле не может быть пустым")
-            .MustAsync(async (chatId, _) => await chatService.CheckChatExistenceById(chatId))
+            .MustAsync(async (chatId, _) => await chatService.CheckChatExistenceByIdAsync(chatId))
             .WithMessage("Такого чата не сущесвует")
-            .MustAsync(async (chatId,_) => await chatService.ValidateChatType(chatId,"Group"))
+            .MustAsync(async (chatId,_) => await chatService.ValidateChatTypeAsync(chatId,"Group"))
             .WithMessage("Не соответсвует тип чата");
         
         RuleFor(p => p.UserId)
             .NotEmpty()
             .WithMessage("Поле не может быть пустым")
-            .MustAsync(async (request, userId, _) => await chatService.ContainUserInChat(request.ChatId, userId))
+            .MustAsync(async (request, userId, _) => 
+                await chatService.ContainUserInChatAsync(request.ChatId, userId))
             .WithMessage("Пользователь не является участником чата");
         
         RuleFor(p => p.Count)
@@ -33,7 +36,7 @@ public class GetPrevMessagesGroupChatValidation: AbstractValidator<GetPrevMessag
             .NotEmpty()
             .WithMessage("Поле не может быть пустым")
             .MustAsync(async (request, messageId, _) =>
-                await messageService.ContainMessageInChat(messageId, request.ChatId))
+                await messageService.ContainMessageInChatAsync(messageId, request.ChatId))
             .WithMessage("Такое сообщение в чате отсутствует");
     }
 }

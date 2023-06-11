@@ -1,8 +1,8 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
-using PowerMessenger.Domain.DTOs.Message;
 using PowerMessenger.Domain.DTOs.Message.MessagesGroupChat;
+// ReSharper disable InvertIf
 
 namespace PowerMessenger.Application.Features.MessageFeature.GetMessagesGroupChat;
 
@@ -18,15 +18,37 @@ public class GetChatsByUserHandler: IRequestHandler<GetMessagesGroupChatQuery,Me
 
     public async Task<MessagesGroupChatResponse> Handle(GetMessagesGroupChatQuery request, CancellationToken cancellationToken)
     {
-       var messagesEnumerable = await _messageRepository.GetMessagesGroupChatByUser(
+       var messages = (await _messageRepository.GetMessagesGroupChatByUserAsync(
            request.ChatId,
            request.UserId,
            request.Next,
            request.Prev
-       );
-       
-       var countUnreadMessages = await _messageRepository.GetCountUnreadMessagesChat(request.ChatId, request.UserId);
+       )).ToList();
 
-       return new MessagesGroupChatResponse(messagesEnumerable.ToList(),countUnreadMessages);
+       var unreadMessagesCount = await _messageRepository.GetCountUnreadMessagesChatAsync(
+           request.ChatId,
+           request.UserId);
+
+       var nextMessagesCount = 0;
+       var prevMessagesCount = 0;
+
+       if (messages.Count > 0)
+       {
+           nextMessagesCount = await _messageRepository.GetCountNextMessagesChatAsync(
+               request.ChatId,
+               request.UserId,
+               messages.Last().Id);
+
+           prevMessagesCount = await _messageRepository.GetCountPrevMessagesChatAsync(
+               request.ChatId,
+               request.UserId,
+               messages.First().Id);
+       }
+
+       return new MessagesGroupChatResponse(
+           messages,
+           nextMessagesCount,
+           prevMessagesCount,
+           unreadMessagesCount);
     }
 }

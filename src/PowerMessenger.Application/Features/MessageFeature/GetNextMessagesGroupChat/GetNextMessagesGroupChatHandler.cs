@@ -17,17 +17,21 @@ public class GetNextMessagesGroupChatHandler: IRequestHandler<GetNextMessagesGro
 
     public async Task<NextMessagesGroupChatResponse> Handle(GetNextMessagesGroupChatQuery request, CancellationToken cancellationToken)
     {
-        var messagesGroup = await _messageRepository.GetNextMessagesGroupChatByUser(
+        var messagesGroup = (await _messageRepository.GetNextMessagesGroupChatByUserAsync(
             request.ChatId,
             request.UserId,
             request.MessageId,
-            request.Count);
-
-        var countNextMessages = await _messageRepository.GetCountNextMessagesChat(
-            request.ChatId,
-            request.UserId,
-            request.MessageId);
-
-        return new NextMessagesGroupChatResponse(messagesGroup.ToList(), countNextMessages);
+            request.Count)).ToList();
+        
+        var countNextMessages = 0;
+        if (messagesGroup.Count != 0)
+        {
+            countNextMessages = await _messageRepository.GetCountNextMessagesChatAsync(
+                request.ChatId,
+                request.UserId,
+                messagesGroup.Last().Id);
+        }
+        
+        return new NextMessagesGroupChatResponse(messagesGroup, countNextMessages);
     }
 }
