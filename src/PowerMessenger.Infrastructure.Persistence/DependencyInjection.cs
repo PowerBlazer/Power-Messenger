@@ -36,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<IChatParticipantsRepository, ChatParticipantsRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<IChatTypeRepository, ChatTypeRepository>();
+        services.AddScoped<IMessageStatusRepository, MessageStatusRepository>();
         
         return services;
     }
