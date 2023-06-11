@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using PowerMessenger.Application.Features.MessageFeature.GetMessagesGroupChat;
 using PowerMessenger.Application.Features.MessageFeature.GetNextMessagesGroupChat;
 using PowerMessenger.Application.Features.MessageFeature.GetPrevMessagesGroupChat;
+using PowerMessenger.Application.Features.MessageFeature.SetMessageAsRead;
 using PowerMessenger.Domain.Common;
+using PowerMessenger.Domain.DTOs.Message;
 using PowerMessenger.Domain.DTOs.Message.MessagesGroupChat;
 
 namespace PowerMessenger.WebApi.Controllers.V1;
@@ -33,7 +35,7 @@ public class MessageController: BaseController
     /// <response code="500">Ошибка на сервере</response>
     [HttpGet("groupChat/{chatId:long}")]
     [ProducesResponseType(typeof(ApiActionResult<MessagesGroupChatResponse>),StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiActionResult<MessagesGroupChatResponse>),StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ApiActionResult<MessagesGroupChatResponse>> GetMessagesGroupChatByUser(
         [FromRoute]long chatId,int next = 10,int prev = 10)
@@ -64,7 +66,7 @@ public class MessageController: BaseController
     /// <response code="500">Ошибка на сервере</response>
     [HttpGet("groupChat/{chatId:long}/next/{messageId:long}")]
     [ProducesResponseType(typeof(ApiActionResult<NextMessagesGroupChatResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiActionResult<NextMessagesGroupChatResponse>),StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ApiActionResult<NextMessagesGroupChatResponse>> GetNextMessagesGroupChatByUser(
         [FromRoute] long chatId, [FromRoute] long messageId, int count = 10)
@@ -94,7 +96,7 @@ public class MessageController: BaseController
     /// <response code="500">Ошибка на сервере</response>
     [HttpGet("groupChat/{chatId:long}/prev/{messageId:long}")]
     [ProducesResponseType(typeof(ApiActionResult<PrevMessagesGroupChatResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiActionResult<PrevMessagesGroupChatResponse>),StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ApiActionResult<PrevMessagesGroupChatResponse>> GetPrevMessagesGroupChatByUser(
         [FromRoute] long chatId, [FromRoute] long messageId, int count = 10)
@@ -110,4 +112,30 @@ public class MessageController: BaseController
             Result = result
         };
     }
+    
+    /// <summary>
+    /// Отметить сообщение последним прочитанным в чате
+    /// </summary>
+    /// <param name="chatId">Id чата</param>
+    /// <param name="messageId">Id сообщения</param>
+    /// <returns></returns>
+    /// <response code="200">Сообщение отмечено прочитанным</response>
+    /// <response code="401">Пользователь не авторизвован</response>
+    /// <response code="400">Ошибка валидации данных</response>
+    /// <response code="500">Ошибка на сервере</response>
+    [HttpPut("{messageId:long}/read")]
+    [ProducesResponseType(typeof(ApiActionResult<SetMessageAsReadResponse>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiActionResult<SetMessageAsReadResponse>),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ApiActionResult<SetMessageAsReadResponse>> MarkMessageAsRead(
+        [FromRoute] long messageId, long chatId)
+    {
+        var result = await _mediator.Send(new SetMessageAsReadCommand(chatId, messageId, UserId));
+
+        return new ApiActionResult<SetMessageAsReadResponse>
+        {
+            Result = result
+        };
+    }
+    
 }
