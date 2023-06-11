@@ -5,6 +5,10 @@
     --header-height:50px;
     --chat-header:62px;
     --font-family: 'Montserrat', sans-serif; 
+    --background-color:#181818;
+    --main-background-color:#212121;
+    --font-color: white;
+    --theme-color:#9068FE;
 }
 
 *{
@@ -16,6 +20,7 @@ body{
     width: 100%;
     margin: 0;
     font-family: 'Montserrat',initial, sans-serif;
+    background-color: var(--background-color);
 }
 
 a{
@@ -35,7 +40,7 @@ button{
 }
 
 header{
-    background-color: gainsboro;
+    background-color: white;
 }
 
 .header{
@@ -59,7 +64,11 @@ header{
 
 .logo-name{
     font-family: var(--font-family);
-    font-size: 20px;
+    font-size: 22px;
+    color: rgb(144, 104, 254);
+    display: flex;
+    align-items: center;
+    gap: 7px;
 }
 
 .menu-items{
@@ -70,6 +79,7 @@ header{
 .menu-items > a{
     font-family: var(--font-family);
     transition: all .3s;
+    font-weight: 600;
 }
 
 .menu-items > button{
@@ -78,14 +88,15 @@ header{
     transition: all .3s;
     font-size: 16px;
     cursor: pointer;
+    font-weight: 600;
 }
 
 .menu-items > button:hover{
-    color: blue;
+    color: var(--theme-color);
 }
 
 .menu-items > a:hover{
-    color:blue;
+    color:var(--theme-color);
 }
 
 .main{
@@ -100,9 +111,11 @@ header{
     gap: 5px;
     padding: 10px;
     width: 350px;
-    border-right: 1px solid blue;
+    border-right: 1px solid var(--theme-color);
     height: calc(100vh - var(--header-height));
     flex-shrink: 0;
+    background-color: var(--main-background-color);
+    color: var(--font-color);
 }
 .chats_toolbar-header{
     font-family: var(--font-family);
@@ -112,6 +125,7 @@ header{
     flex-direction: column;
     justify-content: flex-start;
     gap: 5px;
+
 }
 
 .chat-item_inner{
@@ -121,20 +135,26 @@ header{
 .chat-item{
     display: flex;
     gap: 10px;
-    border: 3px solid gainsboro;
     padding: 10px 5px;
     border-radius: 5px;
     transition: background-color .2s;
     position: relative;
+    color: var(--font-color);
 }
 
 .chat-item:hover{
-    background-color: gainsboro;
+    background-color: var(--theme-color);
+    color: white;
+}
+
+.chat-item:hover .count-unread-messages{
+    background-color: white;
+    color: var(--theme-color);
 }
 
 .chat-item > img {
     border-radius: 50%;
-    border: 1px solid blue;
+    border: 1px solid var(--theme-color);
 }
 
 .chat-item_inner{
@@ -157,24 +177,27 @@ header{
     gap: 10px;
     justify-content: space-between;
     flex-direction: row;
+    
 }
 
 .last-message-chat{
     width: 200px;
-    text-align: start;
-    white-space: nowrap;
     overflow: hidden;
+    white-space: nowrap;
     text-overflow:ellipsis; 
+    text-align: start;
+    font-weight: 600;
 }
 
 .count-unread-messages{
-    width: 23px;
-    height: 23px;
+    width: 20px;
+    height: 20px;
     position: absolute;
-    right: 0;
-    top: 0;
-    background-color: blue;
+    right: 7px;
+    top: 7px;
+    background-color: var(--theme-color);
     color: white;
+    font-size: 11px;
     font-weight: 600;
     font-family: var(--font-family);
     border-radius: 50%;
@@ -193,12 +216,12 @@ header{
 .chat-info-header{
     width: 100%;
     min-height: var(--chat-header);
-    background-color: gainsboro;
-    border-top: 1px solid blue;
-    border-bottom: 1px solid blue;
-    border-right: 1px solid blue;
+    background-color: var(--main-background-color);
+    border-top: 1px solid var(--theme-color);
+    border-right: 1px solid var(--theme-color);
     display: flex;
     flex-shrink: 0;
+    color: white;
 }
 
 .chat-info_inner{
@@ -210,7 +233,7 @@ header{
 
 .chat-info_inner > img {
     border-radius: 50%;
-    border: 1px solid blue;
+    border: 1px solid var(--theme-color);
 }
 
 .chat-info-block{
@@ -234,7 +257,7 @@ header{
     background-image: url(../assets/img/background.jpg);
     background-size: cover;
     background-position: center;
-    border-right: 1px solid blue;
+    border-right: 1px solid var(--theme-color);
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
@@ -261,7 +284,7 @@ header{
 {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-  background-color: #2943d6;
+  background-color: var(--theme-color);
 }
 
 .message-window_inner{
@@ -301,17 +324,18 @@ header{
     left: -50px;
 }
 .message-item_inner{
-   padding: 5px 10px 28px;
+   padding: 5px 10px 23px;
    background-color: #212121;
    border-radius: 5px;
    display: flex;
    flex-direction: column;
-   gap: 5px;
    min-height: 53px;
    position: relative;
+   min-width: 130px;
 }
+
 .message-owner-userName{
-    color: rgb(124, 124, 207);
+    color: rgb(144, 104, 254);
     font-family: var(--font-family);
     font-size: 13px;
     font-weight: 600;
@@ -321,6 +345,7 @@ header{
     color: white;
     font-weight: 600;
     font-size: 14px;
+    flex-grow: 1;
 }
 .message-time{
     position: absolute;
@@ -337,4 +362,55 @@ header{
     width: auto;
     margin: 20px 80px 30px;
     background-color: bisque;
+}
+
+.forwarded-message-button{
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 3px;
+    max-width: calc(100% - 0.75rem);
+    overflow: hidden;
+    margin: 3px 0;
+    position: relative;
+    border-radius: 5px;
+    padding: 3px;
+    transition: background-color .2s;
+    min-width: 90px;
+}
+
+.forwarded-message-button:hover{
+    background-color: rgba(144, 104, 254, 0.25);
+}
+
+.forwarded_message_content{
+    width: calc(100% - 0.75rem);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow:ellipsis; 
+    font-family: var(--font-family);
+    color: white;
+    font-weight: 600;
+    font-size: 11px;
+    margin-left: 8px;
+    text-align: start;
+}
+.forwarded_message_username{
+    width: calc(100% - 0.75rem);
+    font-family: var(--font-family);
+    color: rgb(144, 104, 254);
+    text-align: start;
+    font-weight: 600;
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+.forwarded-line{
+    width: 3px;
+    background-color: rgb(144, 104, 254);
+    height: 80%;
+    position: absolute;
+    top: 4px;
+    left: 3px;
+    border-radius: 5px;
 }

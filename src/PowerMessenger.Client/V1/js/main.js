@@ -1,4 +1,4 @@
-const apiUrl = "api/v1/";
+const apiUrl = "http://localhost:6001/api/v1/";
 const apiAssets = "http://localhost:6001/"
 
 class TokenService{
@@ -61,10 +61,11 @@ class TokenService{
             return true;
         }
     
-        if(response.status === 401 || response.status === 400 
-            || response.status === 500){
+        if(response.status === 401){
             location.href = "Login.html"
         }
+
+        throw new Error('Request failed with status: ' + response.status);
     }
 
     clearTokens(){
@@ -80,36 +81,114 @@ class ChatService{
         this.uri = uri;
     }
 
-    async getChatsByUser(){
+    getChatsByUser = async () => {
         const response = await fetch(`${apiUrl}Chat/chats`,{
             method:"GET",
-            headers:this.tokenService.requestHeaders()
+            headers: this.tokenService.requestHeaders()
         });
     
         return await this.tokenService.handleTokenResponse(response,this.getChatsByUser)
     }
 
+    setSelectedChat = (chat) => {
+        const chatJson = JSON.stringify(chat);
+        localStorage.removeItem("selected-chat");
+        localStorage.setItem("selected-chat",chatJson);
+    }
+
+    getSelectedChat = () => {
+        const chatJson = localStorage.getItem("selected-chat");
+
+        if(chatJson === null || chatJson.length === 0){
+            return null;
+        }
+
+        const selectedChat = JSON.parse(chatJson);
+
+        return selectedChat;
+    }
+
+    setUnreadMessagesCount = (count) => {
+        localStorage.removeItem("unread-messages-count");
+        localStorage.setItem("unread-messages-count",count);
+    }
+
+    getUnreadMessagesCount = () => {
+        return localStorage.getItem("unread-messages-count");
+    }
+
 }
 
 class MessageService{
-    constructor(uri,tokenService){
-        this.tokenServive = tokenService;
+    constructor(uri, tokenService) {
+        this.tokenService = tokenService;
         this.uri = uri;
-    }
-
-    async getMessagesByChat(chatId,type){
-        switch (type){
-            case "Group":
-                const response = await fetch(`${this.uri}Message/groupchat/${chatId}?next=10`,{
-                    method:"GET",
-                    headers:this.tokenServive.requestHeaders()
-                });
-                
-                return await this.tokenServive.handleTokenResponse(response,this.getMessagesByChat,chatId,type);
-            default:
-                break;
+      }
+    
+      getMessagesByChat = async (chatId, type) => {
+        switch (type) {
+          case "Group":
+            const response = await fetch(`${apiUrl}Message/groupchat/${chatId}?next=10`, {
+              method: "GET",
+              headers: this.tokenService.requestHeaders(),
+            });
+    
+            return await this.tokenService.handleTokenResponse(response, this.getMessagesByChat, chatId, type);
+          default:
+            break;
         }
-    }
+      }
+    
+      getNextMessagesByChat = async (chatId, messageId, type) => {
+        switch (type) {
+          case "Group":
+            const response = await fetch(`${apiUrl}Message/groupchat/${chatId}/next/${messageId}`, {
+              method: "GET",
+              headers: this.tokenService.requestHeaders(),
+            });
+    
+            return await this.tokenService.handleTokenResponse(response, this.getNextMessagesByChat, chatId, messageId, type);
+          default:
+            break;
+        }
+      }
+    
+      getPrevMessagesByChat = async (chatId, messageId, type) => {
+        switch (type) {
+          case "Group":
+            const response = await fetch(`${this.uri}Message/groupchat/${chatId}/prev/${messageId}`, {
+              method: "GET",
+              headers: this.tokenService.requestHeaders(),
+            });
+    
+            return await this.tokenService.handleTokenResponse(response, this.getPrevMessagesByChat, chatId, messageId, type);
+          default:
+            break;
+        }
+      }
+      
+      setMessageAsRead = async (chatId,messageId) => {
+        const response = await fetch(`${this.uri}Message/${messageId}/read?chatId=${chatId}`, {
+            method: "PUT",
+            headers: this.tokenService.requestHeaders(),
+        });
+
+        return await this.tokenService.handleTokenResponse(response, this.getPrevMessagesByChat, chatId, messageId);
+      }
+
+      setReadMessage = (message) => {
+        localStorage.removeItem("read-message");
+        localStorage.setItem("read-message",JSON.stringify(message));
+      }
+
+      getReadMessage = () => {
+        const readMessageJson = localStorage.getItem("read-message");
+        if(readMessageJson == null || readMessageJson.length === 0){
+            return null;
+        }
+
+        return JSON.parse(readMessageJson);
+      }
 }
 
 function convertToLocalTime(dateTimeString) {
@@ -121,6 +200,8 @@ function convertToLocalTime(dateTimeString) {
 const tokenService = new TokenService(apiUrl);
 const chatService = new ChatService(apiUrl,tokenService);
 const messageService = new MessageService(apiUrl,tokenService);
+
+let selectedChat = {};
 
 async function chatsInitialize(){
     const chatsPanel = document.getElementsByClassName("chats_toolbar__inner")[0];
@@ -137,7 +218,7 @@ async function chatsInitialize(){
                      <div class="last-message-chat_time">${convertToLocalTime(element.dateCreate)}</div>
                 </div>
             </div>
-            <div class="count-unread-messages">${element.countUnreadMessages}</div>
+            ${element.countUnreadMessages === 0 ? "" :`<div class="count-unread-messages">${element.countUnreadMessages}</div>`}
         </button>`
     });
 
@@ -148,12 +229,19 @@ async function chatsInitialize(){
             chatClickHandler(chats.find(p=>p.id == element.id.split("-").pop()))
         })
     }
+
+    const selectedChat = chatService.getSelectedChat();
+
+    if(selectedChat !== null){
+        chatClickHandler(selectedChat);
+    }
 }
 
 async function chatClickHandler(chat){
     const chatInfoInner = document.getElementsByClassName("chat-info_inner")[0];
+    const chatsPanel = document.getElementsByClassName("chats_toolbar__inner")[0];
 
-    let chatinfo = `<img width=50 height=50  class="chat-avatar" src=${apiAssets}${chat.photo}>
+    let chatinfo = `<img width=45 height=45  class="chat-avatar" alt="chat-avatar" src=${apiAssets}${chat.photo}>
     <div class="chat-info-block">
         <div class="chat-name">${chat.name}</div>
         <div class="chat-count-info_inner">
@@ -162,42 +250,278 @@ async function chatClickHandler(chat){
         </div>
     </div>`;
 
+    for (let index = 0; index < chatsPanel.children.length; index++) {
+        chatsPanel.children[index].style.backgroundColor = "";
+        const childrenUnreadMessageCount = chatsPanel.children[index].querySelector(".count-unread-messages");
+        if(childrenUnreadMessageCount!==null){
+            childrenUnreadMessageCount.style.color = "";
+            childrenUnreadMessageCount.style.backgroundColor = "";
+        }
+        
+    }
+    
+    let clickedChat = document.getElementById(`chatid-${chat.id}`);
+    clickedChat.style.backgroundColor = "var(--theme-color)";
+    const countUnreadMessagesElement = clickedChat.querySelector(".count-unread-messages");
+
+    if(countUnreadMessagesElement!== null){
+        countUnreadMessagesElement.style.backgroundColor = "white";
+        countUnreadMessagesElement.style.color = "var(--theme-color)";    
+    }
+    
     chatInfoInner.innerHTML = chatinfo;
+    chatService.setSelectedChat(chat);
 
     loadMessages(chat);
 }
 
+let optionObserver = {
+    root: document.querySelector(".message-window-scroll"),
+    rootMargin: "0px",
+}
+
+let nextLoadObserver = new IntersectionObserver(loadNextMessages,optionObserver);
+let prevLoadObserver = new IntersectionObserver(loadPrevMessages,optionObserver);
+
+
+function createMessageItem(element,messages,index){
+    const messageItem = document.createElement("div");
+    messageItem.classList.add("message-item");
+    messageItem.classList.add(element.isOwner ? "right" : "left");
+    messageItem.id = `message_id-${element.id}`;
+
+    const messageItemPosition = document.createElement("div");
+    messageItemPosition.classList.add("message-item_position");
+
+    if ((index === messages.length - 1 ||
+        messages[index + 1].messageOwner.userName !== element.messageOwner.userName)
+        && !element.isOwner) {
+        const avatarImage = document.createElement("img");
+        avatarImage.src = "./assets/img/testimg.png";
+        avatarImage.width = "40";
+        avatarImage.height = "40";
+        avatarImage.alt = "message-avatar";
+        avatarImage.classList.add("message-item-avatar");
+        messageItemPosition.appendChild(avatarImage);
+    }
+
+    const messageItemInner = document.createElement("div");
+    messageItemInner.classList.add("message-item_inner");
+
+    const messageOwnerUserName = document.createElement("div");
+    messageOwnerUserName.classList.add("message-owner-userName");
+    messageOwnerUserName.innerText = (index === 0 ||
+        element.messageOwner.userName !== messages[index - 1].messageOwner.userName)
+        ? element.messageOwner.userName
+        : "";
+    messageItemInner.appendChild(messageOwnerUserName);
+    if(element.forwardedMessage !== null){
+        const forwardedMessageButton = document.createElement("button");
+        forwardedMessageButton.classList.add("forwarded-message-button");
+        const forwardedLine = document.createElement("div");
+        forwardedLine.classList.add("forwarded-line");
+        forwardedMessageButton.appendChild(forwardedLine);
+        const forwardedMessageUserName = document.createElement("div");
+        forwardedMessageUserName.classList.add("forwarded_message_username");
+        forwardedMessageUserName.innerHTML = element.forwardedMessage.userName;
+        forwardedMessageButton.appendChild(forwardedMessageUserName);
+        const forwardedMessageContent = document.createElement("div");
+        forwardedMessageContent.classList.add("forwarded_message_content");
+        forwardedMessageContent.innerHTML = element.forwardedMessage.content;
+        forwardedMessageButton.appendChild(forwardedMessageContent);
+        messageItemInner.appendChild(forwardedMessageButton);
+    }
+    
+
+    const messageContent = document.createElement("div");
+    messageContent.classList.add("message-content");
+    messageContent.innerText = element.content === null ? "" : element.content;
+    messageItemInner.appendChild(messageContent);
+
+    const messageTime = document.createElement("div");
+    messageTime.classList.add("message-time");
+    messageTime.innerText = convertToLocalTime(element.dateCreate);
+    messageItemInner.appendChild(messageTime);
+
+    messageItemPosition.appendChild(messageItemInner);
+    messageItem.appendChild(messageItemPosition);
+
+    return messageItem;
+}
+
 async function loadMessages(chat){                  
     const messageWindow = document.getElementsByClassName("message-window_inner")[0];
-    
     messageWindow.innerHTML = "";
 
+    const readMessagesObserver = new IntersectionObserver(entries=>readMessage(entries,messagesResult,readMessagesObserver),optionObserver);
     let messagesResult = await messageService.getMessagesByChat(chat.id,chat.type);
 
     for (let index = 0; index < messagesResult.messages.length; index++) {
         const element = messagesResult.messages[index];
-        
-        messageWindow.innerHTML+= `
-        <div class="message-item ${element.isOwner ? "right":"left"}">
-            <div class="message-item_position">
-                ${(index === messagesResult.messages.length-1 
-                    || messagesResult.messages[index + 1].messageOwner.userName !== element.messageOwner.userName) && !element.isOwner ? 
-                    "<img src=\"./assets/img/testimg.png\" width=\"40\" height=\"40\" class=\"message-item-avatar\">" : ""}
-                <div class="message-item_inner">
-                    <div class="message-owner-userName">${index === 0 || element.messageOwner.userName !== messagesResult.messages[index - 1].messageOwner.userName ? element.messageOwner.userName : ""}</div>
-                    <div class="message-content">${element.content === null ? "":element.content}</div>
-                    <div class="message-time">${convertToLocalTime(element.dateCreate)}</div>
-                </div>
-            </div>
-        </div>`
 
+        const messageItem = createMessageItem(element,messagesResult.messages,index);
+        
+        messageWindow.appendChild(messageItem);
+
+        if(element.isRead == false && messagesResult.unreadMessagesCount){
+            readMessagesObserver.observe(messageItem);
+        }
     }
 
+    const firstInreadMessageIndex = messagesResult.messages.findIndex(p=>p.isRead == false);
+
+    if(firstInreadMessageIndex !== -1){
+        messageWindow.children[firstInreadMessageIndex].scrollIntoView();
+    }
+    else{
+        messageWindow.children[messageWindow.children.length - 1].scrollIntoView();
+    }
+
+    nextLoadObserver.disconnect();
+    prevLoadObserver.disconnect();
+
+    if(messagesResult.nextMessagesCount > 0){
+        nextLoadObserver.observe(messageWindow.children[messageWindow.children.length-1]);
+    }
+    
+    if(messagesResult.prevMessagesCount > 0){
+        prevLoadObserver.observe(messageWindow.children[0]);
+    }
+
+    chatService.setUnreadMessagesCount(messagesResult.unreadMessagesCount);
+    
 }
+
+function setNextMessages(nextMessagesObj){
+    const readMessagesObserver = new IntersectionObserver(entries=>readMessage(entries,nextMessagesObj,readMessagesObserver),optionObserver);
+    const messageWindow = document.getElementsByClassName("message-window_inner")[0];
+    if(nextMessagesObj.messages.length > 0){
+        for (let index = 0; index < nextMessagesObj.messages.length; index++) {
+            const element = nextMessagesObj.messages[index];
+            const messageItem = createMessageItem(element,nextMessagesObj.messages,index);
+            messageWindow.appendChild(messageItem);
+
+            if(element.isRead == false){
+                readMessagesObserver.observe(messageItem);
+            }
+        }
+    }
+
+    if(nextMessagesObj.nextCount !== 0){
+        nextLoadObserver.observe(messageWindow.children[messageWindow.children.length-1]);
+    }
+}
+
+function setPrevMessages(prevMessagesObj){
+    const messageWindow = document.getElementsByClassName("message-window_inner")[0];
+    const messageWindowScroll = document.querySelector(".message-window-scroll");
+
+    const prevScrollHeight = messageWindowScroll.scrollHeight;
+    const prevScrollTop = messageWindowScroll.scrollTop;
+
+    if(prevMessagesObj.messages.length > 0){
+        const fragment = document.createDocumentFragment();
+
+        for (let index = 0; index < prevMessagesObj.messages.length; index++) {
+            const element = prevMessagesObj.messages[index];
+
+            const messageItem = createMessageItem(element,prevMessagesObj.messages,index);
+
+            fragment.appendChild(messageItem);
+        }
+
+        messageWindow.prepend(fragment);
+
+        const newScrollHeight = messageWindowScroll.scrollHeight;
+        const scrollDifference = newScrollHeight - prevScrollHeight;
+        messageWindowScroll.scrollTop = prevScrollTop + scrollDifference;
+    }
+    
+
+    
+    if(prevMessagesObj.prevCount !== 0){
+        prevLoadObserver.observe(messageWindow.children[0]);
+    }
+}
+
+async function loadNextMessages(entries){
+    if(entries.length > 0){
+        const entry = entries[0];
+
+        if(entry.isIntersecting){
+            nextLoadObserver.unobserve(entry.target);
+
+            const messageId = entry.target.id.split("-").pop();
+            const selectedChat = chatService.getSelectedChat();
+            const nextMessages = await messageService.getNextMessagesByChat(selectedChat.id,messageId,selectedChat.type);
+
+            setNextMessages(nextMessages);
+        }
+    }
+}
+
+async function loadPrevMessages(entries){
+    if(entries.length > 0){
+        const entry = entries[0];
+        
+        if(entry.isIntersecting){
+            prevLoadObserver.unobserve(entry.target);
+            const messageId = entry.target.id.split("-").pop();
+            const selectedChat = chatService.getSelectedChat();
+            const prevMessagesObj = await messageService.getPrevMessagesByChat(selectedChat.id,messageId,selectedChat.type);
+
+            setPrevMessages(prevMessagesObj);
+        }
+    }
+}
+
+function readMessage(entries,messagesResult,readMessagesObserver){
+    const visibleMessages = entries.filter(entry=>{
+        return messagesResult.messages.findIndex(p=>`message_id-${p.id}` === entry.target.id && p.isRead === false) !== -1 && entry.isIntersecting;
+    }).sort(p=>p.boundingClientRect.y);
+
+    visibleMessages.forEach(messageEntry => readMessagesObserver.unobserve(messageEntry.target));
+
+    const selectedChat = chatService.getSelectedChat();
+    const selectedChatElement = document.getElementById(`chatid-${selectedChat.id}`);
+    const unreadMessagesCountElement = selectedChatElement.querySelector(".count-unread-messages");
+
+    unreadMessagesCountElement.innerHTML = Number(unreadMessagesCountElement.innerHTML) - visibleMessages.length;
+
+    if(unreadMessagesCountElement.innerHTML == 0)
+        unreadMessagesCountElement.remove();
+
+    if(visibleMessages.length > 0){
+        const lastEntryId = visibleMessages[visibleMessages.length - 1].target.id;
+        const lastReadMessage = messagesResult.messages.find(p=>`message_id-${p.id}` === lastEntryId);
+        messageService.setReadMessage(lastReadMessage);
+    }
+   
+}
+
+function listenScrollStop(messageWindow) {
+    let isScrolling;
+    
+    messageWindow.addEventListener('scroll', function() {
+      clearTimeout(isScrolling);
+      
+      isScrolling = setTimeout(async function() {
+       const lastReadMessage = messageService.getReadMessage();
+       const selectedChat = chatService.getSelectedChat();
+
+       if(lastReadMessage !== null && selectedChat !== null && chatService.getUnreadMessagesCount() > 0){
+        let result = await messageService.setMessageAsRead(selectedChat.id,lastReadMessage.id);
+        console.log(chatService.getUnreadMessagesCount());
+        chatService.setUnreadMessagesCount(result.unreadMessagesCount);
+       }
+      }, 1000);
+    });
+  }
+
 
 document.addEventListener("DOMContentLoaded",() => {
     document.getElementById("logout-button").addEventListener("click",logout);
-    document.getElementById("test").addEventListener("click",test);
+    listenScrollStop(document.querySelector(".message-window-scroll"));
 
     chatsInitialize();
 });
@@ -207,20 +531,5 @@ function logout(){
     location.href = "Login.html";
 }
 
-async function test(){
-    let messageWindow = document.getElementsByClassName("message-window_inner")[0];
-
-    messageWindow.innerHTML = `
-        <div class="message-item left">
-            <div class="message-item_position">
-                <img src="./assets/img/testimg.png" width="40" height="40" class="message-item-avatar">
-                <div class="message-item_inner">
-                    <div class="message-owner-userName">Grubgerg</div>
-                    <div class="message-content">Hello_World</div>
-                    <div class="message-time">23:01</div>
-                </div>
-            </div>
-        </div>` + messageWindow.innerHTML;
-}
 
 

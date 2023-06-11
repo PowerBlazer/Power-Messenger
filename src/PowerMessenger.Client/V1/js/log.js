@@ -1,4 +1,4 @@
-const apiUrl = "api/v1/Authorization/"
+const apiUrl = "http://localhost:6001/api/v1/Authorization/"
 
 
 async function Login(){
