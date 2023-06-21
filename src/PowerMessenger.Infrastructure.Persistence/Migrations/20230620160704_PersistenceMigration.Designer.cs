@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PowerMessenger.Infrastructure.Persistence.Context;
@@ -11,9 +12,11 @@ using PowerMessenger.Infrastructure.Persistence.Context;
 namespace PowerMessenger.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MessengerEfContext))]
-    partial class MessengerEfContextModelSnapshot : ModelSnapshot
+    [Migration("20230620160704_PersistenceMigration")]
+    partial class PersistenceMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
