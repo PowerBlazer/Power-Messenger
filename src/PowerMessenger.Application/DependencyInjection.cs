@@ -15,7 +15,7 @@ public static class DependencyInjection
         , [UsedImplicitly] IConfiguration configuration)
     {
         services.AddMediatR(ctg => ctg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-        
+
         AssemblyScanner.FindValidatorsInAssembly(Assembly.GetExecutingAssembly())
             .ForEach(item => services.AddScoped(item.InterfaceType, item.ValidatorType));
         

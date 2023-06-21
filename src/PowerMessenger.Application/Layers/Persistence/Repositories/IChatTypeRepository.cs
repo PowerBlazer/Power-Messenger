@@ -5,4 +5,5 @@ namespace PowerMessenger.Application.Layers.Persistence.Repositories;
 public interface IChatTypeRepository
 {
     Task<ChatType?> GetChatTypeByIdAsync(long typeId);
+    Task<ChatType?> GetChatTypeByTypeAsync(string type);
 }

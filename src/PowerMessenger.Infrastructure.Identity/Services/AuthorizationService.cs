@@ -158,7 +158,6 @@ public class AuthorizationService: IAuthorizationService
         };
 
         string accessToken = null!, refreshToken = null!;
-
         await _identityUnitOfWork.ExecuteWithExecutionStrategyAsync(async () =>
         {
             var identityUser = await _identityUserRepository.AddUserAsync(newIdentityUser);

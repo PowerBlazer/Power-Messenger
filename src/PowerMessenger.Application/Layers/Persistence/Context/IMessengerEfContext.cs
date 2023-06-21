@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using PowerMessenger.Domain.Entities;
 
 namespace PowerMessenger.Application.Layers.Persistence.Context;
@@ -17,4 +18,5 @@ public interface IMessengerEfContext
     
     Task<int> SaveChangesAsync();
     EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
+    public DatabaseFacade Database { get; }
 }
