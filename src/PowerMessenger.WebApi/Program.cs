@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using PowerMessenger.Infrastructure.Identity;
 using PowerMessenger.Infrastructure.Persistence;
@@ -25,22 +24,10 @@ builder.Services
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
-builder.Services.AddApiVersioning(setup =>
-{
-    setup.DefaultApiVersion = new ApiVersion(1, 0);
-    setup.AssumeDefaultVersionWhenUnspecified = true;
-    setup.ReportApiVersions = true;
-});
-
-builder.Services.AddVersionedApiExplorer(setup =>
-{
-    setup.GroupNameFormat = "'v'VVV";
-    setup.SubstituteApiVersionInUrl = true;
-});
-
 builder.Services
     .AddEndpointsApiExplorer()
-    .AddHttpContextAccessor();
+    .AddHttpContextAccessor()
+    .AddSignalR();
 
 builder.Services.AddSwaggerConfiguration();
 
@@ -92,7 +79,8 @@ builder.Services.AddAuthentication(options =>
             ValidateLifetime = true,
 
             IssuerSigningKey = jwtOptions.GetSymmetricSecurityKey(),
-            ValidateIssuerSigningKey = true
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.FromSeconds(30)
         };
     });
 
@@ -112,7 +100,9 @@ app.UseAuthorization();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
+app.UseSignalRHubs();
 app.MapControllers();
+
 app.MigrateDatabase();
 
 app.Run();

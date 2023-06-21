@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
 
@@ -53,6 +54,19 @@ public static class SwaggerConfiguration
     
             options.OperationFilter<AddParameterDescriptionsFilter>();
         });
+        
+        services.AddApiVersioning(setup =>
+        {
+            setup.DefaultApiVersion = new ApiVersion(1, 0);
+            setup.AssumeDefaultVersionWhenUnspecified = true;
+            setup.ReportApiVersions = true;
+        });
+
+        services.AddVersionedApiExplorer(setup =>
+        {
+            setup.GroupNameFormat = "'v'VVV";
+            setup.SubstituteApiVersionInUrl = true;
+        });
     }
 
     public static void UseSwaggerSetup(this IApplicationBuilder app, IApiVersionDescriptionProvider provider)
@@ -66,7 +80,7 @@ public static class SwaggerConfiguration
                     description.GroupName.ToUpperInvariant());
             }
             
-            options.DisplayRequestDuration();
+           // options.DisplayRequestDuration();
             options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
             options.EnableDeepLinking();
             options.EnableFilter();
