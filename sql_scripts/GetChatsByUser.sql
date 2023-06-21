@@ -9,7 +9,9 @@ RETURNS TABLE(
 	countparticipants integer,
 	countunreadmessages integer, 
 	countmessages integer, 
-	lastmessagecontent text, 
+	lastmessageid bigint,
+	lastmessagecontent text,
+    lastmessageusername character varying,
 	lastmessagetype character varying, 
 	lastmessagedatecreate timestamp with time zone)
 LANGUAGE 'plpgsql'
@@ -34,7 +36,13 @@ AS $BODY$
 		 AND messages.chat_id = chats.id AND messages.user_id != p_user_id),
 		 
         (SELECT count(*)::integer FROM public.messages WHERE messages.chat_id = chats.id),
-        (SELECT content FROM public.messages WHERE messages.chat_id = chats.id 
+		(SELECT messages.id FROM public.messages WHERE messages.chat_id = chats.id 
+                ORDER BY messages.date_create DESC LIMIT 1),
+        (SELECT messages.content FROM public.messages WHERE messages.chat_id = chats.id 
+                ORDER BY messages.date_create DESC LIMIT 1),
+        (SELECT users.user_name FROM public.messages 
+            INNER JOIN users ON users.user_id = messages.user_id
+            WHERE messages.chat_id = chats.id         
                 ORDER BY messages.date_create DESC LIMIT 1),
         (SELECT message_types.type FROM public.messages
         	INNER JOIN public.message_types ON messages.message_type_id = message_types.id
