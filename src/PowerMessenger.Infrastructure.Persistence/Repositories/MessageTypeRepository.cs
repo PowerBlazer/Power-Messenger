@@ -5,24 +5,18 @@ using PowerMessenger.Domain.Entities;
 
 namespace PowerMessenger.Infrastructure.Persistence.Repositories;
 
-public class ChatTypeRepository: IChatTypeRepository
+public class MessageTypeRepository: IMessageTypeRepository
 {
     private readonly IMessengerEfContext _messengerEfContext;
 
-    public ChatTypeRepository(IMessengerEfContext messengerEfContext)
+    public MessageTypeRepository(IMessengerEfContext messengerEfContext)
     {
         _messengerEfContext = messengerEfContext;
     }
 
-    public async Task<ChatType?> GetChatTypeByIdAsync(long typeId)
+    public async Task<MessageType?> GetMessageTypeByTypeAsync(string type)
     {
-        return await _messengerEfContext.ChatTypes
-            .FirstOrDefaultAsync(p => p.Id == typeId);
-    }
-
-    public async Task<ChatType?> GetChatTypeByTypeAsync(string type)
-    {
-        return await _messengerEfContext.ChatTypes
+        return await _messengerEfContext.MessageTypes
             .FirstOrDefaultAsync(p => p.Type == type);
     }
 }

@@ -8,19 +8,25 @@ public class MessageService: IMessageService
 {
     private readonly IMessageRepository _messageRepository;
     private readonly IMessageStatusRepository _messageStatusRepository;
+    private readonly IMessageTypeRepository _messageTypeRepository;
 
     public MessageService(IMessageRepository messageRepository, 
-        IMessageStatusRepository messageStatusRepository)
+        IMessageStatusRepository messageStatusRepository, 
+        IMessageTypeRepository messageTypeRepository)
     {
         _messageRepository = messageRepository;
         _messageStatusRepository = messageStatusRepository;
+        _messageTypeRepository = messageTypeRepository;
     }
 
     public async Task<bool> ContainMessageInChatAsync(long messageId, long chatId)
     {
-        var message = await _messageRepository.GetMessageInTheChatByIdAsync(messageId, chatId);
+       return await _messageRepository.GetMessageInTheChatByIdAsync(messageId, chatId) is not null;
+    }
 
-        return message is not null;
+    public async Task<bool> CheckExistingMessageType(string type)
+    {
+        return await _messageTypeRepository.GetMessageTypeByTypeAsync(type) is not null;
     }
 
     public async Task SetMessageAsReadAsync(long chatId, long messageId, long userId)

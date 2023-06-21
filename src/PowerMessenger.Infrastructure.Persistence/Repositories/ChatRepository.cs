@@ -38,6 +38,8 @@ public class ChatRepository: IChatRepository
                 countparticipants,
                 countunreadmessages,
                 countmessages,
+                lastmessageid as Id,
+                lastmessageusername as UserName,
                 lastmessagecontent as Content,
                 lastmessagetype as Type,
                 lastmessagedatecreate as DateCreate
@@ -48,7 +50,7 @@ public class ChatRepository: IChatRepository
                 return summary;
             },
             new { userId = userId },
-            splitOn:"Content");
+            splitOn:"Id");
 
         #endregion
         

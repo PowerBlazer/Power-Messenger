@@ -36,4 +36,9 @@ public class ChatService: IChatService
 
         return chatType?.Type == type;
     }
+
+    public async Task<bool> CheckExistingChatType(string type)
+    {
+       return await _chatTypeRepository.GetChatTypeByTypeAsync(type) is not null;
+    }
 }

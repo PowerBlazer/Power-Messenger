@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PowerMessenger.Application.Layers.Persistence;
 using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
 using PowerMessenger.Infrastructure.Persistence.Context;
@@ -28,6 +29,7 @@ public static class DependencyInjection
             
         });
 
+        services.AddScoped<IPersistenceUnitOfWork, PersistenceUnitOfWork>();
         services.AddSingleton<IMessengerDapperContext>(_ => 
             new MessengerDapperContext(connectionString!));
 
@@ -37,6 +39,8 @@ public static class DependencyInjection
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<IChatTypeRepository, ChatTypeRepository>();
         services.AddScoped<IMessageStatusRepository, MessageStatusRepository>();
+        services.AddScoped<IMessageGroupChatRepository, MessageGroupChatRepository>();
+        services.AddScoped<IMessageTypeRepository, MessageTypeRepository>();
         
         return services;
     }
