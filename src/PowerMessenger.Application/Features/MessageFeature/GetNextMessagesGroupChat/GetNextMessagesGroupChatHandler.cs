@@ -9,15 +9,18 @@ namespace PowerMessenger.Application.Features.MessageFeature.GetNextMessagesGrou
 public class GetNextMessagesGroupChatHandler: IRequestHandler<GetNextMessagesGroupChatQuery,NextMessagesGroupChatResponse>
 {
     private readonly IMessageRepository _messageRepository;
+    private readonly IMessageGroupChatRepository _messageGroupChatRepository;
 
-    public GetNextMessagesGroupChatHandler(IMessageRepository messageRepository)
+    public GetNextMessagesGroupChatHandler(IMessageRepository messageRepository, 
+        IMessageGroupChatRepository messageGroupChatRepository)
     {
         _messageRepository = messageRepository;
+        _messageGroupChatRepository = messageGroupChatRepository;
     }
 
     public async Task<NextMessagesGroupChatResponse> Handle(GetNextMessagesGroupChatQuery request, CancellationToken cancellationToken)
     {
-        var messagesGroup = (await _messageRepository.GetNextMessagesGroupChatByUserAsync(
+        var messagesGroup = (await _messageGroupChatRepository.GetNextMessagesGroupChatByUserAsync(
             request.ChatId,
             request.UserId,
             request.MessageId,
@@ -26,7 +29,7 @@ public class GetNextMessagesGroupChatHandler: IRequestHandler<GetNextMessagesGro
         var countNextMessages = 0;
         if (messagesGroup.Count != 0)
         {
-            countNextMessages = await _messageRepository.GetCountNextMessagesChatAsync(
+            countNextMessages = await _messageRepository.GetNextMessagesCountChatAsync(
                 request.ChatId,
                 request.UserId,
                 messagesGroup.Last().Id);

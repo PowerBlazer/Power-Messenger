@@ -9,15 +9,18 @@ namespace PowerMessenger.Application.Features.MessageFeature.GetPrevMessagesGrou
 public class GetPrevMessagesGroupChatHandler: IRequestHandler<GetPrevMessagesGroupChatQuery,PrevMessagesGroupChatResponse>
 {
     private readonly IMessageRepository _messageRepository;
+    private readonly IMessageGroupChatRepository _messageGroupChatRepository;
 
-    public GetPrevMessagesGroupChatHandler(IMessageRepository messageRepository)
+    public GetPrevMessagesGroupChatHandler(IMessageRepository messageRepository, 
+        IMessageGroupChatRepository messageGroupChatRepository)
     {
         _messageRepository = messageRepository;
+        _messageGroupChatRepository = messageGroupChatRepository;
     }
 
     public async Task<PrevMessagesGroupChatResponse> Handle(GetPrevMessagesGroupChatQuery request, CancellationToken cancellationToken)
     {
-        var messagesGroup = (await _messageRepository.GetPrevMessagesGroupChatByUserAsync(
+        var messagesGroup = (await _messageGroupChatRepository.GetPrevMessagesGroupChatByUserAsync(
             request.ChatId,
             request.UserId,
             request.MessageId,
@@ -26,7 +29,7 @@ public class GetPrevMessagesGroupChatHandler: IRequestHandler<GetPrevMessagesGro
         var countPrevMessages = 0;
         if (messagesGroup.Count > 0)
         {
-            countPrevMessages = await _messageRepository.GetCountPrevMessagesChatAsync(
+            countPrevMessages = await _messageRepository.GetPrevMessagesCountChatAsync(
                 request.ChatId,
                 request.UserId,
                 messagesGroup.First().Id);

@@ -25,7 +25,7 @@ public class SetMessageAsReadHandler: IRequestHandler<SetMessageAsReadCommand,Se
             request.MessageId,
             request.UserId);
 
-        var unreadMessagesCount = await _messageRepository.GetCountUnreadMessagesChatAsync(
+        var unreadMessagesCount = await _messageRepository.GetUnreadMessagesCountChatAsync(
             request.ChatId,
             request.UserId);
 
