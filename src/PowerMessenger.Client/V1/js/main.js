@@ -1,5 +1,5 @@
 const apiUrl = "http://localhost:6001/api/v1/";
-const apiAssets = "http://localhost:6001/"
+const apiAssets = "http://localhost:6001/";
 
 class TokenService{
     constructor(apiUrl){
@@ -62,7 +62,7 @@ class TokenService{
         }
     
         if(response.status === 401 || response.status === 400){
-            location.href = "Login.html"
+            //location.href = "Login.html"
         }
 
         throw new Error('Request failed with status: ' + response.status);
@@ -166,6 +166,20 @@ class MessageService{
             break;
         }
       }
+
+      getLastMessagesByChat = async (chatId,type) => {
+        switch (type) {
+            case "Group":
+              const response = await fetch(`${this.uri}Message/groupchat/${chatId}/last`, {
+                method: "GET",
+                headers: this.tokenService.requestHeaders(),
+              });
+      
+              return await this.tokenService.handleTokenResponse(response, this.getPrevMessagesByChat, chatId, type);
+            default:
+              break;
+        }
+      }
       
       setMessageAsRead = async (chatId,messageId) => {
         const response = await fetch(`${this.uri}Message/${messageId}/read?chatId=${chatId}`, {
@@ -191,7 +205,184 @@ class MessageService{
       }
 }
 
-function convertToLocalTime(dateTimeString) {
+class ElementsService{
+    createUnreadMessagesCountMark = (count) => {
+        const countUnreadMessagesMark = document.createElement("div");
+        countUnreadMessagesMark.classList.add("count-unread-messages");
+        countUnreadMessagesMark.innerText = count;
+
+        return countUnreadMessagesMark;
+    }
+
+    createChatElements = (panel,chats) => {
+        chats.forEach(element => {
+            const chatItem = document.createElement("button");
+            chatItem.classList.add("chat-item");
+            chatItem.setAttribute("type", "button");
+            chatItem.setAttribute("id", `chatid-${element.id}`);
+            
+            const chatImage = document.createElement("img");
+            chatImage.setAttribute("src", `${apiAssets}${element.photo}`);
+            chatImage.setAttribute("alt", "chat-image");
+            chatImage.setAttribute("width", "50");
+            chatImage.setAttribute("height", "50");
+            
+            const chatItemInner = document.createElement("div");
+            chatItemInner.classList.add("chat-item_inner");
+            
+            const chatName = document.createElement("div");
+            chatName.classList.add("chat-name");
+            chatName.innerText = element.name;
+            
+            const chatItemContent = document.createElement("div");
+            chatItemContent.classList.add("chat-item-content");
+            
+            const chatItemContentInner = document.createElement("div");
+            chatItemContentInner.classList.add("chat-item-content_inner");
+            chatItemContentInner.dir = "auto"
+
+            const lastMessageChatOwner = document.createElement("div");
+            lastMessageChatOwner.classList.add("last-message-owner");
+            lastMessageChatOwner.innerHTML = element.lastMessage.userName+":";
+
+            const lastMessageChat = document.createElement("div");
+            lastMessageChat.classList.add("last-message-chat")
+            lastMessageChat.dir = "auto";
+            lastMessageChat.innerText = element.lastMessage.content;
+            
+            const lastMessageChatTime = document.createElement("div");
+            lastMessageChatTime.classList.add("last-message-chat_time");
+            lastMessageChatTime.innerText = convertToLocalTime(element.lastMessage.dateCreate);
+            
+            const countUnreadMessages = this.createUnreadMessagesCountMark(element.countUnreadMessages);
+            
+            chatItemContentInner.appendChild(lastMessageChatOwner);
+            chatItemContentInner.appendChild(lastMessageChat);
+            chatItemContent.appendChild(chatItemContentInner);
+            chatItemContent.appendChild(lastMessageChatTime);
+            
+            chatItemInner.appendChild(chatName);
+            chatItemInner.appendChild(chatItemContent);
+            
+            chatItem.appendChild(chatImage);
+            chatItem.appendChild(chatItemInner);
+    
+            if(element.countUnreadMessages > 0){
+                chatItem.appendChild(countUnreadMessages);
+            }
+            
+            panel.appendChild(chatItem);
+
+            chatItem.addEventListener("click", () => {
+                chatClickHandler(element);
+            });
+        });
+    }
+
+    resetChatPanelStyles = (chatsPanel) => {
+        Array.from(chatsPanel.children).forEach(chatItem => {
+            chatItem.style.backgroundColor = "";
+            const countUnreadMessagesElement = chatItem.querySelector(".count-unread-messages");
+            if (countUnreadMessagesElement !== null) {
+                countUnreadMessagesElement.style.backgroundColor = "";
+                countUnreadMessagesElement.style.color = "";
+            }
+        });
+    }
+
+    createMessageItem = (element,messages,index) => {
+        const messageItem = document.createElement("div");
+        messageItem.classList.add("message-item");
+        messageItem.classList.add(element.isOwner ? "right" : "left");
+        
+
+        if(element.isOwner){
+            messageItem.classList.add("owner");
+        }
+
+        messageItem.id = `message_id-${element.id}`;
+
+        const messageItemPosition = document.createElement("div");
+        messageItemPosition.classList.add("message-item_position");
+
+        if ((index === messages.length - 1 ||
+            messages[index + 1].messageOwner.userName !== element.messageOwner.userName)
+            && !element.isOwner) {
+            const avatarImage = document.createElement("img");
+            avatarImage.src = "./assets/img/testimg.png";
+            avatarImage.width = "40";
+            avatarImage.height = "40";
+            avatarImage.alt = "message-avatar";
+            avatarImage.classList.add("message-item-avatar");
+            messageItemPosition.appendChild(avatarImage);
+        }
+
+        const messageItemInner = document.createElement("div");
+        messageItemInner.classList.add("message-item_inner");
+
+        const messageOwnerUserName = document.createElement("div");
+        messageOwnerUserName.classList.add("message-owner-userName");
+
+        messageOwnerUserName.innerText = ((index === 0 ||
+            element.messageOwner.userName !== messages[index - 1].messageOwner.userName) && !element.isOwner)
+            ? element.messageOwner.userName
+            : "";
+
+        messageItemInner.appendChild(messageOwnerUserName);
+        if(element.forwardedMessage !== null){
+            const forwardedMessageButton = document.createElement("button");
+            forwardedMessageButton.classList.add("forwarded-message-button");
+            const forwardedLine = document.createElement("div");
+            forwardedLine.classList.add("forwarded-line");
+            forwardedMessageButton.appendChild(forwardedLine);
+            const forwardedMessageUserName = document.createElement("div");
+            forwardedMessageUserName.classList.add("forwarded_message_username");
+            forwardedMessageUserName.innerHTML = element.forwardedMessage.userName;
+            forwardedMessageButton.appendChild(forwardedMessageUserName);
+            const forwardedMessageContent = document.createElement("div");
+            forwardedMessageContent.classList.add("forwarded_message_content");
+            forwardedMessageContent.innerHTML = element.forwardedMessage.content;
+            forwardedMessageButton.appendChild(forwardedMessageContent);
+            messageItemInner.appendChild(forwardedMessageButton);
+        }
+        
+
+        const messageContent = document.createElement("div");
+        messageContent.classList.add("message-content");
+        messageContent.innerText = element.content === null ? "" : element.content;
+        messageItemInner.appendChild(messageContent);
+
+        const messageTime = document.createElement("div");
+        messageTime.classList.add("message-time");
+        messageTime.innerText = convertToLocalTime(element.dateCreate);
+        messageTime.title = new Date(element.dateCreate).toUTCString();
+        messageItemInner.appendChild(messageTime);
+
+        messageItemPosition.appendChild(messageItemInner);
+        messageItem.appendChild(messageItemPosition);
+
+        return messageItem;
+    }
+
+    createShutdownButton = (chatId,lastMessageId,unreadMessageCount) => {
+        const button = document.createElement("button");
+        button.className = "shutdown-position";
+        button.dataset.unreadCount = unreadMessageCount;
+        button.dataset.lastMessageId = lastMessageId;
+
+        const image = document.createElement("img");
+        image.src = "./assets/down.svg";
+        image.width = "25";
+        image.height = "25";
+
+        button.appendChild(image);
+        button.addEventListener("click",()=>shutDownButtonHandler(lastMessageId,chatId));
+
+        return button;
+    }
+}
+
+function convertToLocalTime(dateTimeString){
     const date = new Date(dateTimeString);
     const localTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     return localTime;
@@ -200,81 +391,9 @@ function convertToLocalTime(dateTimeString) {
 const tokenService = new TokenService(apiUrl);
 const chatService = new ChatService(apiUrl,tokenService);
 const messageService = new MessageService(apiUrl,tokenService);
+const elementsService = new ElementsService();
 
 let selectedChat = {};
-
-async function chatsInitialize(){
-    const chatsPanel = document.getElementsByClassName("chats_toolbar__inner")[0];
-
-    let chats = await chatService.getChatsByUser();
-
-    chats.forEach(element => {
-         chatsPanel.innerHTML+= `<button class="chat-item" type="button" id="chatid-${element.id}">
-            <img src="${apiAssets}${element.photo}" alt="chat-image" width="50" height="50">
-            <div class="chat-item_inner">
-                <div class="chat-name">${element.name}</div>
-                <div class="chat-item-content">
-                     <div class="last-message-chat">${element.lastMessage.content}</div>
-                     <div class="last-message-chat_time">${convertToLocalTime(element.dateCreate)}</div>
-                </div>
-            </div>
-            ${element.countUnreadMessages === 0 ? "" :`<div class="count-unread-messages">${element.countUnreadMessages}</div>`}
-        </button>`
-    });
-
-    for (let index = 0; index < chatsPanel.children.length; index++) {
-        const element = chatsPanel.children[index];
-        
-        element.addEventListener("click",()=>{
-            chatClickHandler(chats.find(p=>p.id == element.id.split("-").pop()))
-        })
-    }
-
-    const selectedChat = chatService.getSelectedChat();
-
-    if(selectedChat !== null){
-        chatClickHandler(selectedChat);
-    }
-}
-
-async function chatClickHandler(chat){
-    const chatInfoInner = document.getElementsByClassName("chat-info_inner")[0];
-    const chatsPanel = document.getElementsByClassName("chats_toolbar__inner")[0];
-
-    let chatinfo = `<img width=45 height=45  class="chat-avatar" alt="chat-avatar" src=${apiAssets}${chat.photo}>
-    <div class="chat-info-block">
-        <div class="chat-name">${chat.name}</div>
-        <div class="chat-count-info_inner">
-            <div class="count-participants">Участников - ${chat.countParticipants}</div>
-            <div class="count-messages">Количество сообщении - ${chat.countMessages}</div>
-        </div>
-    </div>`;
-
-    for (let index = 0; index < chatsPanel.children.length; index++) {
-        chatsPanel.children[index].style.backgroundColor = "";
-        const childrenUnreadMessageCount = chatsPanel.children[index].querySelector(".count-unread-messages");
-        if(childrenUnreadMessageCount!==null){
-            childrenUnreadMessageCount.style.color = "";
-            childrenUnreadMessageCount.style.backgroundColor = "";
-        }
-        
-    }
-    
-    let clickedChat = document.getElementById(`chatid-${chat.id}`);
-    clickedChat.style.backgroundColor = "var(--theme-color)";
-    const countUnreadMessagesElement = clickedChat.querySelector(".count-unread-messages");
-
-    if(countUnreadMessagesElement!== null){
-        countUnreadMessagesElement.style.backgroundColor = "white";
-        countUnreadMessagesElement.style.color = "var(--theme-color)";    
-    }
-    
-    chatInfoInner.innerHTML = chatinfo;
-    chatService.setSelectedChat(chat);
-
-    loadMessages(chat);
-}
-
 let optionObserver = {
     root: document.querySelector(".message-window-scroll"),
     rootMargin: "0px",
@@ -284,121 +403,126 @@ let nextLoadObserver = new IntersectionObserver(loadNextMessages,optionObserver)
 let prevLoadObserver = new IntersectionObserver(loadPrevMessages,optionObserver);
 
 
-function createMessageItem(element,messages,index){
-    const messageItem = document.createElement("div");
-    messageItem.classList.add("message-item");
-    messageItem.classList.add(element.isOwner ? "right" : "left");
-    messageItem.id = `message_id-${element.id}`;
-
-    const messageItemPosition = document.createElement("div");
-    messageItemPosition.classList.add("message-item_position");
-
-    if ((index === messages.length - 1 ||
-        messages[index + 1].messageOwner.userName !== element.messageOwner.userName)
-        && !element.isOwner) {
-        const avatarImage = document.createElement("img");
-        avatarImage.src = "./assets/img/testimg.png";
-        avatarImage.width = "40";
-        avatarImage.height = "40";
-        avatarImage.alt = "message-avatar";
-        avatarImage.classList.add("message-item-avatar");
-        messageItemPosition.appendChild(avatarImage);
-    }
-
-    const messageItemInner = document.createElement("div");
-    messageItemInner.classList.add("message-item_inner");
-
-    const messageOwnerUserName = document.createElement("div");
-    messageOwnerUserName.classList.add("message-owner-userName");
-    messageOwnerUserName.innerText = (index === 0 ||
-        element.messageOwner.userName !== messages[index - 1].messageOwner.userName)
-        ? element.messageOwner.userName
-        : "";
-    messageItemInner.appendChild(messageOwnerUserName);
-    if(element.forwardedMessage !== null){
-        const forwardedMessageButton = document.createElement("button");
-        forwardedMessageButton.classList.add("forwarded-message-button");
-        const forwardedLine = document.createElement("div");
-        forwardedLine.classList.add("forwarded-line");
-        forwardedMessageButton.appendChild(forwardedLine);
-        const forwardedMessageUserName = document.createElement("div");
-        forwardedMessageUserName.classList.add("forwarded_message_username");
-        forwardedMessageUserName.innerHTML = element.forwardedMessage.userName;
-        forwardedMessageButton.appendChild(forwardedMessageUserName);
-        const forwardedMessageContent = document.createElement("div");
-        forwardedMessageContent.classList.add("forwarded_message_content");
-        forwardedMessageContent.innerHTML = element.forwardedMessage.content;
-        forwardedMessageButton.appendChild(forwardedMessageContent);
-        messageItemInner.appendChild(forwardedMessageButton);
-    }
+async function chatsInitialize(){
+    const chatsPanel = document.getElementsByClassName("chats_toolbar__inner")[0];
     
+    let chats = await chatService.getChatsByUser();
+    
+    elementsService.createChatElements(chatsPanel,chats);
+    
+    const selectedChat = chatService.getSelectedChat();
+    
+    if (selectedChat !== null) {
+        const chat = chats.find(p=>p.id == selectedChat.id);
 
-    const messageContent = document.createElement("div");
-    messageContent.classList.add("message-content");
-    messageContent.innerText = element.content === null ? "" : element.content;
-    messageItemInner.appendChild(messageContent);
-
-    const messageTime = document.createElement("div");
-    messageTime.classList.add("message-time");
-    messageTime.innerText = convertToLocalTime(element.dateCreate);
-    messageItemInner.appendChild(messageTime);
-
-    messageItemPosition.appendChild(messageItemInner);
-    messageItem.appendChild(messageItemPosition);
-
-    return messageItem;
+        chatClickHandler(chat);
+        chatService.setSelectedChat(chat);
+    }
 }
 
-async function loadMessages(chat){                  
+async function chatClickHandler(chat){
+    const chatInfoInner = document.getElementsByClassName("chat-info_inner")[0];
+    const chatsPanel = document.getElementsByClassName("chats_toolbar__inner")[0];
+    const shutDownPosition = document.querySelector(".shutdown-position");
+
+    if(shutDownPosition){
+        shutDownPosition.remove();
+    }
+
+    chatInfoInner.innerHTML = `
+        <img width="45" height="45" class="chat-avatar" alt="chat-avatar" src="${apiAssets}${chat.photo}">
+        <div class="chat-info-block">
+            <div class="chat-name">${chat.name}</div>
+            <div class="chat-count-info_inner">
+                <div class="count-participants">Участников - ${chat.countParticipants}</div>
+                <div class="count-messages">Количество сообщений - ${chat.countMessages}</div>
+            </div>
+        </div>
+    `;
+
+    elementsService.resetChatPanelStyles(chatsPanel);
+
+    const clickedChat = document.getElementById(`chatid-${chat.id}`);
+
+    clickedChat.style.backgroundColor = "var(--theme-color)";
+
+    const countUnreadMessagesElement = clickedChat.querySelector(".count-unread-messages");
+
+    if (countUnreadMessagesElement !== null){
+        countUnreadMessagesElement.style.backgroundColor = "white";
+        countUnreadMessagesElement.style.color = "var(--theme-color)";
+    }
+
+    chatService.setSelectedChat(chat);
+
+    loadMessages(chat);
+}
+
+async function loadMessages(chat){
     const messageWindow = document.getElementsByClassName("message-window_inner")[0];
+    const senderPanel = document.querySelector(".sender-panel");
+    const shutDownPosition = document.querySelector(".shutdown-position");
+
     messageWindow.innerHTML = "";
 
-    const readMessagesObserver = new IntersectionObserver(entries=>readMessage(entries,messagesResult,readMessagesObserver),optionObserver);
-    let messagesResult = await messageService.getMessagesByChat(chat.id,chat.type);
+    const readMessagesObserver = new IntersectionObserver(entries => 
+        readMessage(entries, messagesResult, readMessagesObserver), optionObserver);
+
+    const messagesResult = await messageService.getMessagesByChat(chat.id, chat.type);
 
     for (let index = 0; index < messagesResult.messages.length; index++) {
-        const element = messagesResult.messages[index];
-
-        const messageItem = createMessageItem(element,messagesResult.messages,index);
+        const message = messagesResult.messages[index];
+        const messageItem = elementsService.createMessageItem(message, messagesResult.messages, index);
         
         messageWindow.appendChild(messageItem);
 
-        if(element.isRead == false && messagesResult.unreadMessagesCount){
+        if (!message.isRead && messagesResult.unreadMessagesCount) {
             readMessagesObserver.observe(messageItem);
         }
     }
 
-    const firstInreadMessageIndex = messagesResult.messages.findIndex(p=>p.isRead == false);
+    const firstUnreadMessageIndex = messagesResult.messages.findIndex(p => !p.isRead);
 
-    if(firstInreadMessageIndex !== -1){
-        messageWindow.children[firstInreadMessageIndex].scrollIntoView();
-    }
-    else{
+    if (firstUnreadMessageIndex !== -1) {
+        messageWindow.children[firstUnreadMessageIndex].scrollIntoView();
+    }else{
         messageWindow.children[messageWindow.children.length - 1].scrollIntoView();
     }
 
     nextLoadObserver.disconnect();
     prevLoadObserver.disconnect();
 
-    if(messagesResult.nextMessagesCount > 0){
-        nextLoadObserver.observe(messageWindow.children[messageWindow.children.length-1]);
+    if (messagesResult.nextMessagesCount > 0) {
+        nextLoadObserver.observe(messageWindow.children[messageWindow.children.length - 1]);
     }
-    
-    if(messagesResult.prevMessagesCount > 0){
+
+    if (messagesResult.prevMessagesCount > 0) {
         prevLoadObserver.observe(messageWindow.children[0]);
     }
 
     chatService.setUnreadMessagesCount(messagesResult.unreadMessagesCount);
+
+    if(shutDownPosition){
+        shutDownPosition.remove();
+    }
+
     
+
+    if(chat.countUnreadMessages > 0){
+        senderPanel.appendChild(elementsService.createShutdownButton(chat.id,chat.lastMessage.id,messagesResult.unreadMessagesCount));
+    }
+
 }
 
 function setNextMessages(nextMessagesObj){
     const readMessagesObserver = new IntersectionObserver(entries=>readMessage(entries,nextMessagesObj,readMessagesObserver),optionObserver);
+
     const messageWindow = document.getElementsByClassName("message-window_inner")[0];
+
     if(nextMessagesObj.messages.length > 0){
         for (let index = 0; index < nextMessagesObj.messages.length; index++) {
             const element = nextMessagesObj.messages[index];
-            const messageItem = createMessageItem(element,nextMessagesObj.messages,index);
+            const messageItem = elementsService.createMessageItem(element,nextMessagesObj.messages,index);
             messageWindow.appendChild(messageItem);
 
             if(element.isRead == false){
@@ -425,7 +549,7 @@ function setPrevMessages(prevMessagesObj){
         for (let index = 0; index < prevMessagesObj.messages.length; index++) {
             const element = prevMessagesObj.messages[index];
 
-            const messageItem = createMessageItem(element,prevMessagesObj.messages,index);
+            const messageItem = elementsService.createMessageItem(element,prevMessagesObj.messages,index);
 
             fragment.appendChild(messageItem);
         }
@@ -442,6 +566,33 @@ function setPrevMessages(prevMessagesObj){
     if(prevMessagesObj.prevCount !== 0){
         prevLoadObserver.observe(messageWindow.children[0]);
     }
+}
+
+function setLastMessages(lastMessagesObj){
+    const messagesWindow = document.querySelector(".message-window_inner");
+    messagesWindow.innerHTML = "";
+
+    for (let index = 0; index < lastMessagesObj.messages.length; index++) {
+        const message = lastMessagesObj.messages[index];
+        const messageItem = elementsService.createMessageItem(message, lastMessagesObj.messages, index);
+        messagesWindow.appendChild(messageItem);
+    }
+
+    prevLoadObserver.disconnect();
+
+    if (lastMessagesObj.prevMessagesCount > 0) {
+        prevLoadObserver.observe(messagesWindow.children[0]);
+    }
+
+    messagesWindow.children[messagesWindow.children.length - 1].scrollIntoView();
+}
+
+function setLastMessage(message){
+
+}
+
+function setStatuseMessage(messageId,status){
+
 }
 
 async function loadNextMessages(entries){
@@ -485,8 +636,19 @@ function readMessage(entries,messagesResult,readMessagesObserver){
     const selectedChat = chatService.getSelectedChat();
     const selectedChatElement = document.getElementById(`chatid-${selectedChat.id}`);
     const unreadMessagesCountElement = selectedChatElement.querySelector(".count-unread-messages");
+    const shutDownPosition = document.querySelector(".shutdown-position");
+
 
     unreadMessagesCountElement.innerHTML = Number(unreadMessagesCountElement.innerHTML) - visibleMessages.length;
+
+    if(shutDownPosition !== null){
+        shutDownPosition.dataset.unreadCount = Number(shutDownPosition.dataset.unreadCount) - visibleMessages.length;
+        if(shutDownPosition.dataset.unreadCount == 0){
+            shutDownPosition.remove();
+        }
+    }
+
+    
 
     if(unreadMessagesCountElement.innerHTML == 0)
         unreadMessagesCountElement.remove();
@@ -499,7 +661,7 @@ function readMessage(entries,messagesResult,readMessagesObserver){
    
 }
 
-function listenScrollStop(messageWindow) {
+function listenScrollStop(messageWindow){
     let isScrolling;
     
     messageWindow.addEventListener('scroll', function() {
@@ -511,18 +673,43 @@ function listenScrollStop(messageWindow) {
 
        if(lastReadMessage !== null && selectedChat !== null && chatService.getUnreadMessagesCount() > 0){
         let result = await messageService.setMessageAsRead(selectedChat.id,lastReadMessage.id);
-        console.log(chatService.getUnreadMessagesCount());
         chatService.setUnreadMessagesCount(result.unreadMessagesCount);
        }
       }, 1000);
     });
-  }
+}
+
+async function shutDownButtonHandler(lastMessageId,chatId){
+   const selectedChatElement = document.getElementById(`chatid-${chatId}`);
+   const unreadMessagesCountElement = selectedChatElement.querySelector(".count-unread-messages");
+   const shutDownPosition = document.querySelector(".shutdown-position");
+
+   const unreadMessageCount = await messageService.setMessageAsRead(chatId,lastMessageId).unreadMessageCount;
+   chatService.setUnreadMessagesCount(unreadMessageCount);
+
+   if(unreadMessagesCountElement){
+    unreadMessagesCountElement.remove()
+   }
+
+   if(shutDownPosition){
+    shutDownPosition.remove();
+   }
+
+   const lastMessagesObj = await messageService.getLastMessagesByChat(chatId,"Group");
+
+   setLastMessages(lastMessagesObj);
+}
+
+async function sendMessage(){
+    let unreadMessagesCount = chatService.getUnreadMessagesCount();
+
+    
+}
 
 
 document.addEventListener("DOMContentLoaded",() => {
     document.getElementById("logout-button").addEventListener("click",logout);
     listenScrollStop(document.querySelector(".message-window-scroll"));
-
     chatsInitialize();
 });
 

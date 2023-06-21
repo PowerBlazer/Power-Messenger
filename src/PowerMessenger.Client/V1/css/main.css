@@ -9,6 +9,7 @@
     --main-background-color:#212121;
     --font-color: white;
     --theme-color:#9068FE;
+    --theme-color-hover:#6e47d8;
 }
 
 *{
@@ -37,6 +38,7 @@ button{
     background-color: transparent;
     border: none;
     padding: 0;
+    cursor: pointer;
 }
 
 header{
@@ -65,7 +67,7 @@ header{
 .logo-name{
     font-family: var(--font-family);
     font-size: 22px;
-    color: rgb(144, 104, 254);
+    color:var(--theme-color);
     display: flex;
     align-items: center;
     gap: 7px;
@@ -110,7 +112,7 @@ header{
     flex-direction: column;
     gap: 5px;
     padding: 10px;
-    width: 350px;
+    width: 370px;
     border-right: 1px solid var(--theme-color);
     height: calc(100vh - var(--header-height));
     flex-shrink: 0;
@@ -162,6 +164,8 @@ header{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    flex: 1;
+    min-width: 0;
 }
 
 .chat-name{
@@ -177,11 +181,23 @@ header{
     gap: 10px;
     justify-content: space-between;
     flex-direction: row;
-    
+    font-family: var(--font-family);
+}
+
+.chat-item-content_inner{
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+}
+
+.last-message-owner{
+    font-family: var(--font-family);
 }
 
 .last-message-chat{
-    width: 200px;
+    width: calc(100% - 1.75rem);
     overflow: hidden;
     white-space: nowrap;
     text-overflow:ellipsis; 
@@ -265,7 +281,7 @@ header{
 .message-window-scroll{
     height: 100%;
     overflow-y: auto;
-    padding: 25px 60px;
+    padding: 25px 10px;
 }
 .message-window-scroll::-webkit-scrollbar-track{
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
@@ -278,7 +294,6 @@ header{
   width: 6px;
   background-color:transparent;
 }
-
 
 .message-window-scroll::-webkit-scrollbar-thumb
 {
@@ -293,6 +308,8 @@ header{
     gap: 15px;
     height: 100%;
     width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 }
 .message-window_inner > .right {
     justify-content: flex-end;
@@ -302,6 +319,7 @@ header{
     justify-content: flex-start;
     margin-left: 50px;
 }
+
 
 .message-item_position{
     display: flex;
@@ -317,14 +335,15 @@ header{
 
 .message-item_position > img {
     border-radius: 50%;
-    border:1px solid blue;
+    border:1px solid var(--theme-color);
     object-fit: contain;
     object-position: center;
     position: absolute;
     left: -50px;
 }
+
 .message-item_inner{
-   padding: 5px 10px 23px;
+   padding: 5px 10px 25px;
    background-color: #212121;
    border-radius: 5px;
    display: flex;
@@ -334,8 +353,24 @@ header{
    min-width: 130px;
 }
 
+.message-window_inner .owner .message-item_inner{
+    background-color: var(--theme-color);  
+}
+
+.message-window_inner .owner .forwarded_message_username{
+    color: white;
+}
+
+.message-window_inner .owner .forwarded-line{
+    background-color: white;
+}
+
+.message-window_inner .owner .forwarded-message-button:hover{
+    background-color:rgba(240, 240, 240, 0.3);
+}
+
 .message-owner-userName{
-    color: rgb(144, 104, 254);
+    color: var(--theme-color);
     font-family: var(--font-family);
     font-size: 13px;
     font-weight: 600;
@@ -351,17 +386,11 @@ header{
     position: absolute;
     right: 10px;
     bottom: 8px;
-    font-size: 11px;
+    font-size: 12px;
     color: rgb(206, 205, 205);
     font-family: var(--font-family);
-}
-
-.message-input_inner{
-    flex-shrink: 0;
-    height: 40px;
-    width: auto;
-    margin: 20px 80px 30px;
-    background-color: bisque;
+    font-weight: 700;
+    cursor:default;
 }
 
 .forwarded-message-button{
@@ -398,7 +427,7 @@ header{
 .forwarded_message_username{
     width: calc(100% - 0.75rem);
     font-family: var(--font-family);
-    color: rgb(144, 104, 254);
+    color: var(--theme-color);
     text-align: start;
     font-weight: 600;
     font-size: 12px;
@@ -407,10 +436,132 @@ header{
 
 .forwarded-line{
     width: 3px;
-    background-color: rgb(144, 104, 254);
+    background-color: var(--theme-color);
     height: 80%;
     position: absolute;
     top: 4px;
     left: 3px;
     border-radius: 5px;
 }
+
+.message-input-panel{
+    flex-shrink: 0;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.message-input-panel_inner{
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    align-items: end;
+    gap: 10px;
+}
+
+.message-input_inner{
+    background-color: var(--main-background-color);
+    display: flex;
+    align-items: end;
+    border-radius: 7px;
+    padding: 5px 12px;
+    width: 100%;
+    max-width: 800px;
+    gap: 10px;
+}
+
+.message-input{
+    width: 100%;
+    max-width: calc(100% - 0.25rem);
+    min-height: 45px;
+    font-weight: 600;
+    font-size: 17px;
+    font-family: var(--font-family);
+    color: white;
+    text-align: start;
+    padding: 10px 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-bottom: 0px;
+    max-height: 300px;
+    overflow: hidden;
+}
+
+.message-input:focus{
+    outline: none;
+}
+
+.smile-message-button{
+    margin-top: 2px;
+    margin-bottom: 5px;
+}
+
+.common-message-button{
+    flex-shrink: 0;
+    height: 27px;
+    margin-bottom: 7px;
+}
+
+
+.sender-panel{
+    position: relative;
+    flex-shrink: 0;
+}
+
+.send-message{
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--theme-color);
+    border-radius: 50%;
+    transition: background-color .2s;
+    cursor: pointer;
+}
+
+.send-message:hover{
+    background-color: var(--theme-color-hover);
+}
+
+.send-message > img{
+    margin-left: 2px;
+}
+
+.shutdown-position{
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: -65px;
+    background-color: var(--main-background-color);
+    border-radius: 50%;
+    border: 1px solid #343333;
+}
+
+.shutdown-position:hover{
+    background-color: #343333;
+}
+
+.shutdown-position::before{
+    width: 22px;
+    height: 22px;
+    background-color: var(--theme-color);
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    border-radius: 50%;
+    position: absolute;
+    content: attr(data-unread-count);
+    right: 0;
+    top: -5px;
+}
+
