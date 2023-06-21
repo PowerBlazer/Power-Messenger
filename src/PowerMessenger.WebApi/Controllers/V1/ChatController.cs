@@ -8,7 +8,7 @@ using PowerMessenger.Domain.DTOs.Chat;
 namespace PowerMessenger.WebApi.Controllers.V1;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/[controller]"),ApiVersion("1.0"),Authorize]
+[Route("api/v{version:apiVersion}/chat"),ApiVersion("1.0"),Authorize]
 public class ChatController: BaseController
 {
     private readonly IMediator _mediator;

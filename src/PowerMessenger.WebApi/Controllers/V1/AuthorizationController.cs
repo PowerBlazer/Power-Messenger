@@ -12,7 +12,7 @@ using PowerMessenger.Domain.DTOs.Authorization;
 namespace PowerMessenger.WebApi.Controllers.V1;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/[controller]")]
+[Route("api/v{version:apiVersion}/authorization")]
 [ApiVersion("1.0")]
 public class AuthorizationController: BaseController
 {
