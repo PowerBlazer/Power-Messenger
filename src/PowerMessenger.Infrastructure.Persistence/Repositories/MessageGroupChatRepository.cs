@@ -23,12 +23,8 @@ public class MessageGroupChatRepository: IMessageGroupChatRepository
         
         var messagesGroup = await connection.QueryAsync<MessageGroupChatResponse,
             MessageOwner,ForwardedMessage,MessageGroupChatResponse>(
-                NpgFunctionQueries.GetMessagesGroupChatByUser, (message, owner, forwarded) =>
-                {
-                    message.MessageOwner = owner;
-                    message.ForwardedMessage = forwarded;
-                    return message;
-                },
+                NpgFunctionQueries.GetMessagesGroupChatByUser, 
+                MapOptionGroupChatMessages,
                 new
                 {
                     chatId = chatId,
@@ -47,12 +43,8 @@ public class MessageGroupChatRepository: IMessageGroupChatRepository
         
         var messagesGroup = await connection.QueryAsync<MessageGroupChatResponse,
             MessageOwner,ForwardedMessage,MessageGroupChatResponse>(
-                NpgFunctionQueries.GetNextMessagesGroupChatByUser, (message, owner, forwarded) =>
-                {
-                    message.MessageOwner = owner;
-                    message.ForwardedMessage = forwarded;
-                    return message;
-                },
+                NpgFunctionQueries.GetNextMessagesGroupChatByUser, 
+                MapOptionGroupChatMessages,
                 new
                 {
                     chatId = chatId,
@@ -71,12 +63,8 @@ public class MessageGroupChatRepository: IMessageGroupChatRepository
         
         var messagesGroup = await connection.QueryAsync<MessageGroupChatResponse,
             MessageOwner,ForwardedMessage,MessageGroupChatResponse>(
-                NpgFunctionQueries.GetPrevMessagesGroupChatByUser, (message, owner, forwarded) =>
-                {
-                    message.MessageOwner = owner;
-                    message.ForwardedMessage = forwarded;
-                    return message;
-                },
+                NpgFunctionQueries.GetPrevMessagesGroupChatByUser,
+                MapOptionGroupChatMessages,
                 new
                 {
                     chatId = chatId,
@@ -95,12 +83,8 @@ public class MessageGroupChatRepository: IMessageGroupChatRepository
         
         var lastMessagesGroup = await connection.QueryAsync<MessageGroupChatResponse,
             MessageOwner,ForwardedMessage,MessageGroupChatResponse>(
-                NpgFunctionQueries.GetLastMessagesGroupChatByUser, (message, owner, forwarded) =>
-                {
-                    message.MessageOwner = owner;
-                    message.ForwardedMessage = forwarded;
-                    return message;
-                },
+                NpgFunctionQueries.GetLastMessagesGroupChatByUser, 
+                MapOptionGroupChatMessages,
                 new
                 {
                     chatId = chatId,
@@ -118,12 +102,8 @@ public class MessageGroupChatRepository: IMessageGroupChatRepository
         
         var messagesGroup = await connection.QueryAsync<MessageGroupChatResponse,
             MessageOwner,ForwardedMessage,MessageGroupChatResponse>(
-                NpgFunctionQueries.GetMessagesGroupChatByMessageId, (message, owner, forwarded) =>
-                {
-                    message.MessageOwner = owner;
-                    message.ForwardedMessage = forwarded;
-                    return message;
-                },
+                NpgFunctionQueries.GetMessagesGroupChatByMessageId, 
+                MapOptionGroupChatMessages,
                 new
                 {
                     chatId = chatId,
@@ -134,5 +114,13 @@ public class MessageGroupChatRepository: IMessageGroupChatRepository
                 }, splitOn: "Id,Id");
 
         return messagesGroup;
+    }
+
+    private static MessageGroupChatResponse MapOptionGroupChatMessages(MessageGroupChatResponse message,
+        MessageOwner owner, ForwardedMessage forwardedMessage)
+    {
+        message.MessageOwner = owner;
+        message.ForwardedMessage = forwardedMessage;
+        return message;
     }
 }

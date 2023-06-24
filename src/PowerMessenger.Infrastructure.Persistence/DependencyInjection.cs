@@ -26,10 +26,10 @@ public static class DependencyInjection
             );
             
             options.UseSnakeCaseNamingConvention();
-            
         });
 
         services.AddScoped<IPersistenceUnitOfWork, PersistenceUnitOfWork>();
+        
         services.AddSingleton<IMessengerDapperContext>(_ => 
             new MessengerDapperContext(connectionString!));
 

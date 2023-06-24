@@ -27,7 +27,7 @@ public static class NpgFunctionQueries
             forwarded_message_content as Content,
             forwarded_message_type as Type,
             forwarded_message_chat_id as ChatId
-        FROM get_last_messages_group_chat_by_user(@chatId,@userId,@messageId,@next,@prev)";
+        FROM get_messages_group_chat_by_message_id(@chatId,@userId,@messageId,@next,@prev)";
     
     /// <summary>
     /// GetMessagesGroupChatByUser Query
@@ -127,4 +127,25 @@ public static class NpgFunctionQueries
             forwarded_message_type as Type,
             forwarded_message_chat_id as ChatId
         FROM get_last_messages_group_chat_by_user(@chatId,@userId,@count)";
+    
+    /// <summary>
+    /// Get Message Data by Id Query
+    /// </summary>
+    /// <param name="@messageId">Message Id</param>
+    public const string GetMessageDataById = @"SELECT 
+            id as Id,
+            chat_id as ChatId,
+            content,
+            source,
+            date_create as DateCreate,
+            type,
+            message_user_id as Id,
+            message_user_name as UserName,
+            message_user_avatar as Avatar,
+            forwarded_message_id as Id,
+            forwarded_message_user_name as UserName,
+            forwarded_message_content as Content,
+            forwarded_message_type as Type,
+            forwarded_message_chat_id as ChatId
+        FROM get_message_data_by_id(@messageId)";
 }

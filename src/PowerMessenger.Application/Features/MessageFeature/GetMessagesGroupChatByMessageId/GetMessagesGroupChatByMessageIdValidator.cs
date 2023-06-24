@@ -5,7 +5,8 @@ namespace PowerMessenger.Application.Features.MessageFeature.GetMessagesGroupCha
 
 public class GetMessagesGroupChatByMessageIdValidator: AbstractValidator<GetMessagesGroupChatByMessageIdQuery>
 {
-    public GetMessagesGroupChatByMessageIdValidator(IChatService chatService)
+    public GetMessagesGroupChatByMessageIdValidator(IChatService chatService,
+        IMessageService messageService)
     {
         RuleFor(p => p.ChatId)
             .NotEmpty()
@@ -14,6 +15,12 @@ public class GetMessagesGroupChatByMessageIdValidator: AbstractValidator<GetMess
             .WithMessage("Такого чата не сущесвует")
             .MustAsync(async (chatId,_) => await chatService.ValidateChatTypeAsync(chatId,"Group"))
             .WithMessage("Не соответсвует тип чата");
+
+        RuleFor(p => p.MessageId)
+            .NotEmpty()
+            .WithMessage("Поле не может быть пустым")
+            .MustAsync(async (messageId, _) => await messageService.ContainMessageByMessageId(messageId))
+            .WithMessage("Сообщение отсутсвует");
 
         RuleFor(p => p.UserId)
             .NotEmpty()

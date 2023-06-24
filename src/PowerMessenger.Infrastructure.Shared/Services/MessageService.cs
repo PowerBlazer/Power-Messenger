@@ -19,6 +19,11 @@ public class MessageService: IMessageService
         _messageTypeRepository = messageTypeRepository;
     }
 
+    public async Task<bool> ContainMessageByMessageId(long messageId)
+    {
+        return await _messageRepository.GetMessageByMessageId(messageId) is not null;
+    }
+
     public async Task<bool> ContainMessageInChatAsync(long messageId, long chatId)
     {
        return await _messageRepository.GetMessageInTheChatByIdAsync(messageId, chatId) is not null;

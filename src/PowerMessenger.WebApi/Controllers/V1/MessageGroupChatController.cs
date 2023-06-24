@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PowerMessenger.Application.Features.MessageFeature.GetLastMessagesGroupChat;
 using PowerMessenger.Application.Features.MessageFeature.GetMessagesGroupChat;
+using PowerMessenger.Application.Features.MessageFeature.GetMessagesGroupChatByMessageId;
 using PowerMessenger.Application.Features.MessageFeature.GetNextMessagesGroupChat;
 using PowerMessenger.Application.Features.MessageFeature.GetPrevMessagesGroupChat;
 using PowerMessenger.Domain.Common;
@@ -127,7 +128,38 @@ public class MessageGroupChatController: BaseController
         [FromRoute]long chatId,int count = 10)
     {
         var result = await _mediator.Send(new GetLastMessagesGroupChatQuery(
-            chatId, UserId, count));
+            chatId, 
+            UserId, 
+            count));
+        
+        return new ApiActionResult<MessagesGroupChatResponse>
+        {
+            Result = result
+        };
+    }
+
+    /// <summary>
+    /// Получить сообщении чата по Id сообщения
+    /// </summary>
+    /// <param name="chatId">Id чата</param>
+    /// <param name="messageId">Id сообщения</param>
+    /// <param name="next">Количество следующих</param>
+    /// <param name="prev">Количество предыдущих</param>
+    /// <returns></returns>
+    /// <response code="200">Возвращает список сообщении группового чата</response>
+    /// <response code="401">Пользователь не авторизвован</response>
+    /// <response code="400">Ошибка валидации данных</response>
+    /// <response code="500">Ошибка на сервере</response>
+    [HttpGet("{chatId:long}/message/{messageId:long}")]
+    public async Task<ApiActionResult<MessagesGroupChatResponse>> GetMessagesGroupChatByMessageId(long chatId,
+        long messageId, int next = 10, int prev = 10)
+    {
+        var result = await _mediator.Send(new GetMessagesGroupChatByMessageIdQuery(
+            chatId,
+            UserId,
+            messageId,
+            next,
+            prev));
         
         return new ApiActionResult<MessagesGroupChatResponse>
         {

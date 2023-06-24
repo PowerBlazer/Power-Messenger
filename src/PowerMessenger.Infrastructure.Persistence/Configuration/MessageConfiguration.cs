@@ -4,7 +4,7 @@ using PowerMessenger.Domain.Entities;
 
 namespace PowerMessenger.Infrastructure.Persistence.Configuration;
 
-public class MessageConfiguration:IEntityTypeConfiguration<Message>
+public class MessageConfiguration: IEntityTypeConfiguration<Message>
 {
     public void Configure(EntityTypeBuilder<Message> builder)
     {

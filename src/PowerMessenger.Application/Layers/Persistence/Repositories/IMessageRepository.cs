@@ -1,11 +1,11 @@
 ﻿using PowerMessenger.Domain.DTOs.Message;
-using PowerMessenger.Domain.DTOs.Message.MessagesGroupChat;
 using PowerMessenger.Domain.Entities;
 
 namespace PowerMessenger.Application.Layers.Persistence.Repositories;
 
 public interface IMessageRepository
 {
+    Task<Message?> GetMessageByMessageId(long messageId);
     Task<Message?> GetMessageInTheChatByIdAsync(long messageId, long chatId);
     Task<Message> AddMessageAsync(Message message);
     Task<MessageResponse?> GetMessageResponseModel(long messageId);
