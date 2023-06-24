@@ -542,6 +542,8 @@ header{
     background-color: var(--main-background-color);
     border-radius: 50%;
     border: 1px solid #343333;
+    opacity: 1;
+    animation: anim-shutdown-btn linear .3s;
 }
 
 .shutdown-position:hover{
@@ -549,10 +551,9 @@ header{
 }
 
 .shutdown-position::before{
-    width: 22px;
-    height: 22px;
+    padding: 3px;
     background-color: var(--theme-color);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: white;
     display: flex;
@@ -563,5 +564,15 @@ header{
     content: attr(data-unread-count);
     right: 0;
     top: -5px;
+}
+
+@keyframes anim-shutdown-btn{
+    0%{
+        opacity: 0;
+    }
+
+    100%{
+        opacity: 1;
+    }
 }
 

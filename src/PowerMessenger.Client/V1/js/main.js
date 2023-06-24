@@ -180,6 +180,20 @@ class MessageService{
               break;
         }
       }
+
+      getMessagesByMessageId = async (chatId,messageId,type) => {
+        switch (type) {
+            case "Group":
+              const response = await fetch(`${this.uri}Message/groupchat/${chatId}/message/${messageId}`, {
+                method: "GET",
+                headers: this.tokenService.requestHeaders(),
+              });
+      
+              return await this.tokenService.handleTokenResponse(response, this.getMessageByMessageId, chatId, type);
+            default:
+              break;
+        }
+      }
       
       setMessageAsRead = async (chatId,messageId) => {
         const response = await fetch(`${this.uri}Message/${messageId}/read?chatId=${chatId}`, {
@@ -290,7 +304,7 @@ class ElementsService{
         });
     }
 
-    createMessageItem = (element,messages,index) => {
+    createMessageItem = (element,messages,index,callBack) => {
         const messageItem = document.createElement("div");
         messageItem.classList.add("message-item");
         messageItem.classList.add(element.isOwner ? "right" : "left");
@@ -342,6 +356,12 @@ class ElementsService{
             const forwardedMessageContent = document.createElement("div");
             forwardedMessageContent.classList.add("forwarded_message_content");
             forwardedMessageContent.innerHTML = element.forwardedMessage.content;
+
+            if(callBack){
+                forwardedMessageButton.addEventListener('click',callBack)
+            }
+            
+
             forwardedMessageButton.appendChild(forwardedMessageContent);
             messageItemInner.appendChild(forwardedMessageButton);
         }
@@ -367,7 +387,10 @@ class ElementsService{
     createShutdownButton = (chatId,lastMessageId,unreadMessageCount) => {
         const button = document.createElement("button");
         button.className = "shutdown-position";
-        button.dataset.unreadCount = unreadMessageCount;
+        if(unreadMessageCount>0){
+            button.dataset.unreadCount = unreadMessageCount;
+        }
+        
         button.dataset.lastMessageId = lastMessageId;
 
         const image = document.createElement("img");
@@ -472,8 +495,9 @@ async function loadMessages(chat){
 
     for (let index = 0; index < messagesResult.messages.length; index++) {
         const message = messagesResult.messages[index];
-        const messageItem = elementsService.createMessageItem(message, messagesResult.messages, index);
-        
+
+        const messageItem = elementsService.createMessageItem(message, messagesResult.messages, index,()=>forwardedMessageHandler(message));
+
         messageWindow.appendChild(messageItem);
 
         if (!message.isRead && messagesResult.unreadMessagesCount) {
@@ -484,9 +508,9 @@ async function loadMessages(chat){
     const firstUnreadMessageIndex = messagesResult.messages.findIndex(p => !p.isRead);
 
     if (firstUnreadMessageIndex !== -1) {
-        messageWindow.children[firstUnreadMessageIndex].scrollIntoView();
+        messageWindow.children[firstUnreadMessageIndex].scrollIntoView({block: 'center'});
     }else{
-        messageWindow.children[messageWindow.children.length - 1].scrollIntoView();
+        messageWindow.children[messageWindow.children.length - 1].scrollIntoView({block: 'center'});
     }
 
     nextLoadObserver.disconnect();
@@ -506,12 +530,41 @@ async function loadMessages(chat){
         shutDownPosition.remove();
     }
 
-    
-
     if(chat.countUnreadMessages > 0){
         senderPanel.appendChild(elementsService.createShutdownButton(chat.id,chat.lastMessage.id,messagesResult.unreadMessagesCount));
     }
 
+}
+
+async function setFowardedMessages(messageId,messagesResult){
+    const messageWindow = document.getElementsByClassName("message-window_inner")[0];
+    // const senderPanel = document.querySelector(".sender-panel");
+    // const shutDownPosition = document.querySelector(".shutdown-position");
+    messageWindow.innerHTML = "";
+
+
+    for (let index = 0; index < messagesResult.messages.length; index++) {
+        const message = messagesResult.messages[index];
+        const messageItem = elementsService.createMessageItem(message, messagesResult.messages, index,()=>forwardedMessageHandler(message));
+        
+        messageWindow.appendChild(messageItem);
+    }
+
+    const messageIndex = messagesResult.messages.findIndex(p => p.id === messageId);
+    messageWindow.children[messageIndex].scrollIntoView({behavior:"smooth",block: 'center'});
+
+
+
+    nextLoadObserver.disconnect();
+    prevLoadObserver.disconnect();
+
+    if (messagesResult.nextMessagesCount > 0) {
+        nextLoadObserver.observe(messageWindow.children[messageWindow.children.length - 1]);
+    }
+
+    if (messagesResult.prevMessagesCount > 0) {
+        prevLoadObserver.observe(messageWindow.children[0]);
+    }
 }
 
 function setNextMessages(nextMessagesObj){
@@ -522,7 +575,7 @@ function setNextMessages(nextMessagesObj){
     if(nextMessagesObj.messages.length > 0){
         for (let index = 0; index < nextMessagesObj.messages.length; index++) {
             const element = nextMessagesObj.messages[index];
-            const messageItem = elementsService.createMessageItem(element,nextMessagesObj.messages,index);
+            const messageItem = elementsService.createMessageItem(element,nextMessagesObj.messages,index,()=>forwardedMessageHandler(element));
             messageWindow.appendChild(messageItem);
 
             if(element.isRead == false){
@@ -549,7 +602,7 @@ function setPrevMessages(prevMessagesObj){
         for (let index = 0; index < prevMessagesObj.messages.length; index++) {
             const element = prevMessagesObj.messages[index];
 
-            const messageItem = elementsService.createMessageItem(element,prevMessagesObj.messages,index);
+            const messageItem = elementsService.createMessageItem(element,prevMessagesObj.messages,index,()=>forwardedMessageHandler(element));
 
             fragment.appendChild(messageItem);
         }
@@ -574,25 +627,35 @@ function setLastMessages(lastMessagesObj){
 
     for (let index = 0; index < lastMessagesObj.messages.length; index++) {
         const message = lastMessagesObj.messages[index];
-        const messageItem = elementsService.createMessageItem(message, lastMessagesObj.messages, index);
+        const messageItem = elementsService.createMessageItem(message, lastMessagesObj.messages, index,()=>forwardedMessageHandler(message));
         messagesWindow.appendChild(messageItem);
     }
-
     prevLoadObserver.disconnect();
+    console.log(messagesWindow.children[messagesWindow.children.length - 1])
+    messagesWindow.children[messagesWindow.children.length - 1].scrollIntoView({behavior:"smooth"});
 
-    if (lastMessagesObj.prevMessagesCount > 0) {
-        prevLoadObserver.observe(messagesWindow.children[0]);
-    }
-
-    messagesWindow.children[messagesWindow.children.length - 1].scrollIntoView();
+    setTimeout(()=>{
+        if (lastMessagesObj.prevMessagesCount > 0) {
+            prevLoadObserver.observe(messagesWindow.children[0]);
+        }
+    },200);
+    
 }
 
 function setLastMessage(message){
-
+    
 }
 
 function setStatuseMessage(messageId,status){
 
+}
+
+function consumerMessage(message){
+    const selectedChat = chatService.getSelectedChat();
+
+    if(selectedChat.id == message.chatId){
+
+    }
 }
 
 async function loadNextMessages(entries){
@@ -663,10 +726,32 @@ function readMessage(entries,messagesResult,readMessagesObserver){
 
 function listenScrollStop(messageWindow){
     let isScrolling;
+    const senderPanel = document.querySelector(".sender-panel");
     
-    messageWindow.addEventListener('scroll', function() {
+    messageWindow.addEventListener('scroll', function(e) {
       clearTimeout(isScrolling);
-      
+      const shutDownPosition = document.querySelector(".shutdown-position");
+      var scrollPosition = e.target.scrollTop;
+      var blockHeight = e.target.clientHeight;
+
+      // Определить высоту содержимого блока
+      var contentHeight = e.target.scrollHeight;
+
+      // Проверить, находится ли прокрутка в нижней части блока
+      if (scrollPosition + blockHeight < contentHeight / 1.3) {
+        if(!shutDownPosition){
+            senderPanel.appendChild(elementsService.createShutdownButton(chatService.getSelectedChat().id,0,0))
+        }
+            
+      } else {
+        const messagesPanel = document.querySelector(".message-window_inner");
+        let messageIndex = Array.from(messagesPanel.children).findIndex(p=>p.id === `message_id-${chatService.getSelectedChat().lastMessage.id}`);
+        if(shutDownPosition && chatService.getUnreadMessagesCount() == 0 && messageIndex !== -1){
+            shutDownPosition.remove();
+        }
+      }
+
+
       isScrolling = setTimeout(async function() {
        const lastReadMessage = messageService.getReadMessage();
        const selectedChat = chatService.getSelectedChat();
@@ -678,15 +763,15 @@ function listenScrollStop(messageWindow){
       }, 1000);
     });
 }
-
+// В чате есть lastMessageId, если в списке сообщений есть такой id,
+// то можно пролистать вниз или добавить полученное сообщение 
 async function shutDownButtonHandler(lastMessageId,chatId){
    const selectedChatElement = document.getElementById(`chatid-${chatId}`);
    const unreadMessagesCountElement = selectedChatElement.querySelector(".count-unread-messages");
    const shutDownPosition = document.querySelector(".shutdown-position");
-
-   const unreadMessageCount = await messageService.setMessageAsRead(chatId,lastMessageId).unreadMessageCount;
-   chatService.setUnreadMessagesCount(unreadMessageCount);
-
+   const messageWindow = document.querySelector(".message-window_inner");
+   const selectedChat = chatService.getSelectedChat();
+   
    if(unreadMessagesCountElement){
     unreadMessagesCountElement.remove()
    }
@@ -694,6 +779,19 @@ async function shutDownButtonHandler(lastMessageId,chatId){
    if(shutDownPosition){
     shutDownPosition.remove();
    }
+
+   let messageElement = Array.from(messageWindow.children).find(p=>p.id == `message_id-${selectedChat.lastMessage.id}`);
+
+    if(messageElement){
+        messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+
+    if(chatService.getUnreadMessagesCount() > 0){
+        const unreadMessageCount = await messageService.setMessageAsRead(chatId,lastMessageId);
+        chatService.setUnreadMessagesCount(unreadMessageCount.unreadMessagesCount); 
+       }
+
 
    const lastMessagesObj = await messageService.getLastMessagesByChat(chatId,"Group");
 
@@ -704,6 +802,20 @@ async function sendMessage(){
     let unreadMessagesCount = chatService.getUnreadMessagesCount();
 
     
+}
+
+async function forwardedMessageHandler(message){
+    const chat = chatService.getSelectedChat();
+    const messageWindow = document.querySelector(".message-window_inner")
+    let messageElement = Array.from(messageWindow.children).find(p=>p.id == `message_id-${message.forwardedMessage.id}`);
+
+    if(messageElement){
+        messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+
+    const messagesResult = await messageService.getMessagesByMessageId(chat.id,message.forwardedMessage.id,"Group");
+    setFowardedMessages(message.forwardedMessage.id,messagesResult);
 }
 
 
