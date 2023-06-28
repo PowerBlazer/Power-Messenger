@@ -4,6 +4,7 @@ using PowerMessenger.Application.Hubs;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
 using PowerMessenger.Domain.DTOs.Message;
 using PowerMessenger.Domain.Entities;
+using PowerMessenger.Domain.Enums;
 
 namespace PowerMessenger.Application.Features.MessageFeature.SendMessage;
 
@@ -39,8 +40,11 @@ public class SendMessageHandler: IRequestHandler<SendMessageCommand,MessageRespo
         var messageResponse = await _messageRepository
                 .GetMessageResponseModel(addMessage.Id);
 
-        await _hubContext.Clients.Group(request.ChatId.ToString())
-            .SendAsync("","",cancellationToken);
+        await _hubContext.Clients.GroupExcept(request.ChatId.ToString(),request.UserId.ToString())
+            .SendAsync(HubResponseEndpoints.Receive.ToString(), 
+                messageResponse?.ToString(),
+                request.UserId,
+                cancellationToken);
         
         return messageResponse!;
     }
