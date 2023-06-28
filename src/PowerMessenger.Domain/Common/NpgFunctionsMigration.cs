@@ -132,6 +132,7 @@ public static class NpgFunctionsMigration
                           			FROM messages
                           			WHERE messages.chat_id = p_chat_id
                           				AND messages.date_create > firstUnReadMessageDate
+									ORDER BY messages.date_create
                           			LIMIT p_next
                           		), 
                           		read_messages AS (
@@ -446,7 +447,9 @@ RETURN QUERY
             SELECT messages.id
             FROM messages
             WHERE messages.chat_id = p_chat_id
-            AND messages.date_create > message_position_date LIMIT p_next), 
+            AND messages.date_create > message_position_date 
+			ORDER BY messages.date_create
+			LIMIT p_next), 
        prev_messages AS (
             SELECT messages.id
             FROM messages

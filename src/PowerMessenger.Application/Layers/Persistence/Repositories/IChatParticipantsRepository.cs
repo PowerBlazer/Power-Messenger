@@ -1,6 +1,8 @@
-﻿namespace PowerMessenger.Application.Layers.Persistence.Repositories;
+﻿using PowerMessenger.Domain.Entities;
+
+namespace PowerMessenger.Application.Layers.Persistence.Repositories;
 
 public interface IChatParticipantsRepository
 {
-    Task<bool> CheckParticipantInChatAsync(long chatId, long userId);
+    Task<ChatParticipant?> GetChatParticipantInChatAndUserAsync(long chatId, long userId);
 }

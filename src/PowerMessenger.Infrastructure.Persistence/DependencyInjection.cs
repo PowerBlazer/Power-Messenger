@@ -29,8 +29,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IPersistenceUnitOfWork, PersistenceUnitOfWork>();
-        
-        services.AddSingleton<IMessengerDapperContext>(_ => 
+        services.AddScoped<IMessengerDapperContext>(_ => 
             new MessengerDapperContext(connectionString!));
 
         services.AddScoped<IUserRepository, UserRepository>();

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.SignalR;
 using PowerMessenger.Infrastructure.Identity;
 using PowerMessenger.Infrastructure.Persistence;
 using PowerMessenger.Application;
@@ -36,7 +36,9 @@ builder.Services.AddCors(coreOptions =>
     {
         options.AllowAnyHeader();
         options.AllowAnyMethod();
-        options.AllowAnyOrigin();
+        options.WithOrigins("http://127.0.0.1:5500/");
+        options.AllowCredentials();
+        options.SetIsOriginAllowed(_ => true);
     }));
 
 #endregion
@@ -51,6 +53,8 @@ builder.Services
     .AddMessageQueue(builder.Configuration)
     .AddRedis(builder.Configuration)
     .AddEmail(builder.Configuration);
+
+builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
 #endregion
 
 #region AuthenticationConfiguration
@@ -82,6 +86,23 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ClockSkew = TimeSpan.FromSeconds(30)
         };
+        
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) &&
+                    path.StartsWithSegments("/chat"))
+                {
+                    context.Token = accessToken;
+                }
+                
+                return Task.CompletedTask;
+            }
+        };
+        
     });
 
 
@@ -89,9 +110,7 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-app.UseSwaggerSetup(app.Services
-    .GetRequiredService<IApiVersionDescriptionProvider>());
-
+app.UseSwaggerSetup();
 app.UseStaticFiles();
 app.UseCors("All");
 

@@ -4,20 +4,21 @@ using PowerMessenger.Domain.DTOs.Message.MessagesGroupChat;
 
 namespace PowerMessenger.Application.Features.MessageFeature.GetMessagesGroupChatByMessageId;
 
-public class GetMessagesGroupChatByMessageIdHandler: 
-    IRequestHandler<GetMessagesGroupChatByMessageIdQuery,MessagesGroupChatResponse>
+public class GetMessagesGroupChatByMessageIdHandler :
+    IRequestHandler<GetMessagesGroupChatByMessageIdQuery, MessagesGroupChatResponse>
 {
     private readonly IMessageGroupChatRepository _messageGroupChatRepository;
     private readonly IMessageRepository _messageRepository;
 
-    public GetMessagesGroupChatByMessageIdHandler(IMessageGroupChatRepository messageGroupChatRepository, 
+    public GetMessagesGroupChatByMessageIdHandler(IMessageGroupChatRepository messageGroupChatRepository,
         IMessageRepository messageRepository)
     {
         _messageGroupChatRepository = messageGroupChatRepository;
         _messageRepository = messageRepository;
     }
 
-    public async Task<MessagesGroupChatResponse> Handle(GetMessagesGroupChatByMessageIdQuery request, CancellationToken cancellationToken)
+    public async Task<MessagesGroupChatResponse> Handle(GetMessagesGroupChatByMessageIdQuery request,
+        CancellationToken cancellationToken)
     {
         var messagesGroupChat = (await _messageGroupChatRepository.GetMessagesGroupChatByMessageId(
             request.ChatId,
@@ -25,7 +26,7 @@ public class GetMessagesGroupChatByMessageIdHandler:
             request.UserId,
             request.Next,
             request.Prev)).ToList();
-        
+
         var unreadMessagesCount = await _messageRepository.GetUnreadMessagesCountChatAsync(
             request.ChatId,
             request.UserId);
@@ -51,6 +52,5 @@ public class GetMessagesGroupChatByMessageIdHandler:
             nextMessagesCount,
             prevMessagesCount,
             unreadMessagesCount);
-    
     }
 }

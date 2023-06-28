@@ -20,14 +20,15 @@ public class ChatService: IChatService
 
     public async Task<bool> ContainUserInChatAsync(long chatId, long userId)
     {
-        return await _chatParticipantsRepository.CheckParticipantInChatAsync(chatId, userId);
+        return await _chatParticipantsRepository
+            .GetChatParticipantInChatAndUserAsync(chatId, userId) is not null;
     }
 
     public async Task<bool> CheckChatExistenceByIdAsync(long chatId)
     {
         return await _chatRepository.GetChatByIdAsync(chatId) is not null;
     }
-
+    
     public async Task<bool> ValidateChatTypeAsync(long chatId, string type)
     {
         var chat = await _chatRepository.GetChatByIdAsync(chatId);

@@ -5,4 +5,5 @@ namespace PowerMessenger.Application.Layers.Persistence.Repositories;
 public interface IUserRepository
 {
     Task<User> AddUserAsync(User user);
+    Task<User?> GetUserByIdAsync(long userId);
 }

@@ -137,7 +137,7 @@ public static class NpgFunctionQueries
             chat_id as ChatId,
             content,
             source,
-            date_create as DateCreate,
+            date_create as DateCreated,
             type,
             message_user_id as Id,
             message_user_name as UserName,
@@ -148,4 +148,27 @@ public static class NpgFunctionQueries
             forwarded_message_type as Type,
             forwarded_message_chat_id as ChatId
         FROM get_message_data_by_id(@messageId)";
+
+    /// <summary>
+    /// Get Chats By User Id Query
+    /// </summary>
+    /// <param name="@userId"></param>
+    public const string GetChatsDataByUserId = @"
+            SELECT 
+                Id,
+                Name,
+                datecreate,
+                photo,
+                description,
+                type,
+                countparticipants,
+                countunreadmessages,
+                countmessages,
+                lastmessageid as Id,
+                lastmessageusername as UserName,
+                lastmessagecontent as Content,
+                lastmessagetype as Type,
+                lastmessagedatecreate as DateCreate
+            FROM get_chats_by_user(@userId)
+    ";
 }

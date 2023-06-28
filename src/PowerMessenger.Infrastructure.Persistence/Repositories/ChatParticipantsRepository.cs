@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
+using PowerMessenger.Domain.Entities;
 
 namespace PowerMessenger.Infrastructure.Persistence.Repositories;
 
@@ -12,10 +13,10 @@ public class ChatParticipantsRepository: IChatParticipantsRepository
     {
         _messengerEfContext = messengerEfContext;
     }
-
-    public async Task<bool> CheckParticipantInChatAsync(long chatId, long userId)
+    
+    public async Task<ChatParticipant?> GetChatParticipantInChatAndUserAsync(long chatId, long userId)
     {
         return await _messengerEfContext.ChatParticipants
-            .FirstOrDefaultAsync(p => p.ChatId == chatId && p.UserId == userId) is not null;
+            .FirstOrDefaultAsync(p => p.ChatId == chatId && p.UserId == userId);
     }
 }

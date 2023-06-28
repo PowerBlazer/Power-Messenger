@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace PowerMessenger.Application.Common;
+namespace PowerMessenger.Domain.Common;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public class AuthorizationResult

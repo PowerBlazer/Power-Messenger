@@ -80,8 +80,7 @@ public class MessageConfiguration: IEntityTypeConfiguration<Message>
                 Content = "HelloWorld",
                 DateCreate = DateTimeOffset.Parse("2022-12-20T23:34:00+03:00"),
                 MessageTypeId = 1,
-                DeletedByAll = false,
-                
+                DeletedByAll = false
             },
             new Message
             {

@@ -26,7 +26,7 @@ public static class SwaggerConfiguration
             {
                 Title = "PowerMessenger API",
                 Version = "v1",
-                Description = ""
+                Description = "API документация мессенджера"
             });
             
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -69,8 +69,11 @@ public static class SwaggerConfiguration
         });
     }
 
-    public static void UseSwaggerSetup(this IApplicationBuilder app, IApiVersionDescriptionProvider provider)
+    public static void UseSwaggerSetup(this IApplicationBuilder app)
     {
+        var provider = app.ApplicationServices
+            .GetRequiredService<IApiVersionDescriptionProvider>();
+        
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
@@ -80,7 +83,7 @@ public static class SwaggerConfiguration
                     description.GroupName.ToUpperInvariant());
             }
             
-           // options.DisplayRequestDuration();
+            options.DisplayRequestDuration();
             options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
             options.EnableDeepLinking();
             options.EnableFilter();

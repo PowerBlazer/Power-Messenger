@@ -2,7 +2,6 @@
 using MediatR;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
 using PowerMessenger.Application.Layers.Redis.Services;
-using PowerMessenger.Domain.Common;
 using PowerMessenger.Domain.DTOs.Chat;
 
 namespace PowerMessenger.Application.Features.ChatFeature.GetChatsByUser;
@@ -29,7 +28,7 @@ public class GetChatsByUserHandler: IRequestHandler<GetChatsByUserQuery,IList<Ch
         // {
         //     return cachedChats;
         // }
-        var userChats = (await _chatRepository.GetChatsByUserAsync(request.UserId)).ToList();
+        var userChats = (await _chatRepository.GetChatsDataByUserAsync(request.UserId)).ToList();
         // await _cacheService.SetData(cacheKey, userChats, TimeSpan.FromMinutes(5));
         return userChats;
     }

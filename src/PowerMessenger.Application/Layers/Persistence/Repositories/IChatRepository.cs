@@ -5,6 +5,7 @@ namespace PowerMessenger.Application.Layers.Persistence.Repositories;
 
 public interface IChatRepository
 {
-    Task<IEnumerable<ChatResponse>> GetChatsByUserAsync(long userId);
+    Task<IEnumerable<Chat>> GetChatsByUserAsync(long userId);
     Task<Chat?> GetChatByIdAsync(long chatId);
+    Task<IEnumerable<ChatResponse>> GetChatsDataByUserAsync(long userId);
 }
