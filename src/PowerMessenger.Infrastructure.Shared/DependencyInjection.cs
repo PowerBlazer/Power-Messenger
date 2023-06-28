@@ -12,6 +12,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IChatService,ChatService>();
         services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IUserService, UserService>();
         
         
         return services;
