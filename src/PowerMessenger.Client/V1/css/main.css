@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 :root{
-    --header-height:50px;
+    --header-height:55px;
     --chat-header:62px;
     --font-family: 'Montserrat', sans-serif; 
     --background-color:#181818;
@@ -26,7 +26,7 @@ body{
 
 a{
     text-decoration: none;
-    color: black;
+    color: white;
 }
 
 h2,h3{
@@ -42,7 +42,7 @@ button{
 }
 
 header{
-    background-color: white;
+    background-color: var(--background-color);
 }
 
 .header{
@@ -91,6 +91,7 @@ header{
     font-size: 16px;
     cursor: pointer;
     font-weight: 600;
+    color: white;
 }
 
 .menu-items > button:hover{
@@ -205,6 +206,11 @@ header{
     font-weight: 600;
 }
 
+.selected > .count-unread-messages{
+    background-color: white;
+    color:  var(--theme-color);
+}
+
 .count-unread-messages{
     width: 20px;
     height: 20px;
@@ -269,15 +275,27 @@ header{
 }
 
 .messages-window{
+    position: relative;
     height: calc(100vh - var(--header-height) - var(--chat-header));
-    background-image: url(../assets/img/background.jpg);
-    background-size: cover;
-    background-position: center;
     border-right: 1px solid var(--theme-color);
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
 }
+
+.background-window{
+    top: 0;
+    left: 0;
+    position: absolute;
+    height: calc(100vh - var(--header-height) - var(--chat-header));
+    width: 100%;
+    background-image: url(../assets/img/background3.jpg);
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    filter: brightness(40%);
+}
+
 .message-window-scroll{
     height: 100%;
     overflow-y: auto;
@@ -391,6 +409,13 @@ header{
     font-family: var(--font-family);
     font-weight: 700;
     cursor:default;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.status-message{
+   
 }
 
 .forwarded-message-button{
@@ -550,8 +575,9 @@ header{
     background-color: #343333;
 }
 
-.shutdown-position::before{
-    padding: 3px;
+.shutdown-position > div{
+    min-width: 22px;
+    min-height: 22px;
     background-color: var(--theme-color);
     font-size: 13px;
     font-weight: 600;

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/main.css">
-    <title>Document</title>
+    <link rel="icon" href="./assets/img/messenger-icon.ico">
+    <title>PowerMessenger</title>
 </head>
 
 <body>
@@ -39,6 +40,7 @@
                     <div class="chat-info_inner"></div>
                 </div>
                 <div class="messages-window">
+                    <div class="background-window"></div>
                     <div class="message-window-scroll">
                         <div class="message-window_inner" id="message-observer">
                             
@@ -50,14 +52,13 @@
                                 <button class="smile-message-button">
                                     <img src="./assets/smile.svg" width="27" height="27" alt="smile">
                                 </button>
-                                <div class="message-input" contenteditable="true"></div>
+                                <div class="message-input" id="message-input" contenteditable="true"></div>
                                 <button class="common-message-button">
                                     <img src="./assets/paperclip.svg" width="23" height="23" alt="paperclip">
                                 </button>
                             </div>
-                            <div class="sender-panel">
-                                
-                                <button class="send-message">
+                            <div class="sender-panel">  
+                                <button class="send-message" id="send-button">
                                     <img src="./assets/send.svg" width="28" height="28" alt="send">
                                 </button>
                             </div>
@@ -68,6 +69,6 @@
         </div>
     </div>
 </body>
+<script src="./js/signalr.js"></script>
 <script src="./js/main.js"></script>
-
 </html>
