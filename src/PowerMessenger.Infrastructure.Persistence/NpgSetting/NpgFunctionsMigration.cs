@@ -1,4 +1,4 @@
-﻿namespace PowerMessenger.Domain.Common;
+﻿namespace PowerMessenger.Infrastructure.Persistence.NpgSetting;
 
 public static class NpgFunctionsMigration
 {
@@ -500,6 +500,6 @@ $BODY$;"
         "DROP FUNCTION get_next_messages_group_chat_by_user",
         "DROP FUNCTION get_prev_messages_group_chat_by_user",
         "DROP FUNCTION get_last_messages_group_chat_by_user",
-        "FROP FUNCTION get_message_data_by_id"
+        "DROP FUNCTION get_message_data_by_id"
     };
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PowerMessenger.Domain.Common;
+using PowerMessenger.Infrastructure.Persistence.NpgSetting;
 
 #nullable disable
 

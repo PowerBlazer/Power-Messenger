@@ -2,21 +2,23 @@
 using Microsoft.EntityFrameworkCore;
 using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
+using PowerMessenger.Application.Layers.Persistence.Repository;
 using PowerMessenger.Domain.Common;
 using PowerMessenger.Domain.DTOs.Chat;
 using PowerMessenger.Domain.DTOs.Common;
 using PowerMessenger.Domain.Entities;
+using PowerMessenger.Infrastructure.Persistence.NpgSetting;
 
 
 namespace PowerMessenger.Infrastructure.Persistence.Repositories;
 
-public class ChatRepository: IChatRepository
+public class ChatRepository: RepositoryBase<Chat>, IChatRepository
 {
     private readonly IMessengerDapperContext _messengerDapperContext;
     private readonly IMessengerEfContext _messengerEfContext;
 
     public ChatRepository(IMessengerDapperContext messengerDapperContext, 
-        IMessengerEfContext messengerEfContext)
+        IMessengerEfContext messengerEfContext): base(messengerEfContext)
     {
         _messengerDapperContext = messengerDapperContext;
         _messengerEfContext = messengerEfContext;
@@ -40,13 +42,9 @@ public class ChatRepository: IChatRepository
         return await _messengerEfContext.Chats
             .Where(p => p.ChatParticipants!.FirstOrDefault(x => x.UserId == userId) != null)
             .ToListAsync();
+       
     }
-
-    public async Task<Chat?> GetChatByIdAsync(long chatId)
-    {
-        return await _messengerEfContext.Chats.FirstOrDefaultAsync(p => p.Id == chatId);
-    }
-
+    
     private static ChatResponse MapOptionChatResponse(ChatResponse chatResponse, LastMessage lastMessage)
     {
         chatResponse.LastMessage = lastMessage;

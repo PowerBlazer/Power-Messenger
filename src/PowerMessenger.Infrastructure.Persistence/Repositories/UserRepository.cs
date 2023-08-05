@@ -1,31 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
+using PowerMessenger.Application.Layers.Persistence.Repository;
 using PowerMessenger.Domain.Entities;
 
 namespace PowerMessenger.Infrastructure.Persistence.Repositories;
 
-public class UserRepository: IUserRepository
+public class UserRepository: RepositoryBase<User>, IUserRepository
 {
-    private readonly IMessengerEfContext _efContext;
+    private readonly IMessengerEfContext _messengerEfContext;
 
-    public UserRepository(IMessengerEfContext efContext)
+    public UserRepository(IMessengerEfContext messengerEfContext): base(messengerEfContext)
     {
-        _efContext = efContext;
+        _messengerEfContext = messengerEfContext;
     }
-
-    public async Task<User> AddUserAsync(User user)
-    {
-        var result = await _efContext.Users.AddAsync(user);
-
-        await _efContext.SaveChangesAsync();
-
-        return result.Entity;
-    }
-
-    public async Task<User?> GetUserByIdAsync(long userId)
-    {
-        return await _efContext.Users
-            .FirstOrDefaultAsync(p => p.UserId == userId);
-    }
+    
 }

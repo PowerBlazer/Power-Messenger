@@ -4,32 +4,28 @@ using Microsoft.EntityFrameworkCore;
 using PowerMessenger.Application.Hubs;
 using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
+using PowerMessenger.Application.Layers.Persistence.Repository;
 using PowerMessenger.Domain.Common;
 using PowerMessenger.Domain.DTOs.Common;
 using PowerMessenger.Domain.DTOs.Message;
 using PowerMessenger.Domain.Entities;
+using PowerMessenger.Infrastructure.Persistence.NpgSetting;
 
 namespace PowerMessenger.Infrastructure.Persistence.Repositories;
 
-public class MessageRepository: IMessageRepository
+public class MessageRepository: RepositoryBase<Message>, IMessageRepository
 {
     private readonly IMessengerDapperContext _messengerDapperContext;
     private readonly IMessengerEfContext _messengerEfContext;
 
     public MessageRepository(IMessengerDapperContext messengerDapperContext, 
-        IMessengerEfContext messengerEfContext)
+        IMessengerEfContext messengerEfContext): base(messengerEfContext)
     {
         _messengerDapperContext = messengerDapperContext;
         _messengerEfContext = messengerEfContext;
     }
     
     //Methods domain models
-    public async Task<Message?> GetMessageByMessageId(long messageId)
-    {
-        return await _messengerEfContext.Messages
-            .FirstOrDefaultAsync(p => p.Id == messageId);
-    }
-
     public async Task<Message?> GetMessageInTheChatByIdAsync(long messageId, long chatId)
     {
         var message = await _messengerEfContext.Messages
@@ -69,13 +65,14 @@ public class MessageRepository: IMessageRepository
     public async Task<int> GetUnreadMessagesCountChatAsync(long chatId, long userId)
     {
         using var connection = _messengerDapperContext.CreateNpgConnection();
-        const string query = "SELECT * FROM get_unread_message_count(@userId, @chatId)";
-
-        var countUnreadMessages = await connection.QueryFirstOrDefaultAsync<int>(query, new
-        {
-            userId = userId,
-            chatId = chatId
-        });
+        
+        var countUnreadMessages = await connection.QueryFirstOrDefaultAsync<int>(
+            NpgFunctionQueries.GetUnreadMessagesCount, 
+            new 
+            {
+                userId = userId,
+                chatId = chatId
+            });
 
         return countUnreadMessages;
     }

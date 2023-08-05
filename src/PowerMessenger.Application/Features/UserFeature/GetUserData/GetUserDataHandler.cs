@@ -19,7 +19,7 @@ public class GetUserDataHandler: IRequestHandler<GetUserDataQuery,UserDataRespon
 
     public async Task<UserDataResponse> Handle(GetUserDataQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetUserByIdAsync(request.UserId);
+        var user = await _userRepository.GetAsync(p=>p.UserId == request.UserId);
 
         var userResponse = _mapper.Map<User, UserDataResponse>(user!);
 

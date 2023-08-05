@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
+using PowerMessenger.Application.Layers.Persistence.Repository;
 using PowerMessenger.Domain.Entities;
 
 namespace PowerMessenger.Infrastructure.Persistence.Repositories;
 
-public class MessageStatusRepository: IMessageStatusRepository
+public class MessageStatusRepository: RepositoryBase<MessageStatus>, IMessageStatusRepository
 {
     private readonly IMessengerEfContext _messengerEfContext;
 
-    public MessageStatusRepository(IMessengerEfContext messengerEfContext)
+    public MessageStatusRepository(IMessengerEfContext messengerEfContext): base(messengerEfContext)
     {
         _messengerEfContext = messengerEfContext;
     }
@@ -31,12 +32,5 @@ public class MessageStatusRepository: IMessageStatusRepository
 
         return messageStatus;
     }
-
-    public async Task<MessageStatus> AddMessageStatusAsync(MessageStatus newMessageStatus)
-    {
-        var messageStatus = await _messengerEfContext.MessageStatuses
-            .AddAsync(newMessageStatus);
-
-        return messageStatus.Entity;
-    }
+    
 }

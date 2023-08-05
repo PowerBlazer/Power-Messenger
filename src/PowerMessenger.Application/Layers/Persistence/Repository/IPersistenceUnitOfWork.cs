@@ -1,4 +1,4 @@
-﻿namespace PowerMessenger.Application.Layers.Persistence;
+﻿namespace PowerMessenger.Application.Layers.Persistence.Repository;
 
 public interface IPersistenceUnitOfWork
 {

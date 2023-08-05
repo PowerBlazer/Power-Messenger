@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PowerMessenger.Application.Layers.Persistence;
 using PowerMessenger.Application.Layers.Persistence.Context;
+using PowerMessenger.Application.Layers.Persistence.Repository;
 
 namespace PowerMessenger.Infrastructure.Persistence;
 

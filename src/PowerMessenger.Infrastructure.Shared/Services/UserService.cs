@@ -14,6 +14,7 @@ public class UserService: IUserService
 
     public async Task<bool> ContainUserById(long userId)
     {
-        return await _userRepository.GetUserByIdAsync(userId) is not null;
+        return await _userRepository
+            .GetFirstOfDefaultAsync(p=>p.UserId == userId) is not null;
     }
 }

@@ -4,6 +4,7 @@ using PowerMessenger.Application.Layers.Persistence.Repositories;
 using PowerMessenger.Domain.Common;
 using PowerMessenger.Domain.DTOs.Common;
 using PowerMessenger.Domain.DTOs.Message.MessagesGroupChat;
+using PowerMessenger.Infrastructure.Persistence.NpgSetting;
 
 namespace PowerMessenger.Infrastructure.Persistence.Repositories;
 

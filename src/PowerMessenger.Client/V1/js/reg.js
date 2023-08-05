@@ -1,4 +1,4 @@
-const apiUrl = "http://localhost:6001/api/v1/Authorization";
+const apiUrl = "api/v1/Authorization";
 
 const emailWindow = document.getElementsByClassName("email-window");
 const codeWindow = document.getElementsByClassName("code_verification-window");

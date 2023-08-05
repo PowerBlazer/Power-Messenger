@@ -17,7 +17,7 @@ public class UserRegisteredConsumer: IConsumer<UserRegisteredEvent>
 
     public async Task Consume(ConsumeContext<UserRegisteredEvent> context)
     {
-        await _userRepository.AddUserAsync(new User
+        await _userRepository.AddAsync(new User
         {
             UserId = context.Message.UserId,
             UserName = context.Message.UserName

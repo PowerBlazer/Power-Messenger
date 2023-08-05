@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PowerMessenger.Application.Layers.Persistence;
 using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
+using PowerMessenger.Application.Layers.Persistence.Repository;
 using PowerMessenger.Infrastructure.Persistence.Context;
 using PowerMessenger.Infrastructure.Persistence.Repositories;
 
