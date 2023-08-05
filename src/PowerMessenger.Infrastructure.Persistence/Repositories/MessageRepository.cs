@@ -1,11 +1,8 @@
 ﻿using Dapper;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using PowerMessenger.Application.Hubs;
 using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Application.Layers.Persistence.Repositories;
 using PowerMessenger.Application.Layers.Persistence.Repository;
-using PowerMessenger.Domain.Common;
 using PowerMessenger.Domain.DTOs.Common;
 using PowerMessenger.Domain.DTOs.Message;
 using PowerMessenger.Domain.Entities;
