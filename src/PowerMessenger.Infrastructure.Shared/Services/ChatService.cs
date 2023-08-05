@@ -26,14 +26,15 @@ public class ChatService: IChatService
 
     public async Task<bool> CheckChatExistenceByIdAsync(long chatId)
     {
-        return await _chatRepository.GetChatByIdAsync(chatId) is not null;
+        return await _chatRepository
+            .GetFirstOfDefaultAsync(p=>p.Id == chatId) is not null;
     }
     
     public async Task<bool> ValidateChatTypeAsync(long chatId, string type)
     {
-        var chat = await _chatRepository.GetChatByIdAsync(chatId);
+        var chat = await _chatRepository.GetAsync(p=>p.Id == chatId);
 
-        var chatType = await _chatTypeRepository.GetChatTypeByIdAsync(chat!.ChatTypeId);
+        var chatType = await _chatTypeRepository.GetFirstOfDefaultAsync(p=>p.Id == chat.ChatTypeId);
 
         return chatType?.Type == type;
     }

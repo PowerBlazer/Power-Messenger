@@ -24,4 +24,39 @@
       <ProjectReference Include="..\PowerMessenger.Application\PowerMessenger.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="sql\GetChatsByUser.sql" />
+      <Content Include="sql\GetChatsByUser.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="sql\GetLastMessagesGroupChatByUser.sql" />
+      <Content Include="sql\GetLastMessagesGroupChatByUser.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="sql\GetMessageDataById.sql" />
+      <Content Include="sql\GetMessageDataById.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="sql\GetMessageGroupChatByUser.sql" />
+      <Content Include="sql\GetMessageGroupChatByUser.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="sql\GetNextMessagesGroupChatByUser.sql" />
+      <Content Include="sql\GetNextMessagesGroupChatByUser.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="sql\GetPrevMessagesGroupChatByUser.sql" />
+      <Content Include="sql\GetPrevMessagesGroupChatByUser.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="sql\GetUnreadMessagesCount.sql" />
+      <Content Include="sql\GetUnreadMessagesCount.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="sql\GetMessagesGroupChatByMessageId.sql" />
+      <Content Include="sql\GetMessagesGroupChatByMessageId.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

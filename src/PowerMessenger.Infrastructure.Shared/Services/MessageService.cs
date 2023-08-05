@@ -21,7 +21,8 @@ public class MessageService: IMessageService
 
     public async Task<bool> ContainMessageByMessageId(long messageId)
     {
-        return await _messageRepository.GetMessageByMessageId(messageId) is not null;
+        return await _messageRepository
+            .GetFirstOfDefaultAsync(p=>p.Id == messageId) is not null;
     }
 
     public async Task<bool> ContainMessageInChatAsync(long messageId, long chatId)
@@ -41,7 +42,7 @@ public class MessageService: IMessageService
 
         if (messageStatus is null)
         {
-            await _messageStatusRepository.AddMessageStatusAsync(new MessageStatus
+            await _messageStatusRepository.AddAsync(new MessageStatus
             {
                 UserId = userId,
                 ChatId = chatId,

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PowerMessenger.Domain.Common;
+using PowerMessenger.Infrastructure.Persistence.NpgSetting;
 
 #nullable disable
 
@@ -427,7 +428,7 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
 
             if (migrationBuilder.IsNpgsql())
             {
-                foreach (var function in NpgFunctionsMigration.CreateFunctions)
+                foreach (var function in NpgFunctionsMigration.CreateFunctions())
                 {
                     migrationBuilder.Sql(function);
                 }
@@ -457,6 +458,14 @@ namespace PowerMessenger.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "chat_types");
+            
+            if (migrationBuilder.IsNpgsql())
+            {
+                foreach (var function in NpgFunctionsMigration.DeleteFunction())
+                {
+                    migrationBuilder.Sql(function);
+                }
+            }
         }
     }
 }

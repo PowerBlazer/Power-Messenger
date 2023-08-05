@@ -1,5 +1,5 @@
 ﻿// ReSharper disable InvalidXmlDocComment
-namespace PowerMessenger.Domain.Common;
+namespace PowerMessenger.Infrastructure.Persistence.NpgSetting;
 
 public static class NpgFunctionQueries
 {
@@ -153,8 +153,7 @@ public static class NpgFunctionQueries
     /// Get Chats By User Id Query
     /// </summary>
     /// <param name="@userId"></param>
-    public const string GetChatsDataByUserId = @"
-            SELECT 
+    public const string GetChatsDataByUserId = @"SELECT 
                 Id,
                 Name,
                 datecreate,
@@ -169,6 +168,11 @@ public static class NpgFunctionQueries
                 lastmessagecontent as Content,
                 lastmessagetype as Type,
                 lastmessagedatecreate as DateCreate
-            FROM get_chats_by_user(@userId)
-    ";
+            FROM get_chats_by_user(@userId)";
+    /// <summary>
+    /// Get Unread Messages Count
+    /// </summary>
+    /// <param name="@userId">User Id</param>
+    /// <param name="@chatId">Chat Id</param>
+    public const string GetUnreadMessagesCount = @"SELECT * FROM get_unread_message_count(@userId, @chatId)";
 }

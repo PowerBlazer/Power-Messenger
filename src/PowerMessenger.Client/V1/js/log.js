@@ -1,9 +1,10 @@
 const apiUrl = "http://localhost:6001/api/v1/Authorization/"
-const email = document.getElementById("email-input");
-const password = document.getElementById("password-input");
+
+
 
 async function Login(){
-    
+    const email = document.getElementById("email-input");
+    const password = document.getElementById("password-input");
 
     const bodyJson = JSON.stringify({
         email:email.value,

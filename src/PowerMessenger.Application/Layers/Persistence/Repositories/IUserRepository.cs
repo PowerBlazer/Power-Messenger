@@ -1,9 +1,9 @@
-﻿using PowerMessenger.Domain.Entities;
+﻿using PowerMessenger.Application.Layers.Persistence.Repository.Abstraction;
+using PowerMessenger.Domain.Entities;
 
 namespace PowerMessenger.Application.Layers.Persistence.Repositories;
 
-public interface IUserRepository
+public interface IUserRepository: IRepository<User>
 {
-    Task<User> AddUserAsync(User user);
-    Task<User?> GetUserByIdAsync(long userId);
+
 }

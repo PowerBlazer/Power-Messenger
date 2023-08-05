@@ -1,4 +1,4 @@
-const apiUrl = "http://localhost:6001/api/v1/";
+const apiUrl = "api/v1/";
 const apiAssets = "http://localhost:6001/";
 
 class TokenService{

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PowerMessenger.Application.Layers.Persistence.Context;
 using PowerMessenger.Domain.Entities;
+using PowerMessenger.Domain.Entities.Abstractions;
 using PowerMessenger.Infrastructure.Persistence.Configuration;
 
 namespace PowerMessenger.Infrastructure.Persistence.Context;
@@ -23,6 +24,16 @@ public class MessengerEfContext : DbContext,IMessengerEfContext
     public async Task<int> SaveChangesAsync()
     {
         return await base.SaveChangesAsync();
+    }
+
+    public new DbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity<long>
+    {
+        return base.Set<TEntity>();
+    }
+
+    public new void Attach<TEntity>(TEntity entity) where TEntity : BaseEntity<long>
+    {
+        base.Attach(entity);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

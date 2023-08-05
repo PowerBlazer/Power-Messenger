@@ -26,7 +26,7 @@ public class SendMessageHandler: IRequestHandler<SendMessageCommand,MessageRespo
     public async Task<MessageResponse> Handle(SendMessageCommand request, CancellationToken cancellationToken)
     {
         var messageType = await _messageTypeRepository.GetMessageTypeByTypeAsync(request.Type);
-        var addMessage = await _messageRepository.AddMessageAsync(new Message
+        var addMessage = await _messageRepository.AddAsync(new Message
         {
             ChatId = request.ChatId,
             UserId = request.UserId,
