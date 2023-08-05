@@ -1,13 +1,13 @@
 const apiUrl = "http://localhost:6001/api/v1/Authorization/"
-
+const email = document.getElementById("email-input");
+const password = document.getElementById("password-input");
 
 async function Login(){
-    const email = document.getElementById("email-input").value;
-    const password = document.getElementById("password-input").value;
+    
 
     const bodyJson = JSON.stringify({
-        email:email,
-        password:password
+        email:email.value,
+        password:password.value
     });
 
     const response = await fetch(apiUrl+"Login",{
@@ -38,9 +38,6 @@ async function Login(){
     }
 
 }
-
-
-
 
 
 function ErrorNotification(obj){

@@ -3,21 +3,205 @@
 }
 
 body{
+    margin: 0;
+    padding: 0;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+}
+
+.main-window{
     min-height: 100vh;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    background-color: #13121A;
+    position: relative;
+    z-index: 100;
+}
+
+.background{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 98;
+    background-image: url(../assets/img/login_dark.svg);
+    background-position: center center;
+    background-size: cover;
+    opacity: 0;
+    animation-name: start-background;
+    animation-iteration-count: 1;
+    animation-duration: 2s;
+    animation-delay: .5s;
+    animation-fill-mode: forwards;
 }
 
 .login-window{
-    width: 400px;
+    z-index: 99;
+    opacity: 0;
+    width: 480px;
+    height: 580px;
+    border-radius: 5px;
+    background-color: #261F33;
+    animation-name: start-login;
+    animation-iteration-count: 1;
+    animation-duration: 1s;
+    animation-delay: .3s;
+    animation-fill-mode: forwards;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    padding: 16px 0;
 }
-.login-window > div {
+
+.logo-panel{
     display: flex;
     flex-direction: column;
+    align-items: center;
+    padding: 24px;
+    gap: 25px;
+}
+
+.message-info{
+    font-family: Inter, Helvetica, Arial, sans-serif;
+    font-size: 33px;
+    font-weight: 400;
+    color: #d7d7e3;
+    letter-spacing: 0.2px;
+    text-align: center;
+}
+
+.form-panel{
+    padding: 45px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     gap: 10px;
+}
+
+.login-btn{
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+    background: rgb(45, 97, 201);
+    color: rgb(255, 255, 255);
+    box-shadow: rgba(1, 4, 9, 0.75) 0px 1px 2px;
+    border: none;
+    border-radius: 2px;
+    padding: 8px;
+    transition: background-color .3s;
+    cursor: pointer;
+}
+
+.login-btn:hover{
+    background: rgb(65, 115, 216);
+}
+
+.email-panel{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.email-label{
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.25;
+    color: rgb(204, 204, 220);
+    font-family: Inter, Helvetica, Arial, sans-serif;
+}
+
+.email-panel > input{
+    padding: 5px 8px;
+    background: rgb(17, 18, 23);
+    line-height: 1.57143;
+    font-size: 14px;
+    color: rgb(204, 204, 220);
+    border: 1px solid rgba(204, 204, 220, 0.2);
+    position: relative;
+    z-index: 0;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    border-radius: 2px;
+    font-weight: 500;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+}
+
+.email-panel > input:focus{
+    outline: 2px solid rgb(45, 97, 201);
+}
+
+.password-panel{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.password-label{
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.25;
+    color: rgb(204, 204, 220);
+    font-family: Inter, Helvetica, Arial, sans-serif;
+}
+
+.password-panel > input{
+    padding: 5px 8px;
+    background: rgb(17, 18, 23);
+    line-height: 1.57143;
+    font-size: 14px;
+    color: rgb(204, 204, 220);
+    border: 1px solid rgba(204, 204, 220, 0.2);
+    position: relative;
+    z-index: 0;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    border-radius: 2px;
+    font-weight: 500;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+}
+
+.password-panel > input:focus{
+    outline: 2px solid rgb(45, 97, 201);
+}
+
+.registration-link-pn{
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 0;
+}
+
+.registration-link-pn > a{
+    font-weight: 500;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+    color: rgb(110, 159, 255);
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.registration-link-pn > a:hover{
+    text-decoration: underline;
+}
+
+
+@keyframes start-background{
+    0%{
+        opacity: 0;
+        animation-timing-function: cubic-bezier(0, 0, 0.5, 1);
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+@keyframes start-login{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
 }

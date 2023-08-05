@@ -972,6 +972,17 @@ function consumerMessage(message,userId){
         const senderPanel = document.querySelector(".sender-panel");
         const messageItemIndex = Array.from(messageWindow.children).findIndex(p=>p.id == `message_id-${selectedChat.lastMessage.id}`);
 
+        if(shutDownPosition){
+            shutDownPosition.remove();
+        }
+
+        let newUnreadMessageCount = chatService.getUnreadMessagesCount();
+        newUnreadMessageCount++;
+        chatService.setUnreadMessagesCount(newUnreadMessageCount);
+
+        const newShutdownButton = elementsService.createShutdownButton(message.ChatId,message.Id,newUnreadMessageCount);
+        senderPanel.appendChild(newShutdownButton);
+
         if(messageItemIndex !== -1){
             const readMessageObserver = new IntersectionObserver(async(entries)=>{
                 if(entries.length > 0){
@@ -994,22 +1005,8 @@ function consumerMessage(message,userId){
             readMessageObserver.observe(newMessageItem);
 
             messageWindow.appendChild(newMessageItem);
-
         }
-
-        if(shutDownPosition){
-            shutDownPosition.remove();
-        }
-
-        let newUnreadMessageCount = chatService.getUnreadMessagesCount();
-        newUnreadMessageCount++;
-        chatService.setUnreadMessagesCount(newUnreadMessageCount);
-
-        const newShutdownButton = elementsService.createShutdownButton(message.ChatId,message.Id,newUnreadMessageCount);
-        senderPanel.appendChild(newShutdownButton);
     }
-
-    
 }
 
 async function loadNextMessages(entries){

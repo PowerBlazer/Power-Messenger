@@ -21,7 +21,9 @@ body{
     width: 100%;
     margin: 0;
     font-family: 'Montserrat',initial, sans-serif;
-    background-color: var(--background-color);
+    background-image: url(../assets/img/login_dark.svg);
+    background-position: center;
+    background-size: cover;
 }
 
 a{
@@ -41,18 +43,17 @@ button{
     cursor: pointer;
 }
 
-header{
-    background-color: var(--background-color);
-}
+
 
 .header{
-    padding: 15px 10px;
+    padding: 15px 20px;
     margin: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: var(--header-height);
     width: 100%;
+    background-color: var(--background-color);
 }
 
 .container{
